@@ -1,9 +1,0 @@
-ParkSB (4):
-      feat: implement parsing_instr and parsing _data
-      refactor: improve code quality
-      feat: implement the basic features of process_instruction
-      feat: implement all features
-
-Wonkyo Choe (1):
-      Initial commit
-

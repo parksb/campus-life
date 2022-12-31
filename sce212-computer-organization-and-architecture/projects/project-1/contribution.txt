@@ -1,0 +1,20 @@
+ParkSB (15):
+      chore: add contribution text file
+      feat: implement a resolving data section
+      feat: change resolve_data_section function to return the number of data
+      feat: implement a resolving labels in text section
+      refactor: separate the code for finding text section from the resolving functions
+      feat: implement a diassebling the instructions
+      feat: implement a converting instructions to binary digits
+      feat: implement a printing binary digits of section size and data to the file
+      refactor: change the TEXT structure to singly linked list
+      feat: define argument order of each instruction
+      feat: diassemble array argument
+      chore: add contribution text file
+      chore: remove printf lines
+      chore: update contribution.txt
+      fix: remove newline characters
+
+Wonkyo Choe (1):
+      Initial commit
+
