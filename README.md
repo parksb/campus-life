@@ -51,7 +51,6 @@
 
 ### 무료
 
-* [AWS Educate](https://aws.amazon.com/ko/education/awseducate/)
 * [GitHub Student Developer Pack](https://education.github.com/pack)
 * [JetBrains Student Pack](https://www.jetbrains.com/student/)
 * [MATLAB & Simulink](https://kr.mathworks.com/academia/tah-portal/ajou-university-40676932.html)
@@ -62,6 +61,7 @@
 ### 할인
 
 * [Adobe Creative Cloud for Education](https://www.adobe.com/kr/creativecloud/buy/students.html)
+* [AWS Education Program & NCP 그린루키 프로그램](https://www.ajou.ac.kr/sw/board/notice.do?mode=view&articleNo=206978)
 * ~~Apple on Campus~~
 
 ### 대여
