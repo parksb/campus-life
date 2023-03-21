@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 binding.textResult.setText(toStringByDecimal(opnd));
-            } catch (ArithmeticException e) {
+            } catch (Exception e) {
                 binding.textResult.setText("Err");
             } finally {
                 prev = opnd;
