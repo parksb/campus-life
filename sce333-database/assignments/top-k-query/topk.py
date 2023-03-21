@@ -88,7 +88,6 @@ class Algo():
 
         return uids_result, cnt_access
 
-
     # Please use random_access(uid, dim) for random access
     def Fagin(cls, num_dim, top_k) -> Tuple[list, int]:
         uids_result = []
@@ -114,16 +113,12 @@ class Algo():
                 uid2empty_dim[uid] = find_empty_dim(uid)
                 if not len(uid2empty_dim[uid]):
                     cnt_found += 1
-                if cnt_found == top_k:
-                    break
-            if cnt_found == top_k:
+            if cnt_found >= top_k:
                 break
 
         uid2score: defaultdict[str, float] = defaultdict(float)
         for uid in uid2dim2value.keys():
-            score = 0
-            for _, s in uid2dim2value[uid].items():
-                score += s
+            score = sum(uid2dim2value[uid].values())
             for dim in uid2empty_dim[uid]:
                 score += cls.random_access(uid, dim)
             uid2score[uid] = score
