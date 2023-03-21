@@ -60,6 +60,13 @@ class Algo():
     def random_access(cls, uid, dim) -> float:
         return cls.__uid2dim2value__[uid][dim]
 
+    def find_empty_dim(cls, uid: str, num_dim: int, uid2dim2value: dict[str, dict[int, float]]):
+        result = []
+        for dim in range(num_dim):
+            if dim not in uid2dim2value[uid]:
+                result.append(dim)
+        return result
+
     def Naive(cls, num_dim, top_k) -> Tuple[list, int]:
         uids_result = []
         cnt_access = 0
@@ -95,13 +102,6 @@ class Algo():
 
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
 
-        def find_empty_dim(uid: str):
-            result = []
-            for dim in range(num_dim):
-                if dim not in uid2dim2value[uid]:
-                    result.append(dim)
-            return result
-
         cnt_found = 0
         uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list[int])
         for rank in range(len(cls.list_sorted_entities[0])):
@@ -110,7 +110,7 @@ class Algo():
                 uid2dim2value[uid][dim] = value
                 cnt_access += 1
 
-                uid2empty_dim[uid] = find_empty_dim(uid)
+                uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
                 if not len(uid2empty_dim[uid]):
                     cnt_found += 1
             if cnt_found >= top_k:
@@ -123,19 +123,46 @@ class Algo():
                 score += cls.random_access(uid, dim)
             uid2score[uid] = score
 
-        sorted_uid2score = sorted(uid2score.items(), key = lambda x : -x[1])
-
-        # get the top-k results
-        for i in range(top_k):
-            uids_result.append(sorted_uid2score[i][0])
+        uids_result = list(map(lambda x: x[0], sorted(uid2score.items(), key=lambda x: -x[1])))[:top_k]
 
         return uids_result, cnt_access
 
     # Please use random_access(uid, dim) for random access
     def TA(cls, num_dim, top_k) -> Tuple[list, int]:
-        uids_result = []
         cnt_access = 0
 
+        uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
+        top_k_uid2score: list[tuple[str, float]] = []
+
+        for rank in range(len(cls.list_sorted_entities[0])):
+            threshold = 0
+            uids_to_find: set[str] = set()
+            uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list[int])
+
+            for dim in range(num_dim):
+                uid, value = cls.list_sorted_entities[dim][rank]
+                uid2dim2value[uid][dim] = value
+                threshold += value
+                cnt_access += 1
+
+                uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
+                if len(uid2empty_dim[uid]):
+                    uids_to_find.add(uid)
+
+            uid2score: list[tuple[str, float]] = []
+            for uid in uids_to_find:
+                score = sum(uid2dim2value[uid].values())
+                for dim in uid2empty_dim[uid]:
+                    value = cls.random_access(uid, dim)
+                    uid2dim2value[uid][dim] = value
+                    score += value
+                uid2score.append((uid, score))
+
+            top_k_uid2score = sorted(top_k_uid2score + uid2score, key=lambda x: -x[1])[:top_k]
+            if all(map(lambda x: x[1] >= threshold, top_k_uid2score)):
+                break
+
+        uids_result = list(map(lambda x: x[0], top_k_uid2score))
         return uids_result, cnt_access
 
     # You cannot use random access in this method

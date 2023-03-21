@@ -7,7 +7,7 @@ def read_sorted_files(num_dim):
     for dim in range(num_dim):
         sorted_entities = []
         with open("sorted_score_{}.txt".format(dim), "r", encoding="utf-8") as f:
-            for line in f:                
+            for line in f:
                 words = line.strip().split("\t")
                 if len(words) != 2:
                     continue
@@ -16,7 +16,7 @@ def read_sorted_files(num_dim):
                 sorted_entities.append((uid,score))
                 uid2dim2value[uid][dim] = score
         list_sorted_entities.append(sorted_entities)
-    
+
     return list_sorted_entities, uid2dim2value
 
 
@@ -69,7 +69,7 @@ def compare_algorithms(num_dim, top_k, list_sorted_entities_all, uid2dim2value):
     print("\tNRA:\t{}".format(cnt_NRA))
 
 if __name__ == "__main__":
-    list_sorted_entities_all, uid2dim2value = read_sorted_files(10)    
+    list_sorted_entities_all, uid2dim2value = read_sorted_files(10)
     compare_algorithms(2, 3, list_sorted_entities_all, uid2dim2value)
     compare_algorithms(3, 3, list_sorted_entities_all, uid2dim2value)
     compare_algorithms(5, 10, list_sorted_entities_all, uid2dim2value)
