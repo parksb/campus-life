@@ -15,42 +15,39 @@ public class SingleTouchView extends View {
     Paint paint = new Paint();
     Path path = new Path();
 
-    private ArrayList<Paint> paints = new ArrayList<>();
-    private ArrayList<Path> paths = new ArrayList<>();
+    private final ArrayList<Paint> paints = new ArrayList<>();
+    private final ArrayList<Path> paths = new ArrayList<>();
 
     public SingleTouchView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initPaint();
+        initPaint(Color.BLACK);
     }
 
-    private void initPaint() {
+    private void initPaint(int color) {
         paint.setAntiAlias(true);
         paint.setStrokeWidth(10.0f);
-        paint.setColor(Color.BLACK);
+        paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     public void setColor(int c) {
-        paint = new Paint();
-        initPaint();
-        paint.setColor(c);
+        if (paint.getColor() != c) {
+            paint = new Paint();
+            initPaint(c);
+        }
     }
 
     public void clearPath() {
-        for (Path path : paths) {
-            path.reset();
-        }
-
+        path.reset();
         paths.clear();
         paints.clear();
-
         invalidate();
     }
 
     protected void onDraw(Canvas canvas) {
         canvas.drawPath(path, paint);
-        for (int i = 0; i < paths.size(); i++) {
+        for (int i = 0; i < paths.size() && i < paints.size(); i++) {
             canvas.drawPath(paths.get(i), paints.get(i));
         }
     }

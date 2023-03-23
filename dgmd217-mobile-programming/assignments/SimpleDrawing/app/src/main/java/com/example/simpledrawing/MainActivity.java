@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onColorButtonClick(View v) {
         SingleTouchView singleTouch = findViewById(R.id.singleTouchView);
+
         switch (v.getId()) {
             case R.id.btn_black:
                 singleTouch.setColor(Color.BLACK);
