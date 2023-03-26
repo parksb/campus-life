@@ -61,7 +61,7 @@ class Algo():
         return cls.__uid2dim2value__[uid][dim]
 
     def find_empty_dim(cls, uid: str, num_dim: int, uid2dim2value: dict[str, dict[int, float]]):
-        result = []
+        result: list[int] = []
         for dim in range(num_dim):
             if dim not in uid2dim2value[uid]:
                 result.append(dim)
@@ -107,8 +107,9 @@ class Algo():
         for rank in range(len(cls.list_sorted_entities[0])):
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
-                uid2dim2value[uid][dim] = value
                 cnt_access += 1
+
+                uid2dim2value[uid][dim] = value
 
                 uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
                 if not len(uid2empty_dim[uid]):
@@ -121,6 +122,7 @@ class Algo():
             score = sum(uid2dim2value[uid].values())
             for dim in uid2empty_dim[uid]:
                 score += cls.random_access(uid, dim)
+                cnt_access += 1
             uid2score[uid] = score
 
         uids_result = list(map(lambda x: x[0], sorted(uid2score.items(), key=lambda x: -x[1])))[:top_k]
@@ -137,13 +139,14 @@ class Algo():
         for rank in range(len(cls.list_sorted_entities[0])):
             threshold = 0
             uids_to_find: set[str] = set()
-            uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list[int])
+            uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list)
 
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
+                cnt_access += 1
+
                 uid2dim2value[uid][dim] = value
                 threshold += value
-                cnt_access += 1
 
                 uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
                 if len(uid2empty_dim[uid]):
@@ -154,6 +157,7 @@ class Algo():
                 score = sum(uid2dim2value[uid].values())
                 for dim in uid2empty_dim[uid]:
                     value = cls.random_access(uid, dim)
+                    cnt_access += 1
                     uid2dim2value[uid][dim] = value
                     score += value
                 uid2score.append((uid, score))
@@ -165,9 +169,58 @@ class Algo():
         uids_result = list(map(lambda x: x[0], top_k_uid2score))
         return uids_result, cnt_access
 
-    # You cannot use random access in this method
     def NRA(cls, num_dim, top_k) -> Tuple[list, int]:
         uids_result = []
         cnt_access = 0
+
+        uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
+        uid2bound: defaultdict[str, tuple[float, float]] = defaultdict(tuple)
+        uid2unknown_dims: defaultdict[str, list[int]] = defaultdict(list)
+        min_lb = None
+
+        for rank in range(len(cls.list_sorted_entities[0])):
+            curr_rank_dim2value: defaultdict[int, int] = defaultdict(int)
+            curr_uids: set[str] = set()
+
+            for dim in range(num_dim):
+                uid, value = cls.list_sorted_entities[dim][rank]
+                cnt_access += 1
+
+                uid2dim2value[uid][dim] = value
+                curr_rank_dim2value[dim] = value
+                curr_uids.add(uid)
+
+            for uid in curr_uids:
+                lb = round(sum(uid2dim2value[uid].values()), 2)
+                if min_lb is None or lb < min_lb:
+                    min_lb = lb
+                else:
+                    uid2unknown_dims[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
+                    if not len(uid2unknown_dims[uid]):
+                        uid2unknown_dims.pop(uid)
+                    uid2bound[uid] = (lb, 0)
+
+            for uid in uid2unknown_dims:
+                ub = uid2bound[uid][0]
+                for dim in uid2unknown_dims[uid]:
+                    ub += curr_rank_dim2value[dim]
+                uid2bound[uid] = (uid2bound[uid][0], round(ub, 2))
+
+            bounds = sorted(uid2bound.items(), key=lambda x: -x[1][0])
+            uids_result = []
+            found = False
+            for i in range(len(bounds)):
+                for j in range(i + 1, len(bounds)):
+                    if bounds[i][1][0] < bounds[j][1][1]:
+                        found = True
+                        break
+                if found:
+                    break
+                uids_result.append(bounds[i][0])
+                if len(uids_result) >= top_k:
+                    break
+
+            if len(uids_result) >= top_k:
+                break
 
         return uids_result, cnt_access
