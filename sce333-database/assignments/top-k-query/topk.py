@@ -174,13 +174,13 @@ class Algo():
         cnt_access = 0
 
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
-        uid2bound: defaultdict[str, tuple[float, float]] = defaultdict(tuple)
+        uid2lb: defaultdict[str, float] = defaultdict(float)
         uid2unknown_dims: defaultdict[str, list[int]] = defaultdict(list)
         min_lb = None
 
         for rank in range(len(cls.list_sorted_entities[0])):
             curr_rank_dim2value: defaultdict[int, int] = defaultdict(int)
-            curr_uids: set[str] = set()
+            curr_rank_uids: set[str] = set()
 
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
@@ -188,9 +188,9 @@ class Algo():
 
                 uid2dim2value[uid][dim] = value
                 curr_rank_dim2value[dim] = value
-                curr_uids.add(uid)
+                curr_rank_uids.add(uid)
 
-            for uid in curr_uids:
+            for uid in curr_rank_uids:
                 lb = round(sum(uid2dim2value[uid].values()), 2)
                 if min_lb is None or lb < min_lb:
                     min_lb = lb
@@ -198,20 +198,19 @@ class Algo():
                     uid2unknown_dims[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
                     if not len(uid2unknown_dims[uid]):
                         uid2unknown_dims.pop(uid)
-                    uid2bound[uid] = (lb, 0)
+                    uid2lb[uid] = lb
 
-            for uid in uid2unknown_dims:
-                ub = uid2bound[uid][0]
-                for dim in uid2unknown_dims[uid]:
-                    ub += curr_rank_dim2value[dim]
-                uid2bound[uid] = (uid2bound[uid][0], round(ub, 2))
-
-            bounds = sorted(uid2bound.items(), key=lambda x: -x[1][0])
+            bounds = sorted(uid2lb.items(), key=lambda x: -x[1])
             uids_result = []
             found = False
             for i in range(len(bounds)):
                 for j in range(i + 1, len(bounds)):
-                    if bounds[i][1][0] < bounds[j][1][1]:
+                    unknown_dims = uid2unknown_dims[bounds[j][0]]
+                    ub = bounds[j][1]
+                    for unknown_dim in unknown_dims:
+                        ub += curr_rank_dim2value[unknown_dim]
+
+                    if bounds[i][1] < ub:
                         found = True
                         break
                 if found:
