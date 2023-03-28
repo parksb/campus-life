@@ -60,7 +60,7 @@ class Algo():
     def random_access(cls, uid, dim) -> float:
         return cls.__uid2dim2value__[uid][dim]
 
-    def find_empty_dim(cls, uid: str, num_dim: int, uid2dim2value: dict[str, dict[int, float]]):
+    def find_unknown_dim(cls, uid: str, num_dim: int, uid2dim2value: dict[str, dict[int, float]]):
         result: list[int] = []
         for dim in range(num_dim):
             if dim not in uid2dim2value[uid]:
@@ -97,13 +97,12 @@ class Algo():
 
     # Please use random_access(uid, dim) for random access
     def Fagin(cls, num_dim, top_k) -> Tuple[list, int]:
-        uids_result = []
         cnt_access = 0
+        cnt_found = 0
 
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
+        uid2unknown_dim: defaultdict[str, list[int]] = defaultdict(list[int])
 
-        cnt_found = 0
-        uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list[int])
         for rank in range(len(cls.list_sorted_entities[0])):
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
@@ -111,8 +110,8 @@ class Algo():
 
                 uid2dim2value[uid][dim] = value
 
-                uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
-                if not len(uid2empty_dim[uid]):
+                uid2unknown_dim[uid] = cls.find_unknown_dim(uid, num_dim, uid2dim2value)
+                if not len(uid2unknown_dim[uid]):
                     cnt_found += 1
             if cnt_found >= top_k:
                 break
@@ -120,7 +119,7 @@ class Algo():
         uid2score: defaultdict[str, float] = defaultdict(float)
         for uid in uid2dim2value.keys():
             score = sum(uid2dim2value[uid].values())
-            for dim in uid2empty_dim[uid]:
+            for dim in uid2unknown_dim[uid]:
                 score += cls.random_access(uid, dim)
                 cnt_access += 1
             uid2score[uid] = score
@@ -139,7 +138,7 @@ class Algo():
         for rank in range(len(cls.list_sorted_entities[0])):
             threshold = 0
             uids_to_find: set[str] = set()
-            uid2empty_dim: defaultdict[str, list[int]] = defaultdict(list)
+            uid2unknown_dim: defaultdict[str, list[int]] = defaultdict(list)
 
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
@@ -148,14 +147,14 @@ class Algo():
                 uid2dim2value[uid][dim] = value
                 threshold += value
 
-                uid2empty_dim[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
-                if len(uid2empty_dim[uid]):
+                uid2unknown_dim[uid] = cls.find_unknown_dim(uid, num_dim, uid2dim2value)
+                if len(uid2unknown_dim[uid]):
                     uids_to_find.add(uid)
 
             uid2score: list[tuple[str, float]] = []
             for uid in uids_to_find:
                 score = sum(uid2dim2value[uid].values())
-                for dim in uid2empty_dim[uid]:
+                for dim in uid2unknown_dim[uid]:
                     value = cls.random_access(uid, dim)
                     cnt_access += 1
                     uid2dim2value[uid][dim] = value
@@ -163,7 +162,7 @@ class Algo():
                 uid2score.append((uid, score))
 
             top_k_uid2score = sorted(top_k_uid2score + uid2score, key=lambda x: -x[1])[:top_k]
-            if all(map(lambda x: x[1] >= threshold, top_k_uid2score)):
+            if len(top_k_uid2score) >= top_k and all(map(lambda x: x[1] >= threshold, top_k_uid2score)):
                 break
 
         uids_result = list(map(lambda x: x[0], top_k_uid2score))
@@ -176,7 +175,6 @@ class Algo():
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
         uid2lb: defaultdict[str, float] = defaultdict(float)
         uid2unknown_dims: defaultdict[str, list[int]] = defaultdict(list)
-        min_lb = None
 
         for rank in range(len(cls.list_sorted_entities[0])):
             curr_rank_dim2value: defaultdict[int, int] = defaultdict(int)
@@ -192,30 +190,27 @@ class Algo():
 
             for uid in curr_rank_uids:
                 lb = round(sum(uid2dim2value[uid].values()), 2)
-                if min_lb is None or lb < min_lb:
-                    min_lb = lb
-                else:
-                    uid2unknown_dims[uid] = cls.find_empty_dim(uid, num_dim, uid2dim2value)
-                    if not len(uid2unknown_dims[uid]):
-                        uid2unknown_dims.pop(uid)
-                    uid2lb[uid] = lb
+                uid2lb[uid] = lb
+                uid2unknown_dims[uid] = cls.find_unknown_dim(uid, num_dim, uid2dim2value)
+                if not len(uid2unknown_dims[uid]):
+                    uid2unknown_dims.pop(uid)
 
-            bounds = sorted(uid2lb.items(), key=lambda x: -x[1])
+            sorted_lbs = sorted(uid2lb.items(), key=lambda x: -x[1])
             uids_result = []
             found = False
-            for i in range(len(bounds)):
-                for j in range(i + 1, len(bounds)):
-                    unknown_dims = uid2unknown_dims[bounds[j][0]]
-                    ub = bounds[j][1]
+            for i in range(len(sorted_lbs)):
+                for j in range(i + 1, len(sorted_lbs)):
+                    unknown_dims = uid2unknown_dims[sorted_lbs[j][0]]
+                    ub = sorted_lbs[j][1]
                     for unknown_dim in unknown_dims:
                         ub += curr_rank_dim2value[unknown_dim]
 
-                    if bounds[i][1] < ub:
+                    if sorted_lbs[i][1] < ub:
                         found = True
                         break
                 if found:
                     break
-                uids_result.append(bounds[i][0])
+                uids_result.append(sorted_lbs[i][0])
                 if len(uids_result) >= top_k:
                     break
 
