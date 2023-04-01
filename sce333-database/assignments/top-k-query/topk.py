@@ -57,6 +57,8 @@ class Algo():
         '''
         self.__uid2dim2value__ = uid2dim2value
 
+        self.count = len(self.list_sorted_entities[0])
+
     def random_access(cls, uid, dim) -> float:
         return cls.__uid2dim2value__[uid][dim]
 
@@ -103,7 +105,7 @@ class Algo():
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
         uid2unknown_dim: defaultdict[str, list[int]] = defaultdict(list[int])
 
-        for rank in range(len(cls.list_sorted_entities[0])):
+        for rank in range(cls.count):
             for dim in range(num_dim):
                 uid, value = cls.list_sorted_entities[dim][rank]
                 cnt_access += 1
@@ -135,7 +137,7 @@ class Algo():
         uid2dim2value: defaultdict[str, dict[int, float]] = defaultdict(dict)
         top_k_uid2score: list[tuple[str, float]] = []
 
-        for rank in range(len(cls.list_sorted_entities[0])):
+        for rank in range(cls.count):
             threshold = 0
             uids_to_find: set[str] = set()
             uid2unknown_dim: defaultdict[str, list[int]] = defaultdict(list)
@@ -176,7 +178,7 @@ class Algo():
         uid2lb: defaultdict[str, float] = defaultdict(float)
         uid2unknown_dims: defaultdict[str, list[int]] = defaultdict(list)
 
-        for rank in range(len(cls.list_sorted_entities[0])):
+        for rank in range(cls.count):
             curr_rank_dim2value: defaultdict[int, int] = defaultdict(int)
             curr_rank_uids: set[str] = set()
 
