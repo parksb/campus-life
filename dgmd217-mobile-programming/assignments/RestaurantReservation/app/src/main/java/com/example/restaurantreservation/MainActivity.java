@@ -14,8 +14,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     LocalDateTime selectedDateTime = LocalDateTime.now();
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TimePicker timePicker = findViewById(R.id.timePicker);
-        timePicker.setOnTimeChangedListener((timePicker1, hourOfDay, minute) -> {
+        timePicker.setOnTimeChangedListener((timePickerView, hourOfDay, minute) -> {
             EditText time = findViewById(R.id.textTime);
             selectedDateTime = selectedDateTime.withHour(hourOfDay).withMinute(minute);
             time.setText(selectedDateTime.format(timeFormat));
@@ -77,13 +77,16 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.clear) {
             selectedDateTime = LocalDateTime.now();
 
-            final Calendar cal = Calendar.getInstance();
+            EditText date = findViewById(R.id.textDate);
+            date.setText(selectedDateTime.format(dateFormat));
+
             CalendarView calView = findViewById(R.id.calendarView);
-            calView.setDate(cal.getTimeInMillis());
+            calView.setDate(selectedDateTime.atZone(ZoneId.systemDefault())
+                    .toInstant().toEpochMilli());
 
             TimePicker timePicker = findViewById(R.id.timePicker);
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int min = cal.get(Calendar.MINUTE);
+            int hour = selectedDateTime.getHour();
+            int min = selectedDateTime.getMinute();
             timePicker.setHour(hour);
             timePicker.setMinute(min);
         }
