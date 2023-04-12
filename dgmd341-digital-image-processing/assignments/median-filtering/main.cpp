@@ -1,6 +1,4 @@
-#include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
 
 using namespace cv;
 
@@ -8,15 +6,15 @@ std::tuple<int, int> replicate_padding(const Mat& img, const int x, const int y)
     int ret_x = x;
     int ret_y = y;
 
-    if (x < 0) {
+    if (ret_x < 0) {
         ret_x = 0;
-    } else if (x > img.cols - 1) {
+    } else if (ret_x > img.cols - 1) {
         ret_x = img.cols - 1;
     }
 
-    if (y < 0) {
+    if (ret_y < 0) {
         ret_y = 0;
-    } else if (y > img.rows - 1) {
+    } else if (ret_y > img.rows - 1) {
         ret_y = img.rows - 1;
     }
 
@@ -24,8 +22,7 @@ std::tuple<int, int> replicate_padding(const Mat& img, const int x, const int y)
 }
 
 Mat median_filter(const Mat& img, const Size& sz) {
-    assert(sz.width % 2 == 1);
-    assert(sz.height % 2 == 1);
+    assert(sz.width % 2 == 1 && sz.height % 2 == 1);
 
     Mat ret(img.size(), img.type());
 
@@ -52,13 +49,13 @@ Mat median_filter(const Mat& img, const Size& sz) {
 }
 
 int main() {
-    Mat img = imread("images/salt-pepper.png", 0);
+    Mat img = imread("images/salt-and-pepper.png", 0);
     img.convertTo(img, CV_8UC1);
 
     Mat filtered = median_filter(img, Size(5, 5));
 
-    imshow("Image", img);
-    imshow("Filtered Image", filtered);
+    imshow("Original image", img);
+    imshow("Filtered image", filtered);
 
     waitKey();
 }
