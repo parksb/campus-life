@@ -445,3 +445,5 @@ dkms.conf
 output
 
 # End of https://www.toptal.com/developers/gitignore/api/c,c++
+
+memo-*.html

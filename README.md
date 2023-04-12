@@ -2,33 +2,22 @@
 
 ## 수업
 
-### 2017년 봄 (1학년 1학기)
+### 2023년 봄 (3학년 2학기)
 
-* [소셜미디어](mibs101-social-media)
-* [미디어통계](mibs131-media-statistics)
-* [예술이란무엇인가](cart105-what-is-art)
-* [영어2](eng112-listening-and-reading-in-english)
-* [수학1](math102-calculus-1)
-* [아주희망](cajo114-ajou-dream)
+* [영상처리](dgmd341-digital-image-processing)
+* [데이터베이스](sce333-database)
+* [모바일프로그래밍](dgmd217-mobile-programming)
+* [오픈소스SW입문](sce331-introduction-to-open-source-sw)
+* [한국영화사](cart1013-korean-film-history)
+* [서양미술사](cart001-western-art-history)
 
-### 2017년 가을 (1학년 2학기)
+### 2022년 가을 (3학년 1학기)
 
-* [글쓰기](kor101-korean-writing)
-* [컴퓨터프로그래밍](dmed-computer-programming)
-* [컴퓨터프로그램설계](cse134-computer-program-design)
-* [한국정치의쟁점과과제](pol113-the-reality-and-issues-in-contemporary-korean-society)
-* [확률및통계1](math251-probability-and-statistics-1)
-* [영어1](eng111-speaking-and-writing-in-english)
-* [아주인성](cajo113-ajou-virtues-ethics-responsibility-and-sustainability)
-
-### 2018년 봄 (2학년 1학기)
-
-* [그래픽디자인](dgmd151-graphic-design)
-* [자료구조](cse200-data-structures)
-* [객체지향프로그래밍](cse231-object-oriented-programming)
-* [운영체제](cse311-operating-systems)
-* [UX디자인](dgmd451-user-experience-design)
-* [전환기근대사의조명](hist113-survey-of-modern-history)
+* [알고리즘](cse350-algorithms)
+* [컴퓨터그래픽스](dgmd241-computer-graphics)
+* [데이터사이언스개론](dgmd333-introduction-to-data-science)
+* [매스콤과현대사회](soc11-mass-communication-and-modern-society)
+* [인류학이란무엇인가](chis104-what-is-anthropology)
 
 ### 2018년 가을 (2학년 2학기)
 
@@ -39,22 +28,33 @@
 * [디지털타이포그래피](dgmd252-digital-typography)
 * [창업실습2](dgmd472-business-start-up-practice-2)
 
-### 2022년 가을 (3학년 1학기)
+### 2018년 봄 (2학년 1학기)
 
-* [알고리즘](cse350-algorithms)
-* [컴퓨터그래픽스](dgmd241-computer-graphics)
-* [데이터사이언스개론](dgmd333-introduction-to-data-science)
-* [매스콤과현대사회](soc11-mass-communication-and-modern-society)
-* [인류학이란무엇인가](chis104-what-is-anthropology)
+* [그래픽디자인](dgmd151-graphic-design)
+* [자료구조](cse200-data-structures)
+* [객체지향프로그래밍](cse231-object-oriented-programming)
+* [운영체제](cse311-operating-systems)
+* [UX디자인](dgmd451-user-experience-design)
+* [전환기근대사의조명](hist113-survey-of-modern-history)
 
-### 2023년 봄 (3학년 2학기)
+### 2017년 가을 (1학년 2학기)
 
-* [영상처리](dgmd341-digital-image-processing)
-* [데이터베이스](sce333-database)
-* [모바일프로그래밍](dgmd217-mobile-programming)
-* [오픈소스SW입문](sce331-introduction-to-open-source-sw)
-* [한국영화사](cart1013-korean-film-history)
-* [서양미술사](cart001-western-art-history)
+* [글쓰기](kor101-korean-writing)
+* [컴퓨터프로그래밍](dmed270-computer-programming)
+* [컴퓨터프로그램설계](cse134-computer-program-design)
+* [한국정치의쟁점과과제](pol113-the-reality-and-issues-in-contemporary-korean-society)
+* [확률및통계1](math251-probability-and-statistics-1)
+* [영어1](eng111-speaking-and-writing-in-english)
+* [아주인성](cajo113-ajou-virtues-ethics-responsibility-and-sustainability)
+
+### 2017년 봄 (1학년 1학기)
+
+* [소셜미디어](mibs101-social-media)
+* [미디어통계](mibs131-media-statistics)
+* [예술이란무엇인가](cart105-what-is-art)
+* [영어2](eng112-listening-and-reading-in-english)
+* [수학1](math102-calculus-1)
+* [아주희망](cajo114-ajou-dream)
 
 ## 소프트웨어
 
