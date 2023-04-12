@@ -1,6 +1,6 @@
 # Campus Life
 
-## 📚 수업
+## 수업
 
 ### 2017년 봄 (1학년 1학기)
 
@@ -47,7 +47,16 @@
 * [매스콤과현대사회](soc11-mass-communication-and-modern-society)
 * [인류학이란무엇인가](chis104-what-is-anthropology)
 
-## 💿 소프트웨어
+### 2023년 봄 (3학년 2학기)
+
+* [영상처리](dgmd341-digital-image-processing)
+* [데이터베이스](sce333-database)
+* [모바일프로그래밍](dgmd217-mobile-programming)
+* [오픈소스SW입문](sce331-introduction-to-open-source-sw)
+* [한국영화사](cart1013-korean-film-history)
+* [서양미술사](cart001-western-art-history)
+
+## 소프트웨어
 
 ### 무료
 
@@ -67,4 +76,3 @@
 ### 대여
 
 * [PC119센터 대여](http://pc119.ajou.ac.kr)
-
