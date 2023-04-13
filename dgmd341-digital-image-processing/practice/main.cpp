@@ -143,11 +143,7 @@ int main() {
             float dx = pt.x < F.cols / 2 ? pt.x : F.cols - pt.x;
             float dy = pt.y < F.rows / 2 ? pt.y : F.rows - pt.y;
             float D = sqrtf(dx * dx + dy * dy);
-
-            int H = 0;
-            if (D <= D0) {
-                H = 1;
-            }
+            int H = 1 + 4 * PI * PI * D * D / (F.rows * F.cols);
 
             F.at<Vec2f>(pt.y, pt.x) = v * H;
         }
