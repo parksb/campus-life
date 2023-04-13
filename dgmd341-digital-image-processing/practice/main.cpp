@@ -135,37 +135,29 @@ int main() {
     dft(img, F, DFT_COMPLEX_OUTPUT);
 
     Mat ch[2];
-    // for (int y = 0; y < F.rows; y++) {
-    //   for (int x = 0; x < F.cols; x++) {
-    //     Vec2f v = F.at<Vec2f>(y, x);
-    //     float length = sqrtf(v[0] * v[0] + v[1] * v[1]);
-    //     v[0] = length;
-    //     v[1] = 0;
-    //     F.at<Vec2f>(y, x) = v;
-    //   }
-    // }
-    F.at<Vec2f>(0, 0)[0] *= 1.2;
-    F.at<Vec2f>(0, 0)[1] *= 1.2;
+
+    const float D0 = 2;
+    for (Point pt(0, 0); pt.y < F.rows; pt.y++) {
+        for (pt.x = 0; pt.x < F.cols; pt.x++) {
+            Vec2f v = F.at<Vec2f>(pt.y, pt.x);
+            float dx = pt.x < F.cols / 2 ? pt.x : F.cols - pt.x;
+            float dy = pt.y < F.rows / 2 ? pt.y : F.rows - pt.y;
+            float D = sqrtf(dx * dx + dy * dy);
+
+            int H = 0;
+            if (D <= D0) {
+                H = 1;
+            }
+
+            F.at<Vec2f>(pt.y, pt.x) = v * H;
+        }
+    }
 
     dft(F, img2, DFT_INVERSE | DFT_REAL_OUTPUT | DFT_SCALE);
     imshow("Image2", img2);
 
-    // img.setTo(0.5);
-    //
-    // for (int y = 0; y < img.rows; y++) {
-    //   for (int x = 0; x < img.cols; x++) {
-    //     img.at<float>(y, x) = cos(2 * PI * (y + x) / img.rows * 4) + 0.5;
-    //   }
-    // }
     dft(img, out, DFT_COMPLEX_OUTPUT);
-
     imshow("Image", img);
-    // visFreq(out, out);
-    // imshow("Out", out);
-    //
-    // std::vector<Mat> channels;
-    // split(out, channels);
-    // imshow("Out Image", channels[0]);
 
     waitKey();
 }
