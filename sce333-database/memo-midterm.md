@@ -1,29 +1,35 @@
-# Introduction to Database
+# 데이터베이스
+
+## Introduction to Database
 
 - 미니월드: 데이터베이스에 저장된 데이터에 관한 리얼월드의 일부분.
 - DBMS: 데이터베이스를 관리, 생성하기 위한 소프트웨어 시스템.
 - 데이터베이스를 정의한다는 것은 데이터의 타입과 구조, 제약을 정의하는 것.
 - 메타데이터: 데이터베이스 정의 또는 descriptive information.
 
-## Simplified Database System
+### Simplified Database System
 
 ![](https://user-images.githubusercontent.com/6410412/229702076-9c695974-ffcc-45e4-b91f-3f86a43904fc.png)
 
-## Characteristics of the Database Approach
+### Characteristics of the Database Approach
 
+- Traditional file processing vs Database approach:
+  - 전통적 파일 처리는 각 사용자가 특정 애플리케이션에 필요한 파일을 정의하고 구현함.
+  - 데이터베이스는 하나의 저장소가 한 번 정의된 데이터를 관리하고, 다양한 유저가 데이터에 접근함.
 - Self-describing nature of a database system:
   - 데이터베이스 시스템은 구조와 제약에 대한 완전한 정의를 포함하고 있다.
   - 메타데이터는 데이터베이스의 구조를 설명한다. (NOSQL의 경우 메타데이터가 불필요함.)
-  - 데이터베이스 카탈로그는 DBMS 소프트웨어에 사용된다.
+  - 데이터베이스 카탈로그는 DBMS나 데이터베이스 구조에 대한 정보를 필요로하는 유저가 사용한다.
 - Insulation between programs and data:
   - Program-data independence: 데이터를 바꿔도 프로그램을 다시 작성할 필요가 없다.
-  - Program-operation independence: 명령은 두 부분(인터페이스와 구현)으로 나뉜다.
+  - Program-operation independence: 명령은 두 부분(인터페이스와 구현)으로 나뉜다. 인터페이스는 명령의 이름과 인자의 데이터타입을 포함한다. 구현은 인터페이스에 영향을 미치지 않고 수정될 수 있다.
 - Support of multiple views of the data:
-  - 뷰는 데이터베이스의 서브셋.
+  - 뷰는 데이터베이스의 서브셋, 데이터베이스로부터 유도되지만 명시적으로 저장되지는 않는 가상 데이터를 포함.
 - Sharing of data and multiuser transaction processing:
-  - 여러 유저가 데이터베이스에 동시 접근할 수 있다.
+  - 여러 유저가 데이터베이스에 동시 접근할 수 있게 해준다.
+  - 동시성 제어, 트랜잭션(isolation, atomic)
 
-# Database System concepts and Architecture
+## Database System concepts and Architecture
 
 - 데이터 모델: 구조(Structures) + 명령(Operation) + 제약(Constraints)으로 이뤄진 추상 모델.
   - Conceptual(high-level, semantic): 사용자가 데이터를 인식하는 것과 같은 개념 제공.
@@ -31,14 +37,15 @@
   - Implementation (representational) data models
   - Self-describing data models: 데이터에 대한 정의와 값이 합쳐진 모델. (e.g., XML, KV Stores, NOSQL, etc.)
 
-## Schemas and Instances
+### Schemas, Instances and States
 
 - Schema: 데이터베이스의 구조와 제약, 데이터 타입에 대한 설명.
-- Instance: 데이터베이스의 개별 요소. (e.g., record instance, table instance, entity instance)
-- State: 데이터베이스에 저장된 실제 데이터에 대한 특정 시점의 스냅샷.
+- Instance: 데이터베이스의 개별 요소를 가리키는 용어. (e.g., record instance, table instance, entity instance)
+- State: 특정 시점의 데이터베이스에 저장된 실제 데이터. 즉, 데이터베이스의 스냅샷.
 - 스키마는 거의 바뀌지 않지만, 스테이트는 수시로 변경될 수 있다.
+- 스키마는 intension, 스테이트는 extension이라고도 부른다.
 
-## Three-schema Architecture
+### Three-schema Architecture
 
 ![](https://user-images.githubusercontent.com/6410412/229702415-e9ea7b7e-e9cc-4bd6-a771-686b3588d7f8.png)
 
@@ -50,14 +57,14 @@
   - Logical Data Independence: external schema를 변경하지 않고 conceptual schema를 변경할 수 있어야 한다.
   - Physical Data Independence: conceptual shema를 변경하지 않고 internal schema를 변경할 수 있어야 한다.
 
-## DBMS Languages
+### DBMS Languages
 
 - Data Definition Language (DDL): conceptual schema를 정의하기 위해 사용하는 언어. 많은 DBMS가 internal/external schema도 정의할 수 있도록 지원.
   - 어떤 DBMS는 internal schema에는 Storage Definition Language (SDL), external schema에는 View Definition Language (VDL)를 사용하도록 분리하기도.
 - Data Manipulation Language (DML): 데이터를 조회, 변경하기 위해 사용하는 언어. 범용 언어를 임베드하여 사용할 수도 있음.
   - 하이레벨, 비절차적 DML로 SQL이 있음. declarative language라고도 한다.
 
-## DBMS Architectures
+### DBMS Architectures
 
 ### Physical centralized architecture
 
@@ -77,7 +84,7 @@
 - 웹 애플리케이션을 위한 일반적인 아키텍처.
 - 웹 서버를 통해서만 데이터베이스에 접근할 수 있으므로 보안을 향상시킬 수 있음.
 
-# Data Modeling Using E-R Model
+## Data Modeling Using E-R Model
 
 - 아래와 같은 과정으로 모델링:
   ![](https://user-images.githubusercontent.com/6410412/229670315-de5a73e6-3c01-44b8-ad99-68afa05eb442.png)
@@ -95,11 +102,18 @@
     - 복합 키를 만들 수 있음. (e.g., 차량번호는 번호와 지역으로 구성)
     - 여러 키를 가질 수 있음. (e.g., CAR는 차량등록번호와 차량번호)
 
-## E-R Diagram
+### E-R Diagram
 
 ![](https://user-images.githubusercontent.com/6410412/229708819-c913d251-3cd5-4dae-b698-3d437a6c8aba.png)
 
-## Relationship
+- Employee는 EID, Department는 DID처럼 중복되는 이름을 피하면 구분이 편함.
+- ER 다이어그램에서 여러 어트리뷰트로 묶인 키를 표현하려면 어떻게?
+  - relational model에서 복합키를 pkey로 쓰는건 특수한 상황. ER 모델에서 여러 어트리뷰트를 묶어서 키로 표현할 필요가 없다.
+- 왜 weak entity가 필요한가? 그냥 임의의 ID를 주면 되는데?
+  - 실제로 대부분의 경우 그냥 ID를 줌. ID가 있는 엔티티는 중요하다는 것. 명시적으로 weak entity로 만들면 스키마만 보고도 그 엔티티 자체로는 의미가 없다는 것을 보여줄 수 있다.
+- Relational 모델에서 여러 어트리뷰트에 underline하는 건 그 어트리뷰트들의 묶음이 하나의 pkey라는 의미, ER 다이어그램에서 여러 어트리뷰트에 underline하는 건 개별 어트리뷰트 하나 하나가 유니크한 key라는 의미. superkey는 relational model에만 존재하는 개념이다.
+
+### Relationship
 
 - 2개 이상의 엔티티 사이의 관계에 구체적인 의미를 갖는 것.
 - Relationship type:
@@ -114,13 +128,13 @@
   - Total
   - Partial
 
-## Weak Entity Types
+### Weak Entity Types
 
 - 키가 없는 엔티티.
 - 반드시 indentifying relationship type에 참여해야한다.
 - 엔티티는 weak entity type의 부분키(partial key)와 identifying relationship type에 관계된 특정 엔티티의 조합으로 식별된다.
 
-# Relational Data Model
+## Relational Data Model
 
 - Schema $R$: $R(A_1, A_2, \cdots, A_n)$
   - e.g., `STUDENT(Id, Name, Dept)`
@@ -139,7 +153,7 @@
   - 이걸 신경쓰지 않아도 되는 표현은 self-describing이라고 한다. (e.g., XML, JSON)
   - row의 순서는 중요하지 않다.
 
-## Constraints
+### Constraints
 
 - constraints에는 3가지 주요 타입이 있음:
   - Inherent or Implicit Constraints:
@@ -152,38 +166,44 @@
     - 애플리케이션 프로그램으로부터 제공되는 제약.
     - 종종 SQL의 assertions로 명시되기도 한다.
 - explicit constraints에 3가지 주요 타입이 있음:
-  - Key integrity constraints:
+  - Key constraints:
+    - pkey는 중복되어서는 안 된다.
     - Superkey: 여러 어트리뷰트의 집합으로 이뤄진 키.
     - Key: 최소한의 superkey. key는 superkey이지만, 그 반대는 아니다.
     - Primary key: 여러 후보키가 있을 때, 그 중 하나를 pkey로 사용.
   - Entity integrity constraints:
     - 각 relation schema의 pkey는 null이 될 수 없다.
+    - entity를 식별할 수 있어야 한다는 제약이기 때문에 entity constraint.
   - Referential integrity constraints:
     - $R_1$에 있는 튜플의 fkey는 $R_2$에 실제 존재하는 튜플의 pkey를 참조해야 한다.
     - Foreign key: fkey는 자신이 참조하는 pkey와 같은 도메인이어야 한다.
 - 또 다른 schema-based constraint는 Domain constraints.
 
-## Update Operations
+### Update Operations
 
 - 데이터 업데이트 시에 integrity constraints를 위반해서는 안 된다.
 - CASCADE, SET NULL, SET DEFAULT와 같은 트리거를 설정할 수 있다.
-- INSERT는 제약을 위반할 가능성이 있음:
-  - Domain:
+- INSERT는 모든 제약을 위반할 가능성이 있음:
+  - domain:
     - 새 튜플의 값이 어트리뷰트의 도메인에 포함되지 않은 경우.
     - 애플리케이션 코드에서 확인이 필요함.
-  - Key: 같은 키 속성을 가진 튜플이 이미 존재하는 경우.
-  - Referential: 새 튜플이 참조하는 외래키가 존재하지 않는 경우.
-  - Entity: 새 튜플의 주요키가 null인 경우.
+  - key: 같은 키 속성을 가진 튜플이 이미 존재하는 경우.
+  - referential: 새 튜플이 참조하는 외래키가 존재하지 않는 경우.
+  - entity: 새 튜플의 주요키가 null인 경우.
 - DELETE:
-  - 다른 튜플이 삭제하려는 값의 주요키를 참조하는 경우.
+  - referential: 다른 튜플이 삭제하려는 값의 주요키를 참조하는 경우.
+- UPDATE:
+  - pkey를 변경하는 경우에는 모든 제약을 위반할 수 있다.
+  - referential: fkey를 변경하는 경우.
+  - domain: 일반적인 어트리뷰트를 변경하는 경우.
 
-# SQL
+## SQL
 
 - 관계형 모델의 관계, 튜플, 속성이 테이블, 행, 열로 대응.
 - 각 구문 마지막에는 세미콜론이 있어야 한다. (중간고사에 세미콜론 꼭 써야 함.)
 - 테이블 생성: `CREATE TABLE COMPANY.EMPLOYEE` 또는 `CREATE TABLE COMPANY`
 
-## Basic Constraints
+### Specifying Constraints
 
 - Key constraints: pkey 값은 중복될 수 없다.
 - Entity integrity constraint: pkey 값은 null이 될 수 없다.
@@ -203,7 +223,7 @@
   ```
 - 테이블을 생성하는 시점에 아직 없는 값을 fkey로 참조하면 referential integrity constraint를 위반하는 문제가 생김. 테이블을 생성한 뒤, `ALTER TABLE`해 fkey를 추가하면 된다.
 
-## Basic Retrieval Queries
+### Basic Retrieval Queries
 
 - 기본형은 `SELECT <attribute list> FROM <table list> WHERE <condition>;`.
 - 'Research' 부서에서 일하는 모든 직원의 이름과 주소를 찾는 경우:
@@ -215,9 +235,17 @@
     ```
   - 따라서 `WHERE`절이 필수.
 
-# More SQL
+## More SQL
 
-## Nested Queries
+### NULL
+
+![](https://user-images.githubusercontent.com/6410412/233791999-fb1dada0-3288-4462-a033-4c7148ee9eb9.png)
+
+- 위와 같이 three-valued logic에 logical connectives가 있다.
+- 따라서 NULL 조건을 적용할 때는 비교 연산이 아니라 `IS` 연산을 해야한다:
+  - e.g., `SELECT * FROM EMPLOYEE WHERE Pno IS NULL;`
+
+### Nested Queries
 
 - `WHERE` 절 안에 완성된 형태의 select-from-where 블록을 중첩시킬 수 있다.
 - `IN` 명령을 이용해 튜플 집합에서 대상 튜플을 비교할 수 있음.
@@ -235,39 +263,39 @@
    FROM PROJECT, DEPARTMENT, EMPLOYEE
    WHERE Dnum = Dnumber AND Mgr_ssn = Ssn AND Lname = 'Smith')
    UNION
-  (SELECT DISTINCt Pnumber
+  (SELECT DISTINCT Pnumber
    FROM PROJECT, WORKS_ON, EMPLOYEE
    WHERE Pnumber = Pno AND Essn = Ssn AND Lname = 'Smith');
   ```
 
-## Use of (`NOT`) `EXISTS`
+### Use of (`NOT`) `EXISTS`
 
 - 5번 부서의 모든 프로젝트에 참여하는 직원의 이름을 찾는 경우:
   ```sql
   SELECT Fname, Lname
   FROM Employee
   WHERE NOT EXISTS (
-    (SELECT Pnumber FROM PROJECT WHERE Dno=5)
-      EXCEPT (SELECT Pno FROM WORKS_ON WHERE Ssn=ESsn)
+    (SELECT Pnumber FROM PROJECT WHERE Dno = 5)
+      EXCEPT (SELECT Pno FROM WORKS_ON WHERE Ssn = ESsn)
   );
   ```
 - 5번 부서의 모든 프로젝트에서 개별 직원이 참여하는 프로젝트 목록을 뺐을 때, 남는 프로젝트가 없다면 해당 직원은 5번 부서의 모든 프로젝트에 참여하고 있다고 할 수 있음.
 
-## SQL Joins
+### SQL Joins
 
 ![](https://user-images.githubusercontent.com/6410412/229053775-944ef5a5-61e3-4cda-940e-7f5a569311b8.png)
 
 - `INNER JOIN`:
-  - `SELECT * FROM EMPLOYEE E INNER JOIN DEPENDENT D ON (E.Ssn = D.Essn);`
+  - `SELECT * FROM EMPLOYEE E INNER JOIN DEPENDENT D ON E.Ssn = D.Essn;`
   - DEPENDENT가 있는 모든 EMPLOYEE를 반환.
   - 비교하는 속성 이름이 같다면 `NATURAL JOIN`을 할 수 있다.
 - `FULL OUTER JOIN`
 - `LEFT OUTER JOIN`:
-  - `SELECT * FROM EMPLOYEE E LEFT JOIN DEPENDENT D ON (E.Ssn = D.Essn);`
+  - `SELECT * FROM EMPLOYEE E LEFT JOIN DEPENDENT D ON E.Ssn = D.Essn;`
   - DEPENDENT가 없는 직원까지 포함해 반환.
 - `RIGHT OUTER JOIN`
 
-## Aggregate Functions
+### Aggregate Functions
 
 - `COUNT`, `SUM`, `MAX`, `MIN`, `AVG` 등 함수로 여러 튜플을 하나로 요약할 수 있다.
 - `SELECT Dno, COUNT(*), AVG(Salary) FROM EMPLOYEE GROUP BY Dno;`
@@ -281,10 +309,17 @@
   HAVING COUNT(*) > 2;
   ```
   - 여러 개 컬럼으로 `GROUP BY`하면?
-  - `WHERE`는 조심해야 한다. 이미 필터링된 상태에서 그루핑을 하면 `HAVING` 조건을 만족하지 못할 수 있음.
-  - `GROUP BY`되지 않은 컬럼은 `SELECT`할 수 없다.
+- `WHERE`는 조심해야 한다. 이미 필터링된 상태에서 그루핑을 하면 `HAVING` 조건을 만족하지 못할 수 있음:
+  ```sql
+  SELECT Dno, COUNT(*)
+  FROM EMPLOYEE
+  WHERE Salary > 40000 AND Dno IN
+    (SELECT Dno FROM EMPLOYEE GROUP BY Dno HAVING COUNT(*) > 5)
+  GROUP BY Dno;
+  ```
+- `GROUP BY`되지 않은 컬럼은 `SELECT`할 수 없다.
 
-## Alter and Dropping
+### Alter and Dropping
 
 - `ALTER TALBE <table> <ADD|DROP> <column> [type] [CASCADE|RESTRICT]`: 컬럼 추가/제거.
   - `CASCADE`: 삭제할 컬럼에 있는 모든 제약과 뷰를 제거한다.
@@ -292,14 +327,14 @@
 - `ALTER TALBE <table> ALTER COLUMN <column> <SET|DROP> DEFAULT [default]`: 디폴트 값 추가/제거.
 - `DROP TABLE <table>`: 테이블 삭제.
 
-# Relational Algebra and Relational Calculus
+## Relational Algebra and Relational Calculus
 
-## Relational Algebra
+### Relational Algebra
 
 - 관계형 모델에 대한 기본 명령 집합.
 - 쿼리의 기본적인 구현과 최적화에 사용할 수 있음.
 
-## Unary Relational Operations
+### Unary Relational Operations
 
 - SELECT ($\sigma_{<condition>}(R)$):
   - SQL의 WHERE에 대응하는 명령.
@@ -320,10 +355,12 @@
 - RENAME ($\rho_{S(B_1, B_2, \cdots, B_n)}(R)$)
   - 릴레이션 이름과 어트리뷰트 이름을 변경한다.
   - 둘 중 하나만 변경할 수도 있다: $\rho_S(R)$, $\rho_{B_1, B_2, \cdots, B_n}(R)$
-  - 보통 대입 연산과 함께 쓰여 어트리뷰트 이름을 축약하는 데 쓴다:
+  - 보통 대입 연산과 함께 쓰인다:
     $RESULT(F, M, L, S, B, A, SX, SAL, SU, DNO) \leftarrow \rho_{RESULT(F, M, L, S, B, A, SX, SAL, SU, DNO)}(DEP5\_EMPS)$
+  - 이렇게 축약할 수도 있다: $RESULT(First\_name, Last\_name) \leftarrow \pi_{Fname, Lname}(EMPLOYEE)$
 
-## Relational Algebra Operations From Set Theory
+
+### Relational Algebra Operations From Set Theory
 
 - UNION ($R \cup S$):
   - R, S에 존재하는 튜플을 모두 얻는다.
@@ -337,9 +374,9 @@
 - SET DIFFERENCE ($R - S$)
   - R에서 S에 존재하는 튜플을 제외하고 얻는다.
   - R, S의 타입이 서로 다르면 안 된다.
-  - 결합법칙만 성립한다.
+  - 교환법칙과 결합법칙이 성립하지 않는다.
 
-## Binary Relational Operations
+### Binary Relational Operations
 
 - CARTESIAN PRODUCT ($R(A_1, A_2, \cdots, A_n) \times S(B_1, B_2, \cdots, B_m)$)
   - R, S 사이의 모든 튜플 조합을 얻는다.
@@ -356,24 +393,17 @@
       - EQUI JOIN과 달리 결과에서 이름이 중복되는 컬럼을 제거한다: $Q(A, B, R.C, S.C, R.D, S.D, E)$가 아닌 $Q(A, B, C, D, E)$.
     - e.g., DEPARTMENT에도 Dnumber가 있고, DEPT_LOCATION에도 Dnumber가 있다면 다음과 같이 부서별 위치를 구할 수 있다: $DPET\_LOCS \leftarrow DEPARTMENT \ast DEPT\_LOCATION$.
 - DIVISION ($R(Z) \div S(X)$):
- - X가 Z의 부분집합일 때 나누기 연산을 할 수 있다.
+  - X가 Z의 부분집합일 때 나누기 연산을 할 수 있다.
 
-## Additional Relational Operations
+### Additional Relational Operations
 
 - Complete set of relational operations: SELECT, PROJECT, UION, DIFFERENCE, RENAME, CARTESIAN PRODUCT. 다른 모든 명령을 이 6개 명령으로 구성할 수 있다.
   - e.g., $R \cap S = (R \cup S) - ((R - S) \cup (S - R))$
   - e.g., $R \Join {}_{<condition>}S = \sigma_{<condition>}(R \times S)$
-- LEFT/RIGHT/FULL OUTER JOIN 모두 가능.
+- LEFT/RIGHT/FULL OUTER JOIN 모두 가능:
+  - OUTER JOIN은 기준 릴레이션의 모든 튜플이 포함. 매칭되지 않는 튜플의 조인된 어트리뷰트는 null로 채워짐.
 
-## Query Tree Notation
+### Query Tree Notation
 
 - 쿼리를 표현하기 위한 internal data structure.
 - 쿼리의 동작을 트리로 표현할 수 있다.
-
-# Functional Dependency and Normalization
-
-- 데이터베이스의 품질을 측정하는 기준:
-  - attribute semantics를 명확히 한다.
-  - 튜플의 중복된 정보를 최소화한다.
-  - 튜플의 NULL 값을 최소화한다.
-  - 위변조 튜플의 생성을 방지한다.
