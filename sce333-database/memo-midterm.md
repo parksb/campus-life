@@ -108,10 +108,10 @@
 
 - Employee는 EID, Department는 DID처럼 중복되는 이름을 피하면 구분이 편함.
 - ER 다이어그램에서 여러 어트리뷰트로 묶인 키를 표현하려면 어떻게?
-  - relational model에서 복합키를 pkey로 쓰는건 특수한 상황. ER 모델에서 여러 어트리뷰트를 묶어서 키로 표현할 필요가 없다.
+  - relational model에서 복합키를 PK로 쓰는건 특수한 상황. ER 모델에서 여러 어트리뷰트를 묶어서 키로 표현할 필요가 없다.
 - 왜 weak entity가 필요한가? 그냥 임의의 ID를 주면 되는데?
   - 실제로 대부분의 경우 그냥 ID를 줌. ID가 있는 엔티티는 중요하다는 것. 명시적으로 weak entity로 만들면 스키마만 보고도 그 엔티티 자체로는 의미가 없다는 것을 보여줄 수 있다.
-- Relational 모델에서 여러 어트리뷰트에 underline하는 건 그 어트리뷰트들의 묶음이 하나의 pkey라는 의미, ER 다이어그램에서 여러 어트리뷰트에 underline하는 건 개별 어트리뷰트 하나 하나가 유니크한 key라는 의미. superkey는 relational model에만 존재하는 개념이다.
+- Relational 모델에서 여러 어트리뷰트에 underline하는 건 그 어트리뷰트들의 묶음이 하나의 PK라는 의미, ER 다이어그램에서 여러 어트리뷰트에 underline하는 건 개별 어트리뷰트 하나 하나가 유니크한 key라는 의미. superkey는 relational model에만 존재하는 개념이다.
 
 ### Relationship
 
@@ -138,9 +138,9 @@
 
 - Schema $R$: $R(A_1, A_2, \cdots, A_n)$
   - e.g., `STUDENT(Id, Name, Dept)`
-- Tuple: 순서있는 집합.
-  - e.g., `<202300001, "Park", "Media">`
-  - relation은 각 튜플의 집합이다.
+- Tuple: 값의 순서있는 집합.
+  - 튜플 내의 어트리뷰트에는 순서가 있음. e.g., `<202300001, "Park", "Media">`
+  - relation은 튜플의 집합이다.
   - 튜플의 모든 값은 atomic하다.
   - null 값은 unknown, not available, inapplicable, undefined를 의미한다.
 - Key: 테이블의 로우를 유일하게 식별 가능하게 하는 값.
@@ -151,7 +151,7 @@
 - 스키마의 어트리뷰트를 표현할 때는 순서가 중요.
   - $R(A_1, A_2, \cdots, A_n)$의 값은 $t_i = <v_1, v_2, \cdots, v_n>$.
   - 이걸 신경쓰지 않아도 되는 표현은 self-describing이라고 한다. (e.g., XML, JSON)
-  - row의 순서는 중요하지 않다.
+  - 튜플 간의 순서는 중요하지 않다.
 
 ### Constraints
 
@@ -167,16 +167,16 @@
     - 종종 SQL의 assertions로 명시되기도 한다.
 - explicit constraints에 3가지 주요 타입이 있음:
   - Key constraints:
-    - pkey는 중복되어서는 안 된다.
-    - Superkey: 여러 어트리뷰트의 집합으로 이뤄진 키.
-    - Key: 최소한의 superkey. key는 superkey이지만, 그 반대는 아니다.
-    - Primary key: 여러 후보키가 있을 때, 그 중 하나를 pkey로 사용.
+    - PK는 중복되어서는 안 된다.
+    - Superkey: 여러 어트리뷰트의 집합으로 이뤄진 키. 각각의 어트리뷰트는 유일성을 만족하지 않을 수 있음.
+    - Key: 최소성을 만족하는 superkey. key는 superkey이지만, 그 반대는 아니다.
+    - Primary key: 여러 후보키가 있을 때, 그 중 하나를 PK로 사용.
   - Entity integrity constraints:
-    - 각 relation schema의 pkey는 null이 될 수 없다.
+    - 각 relation schema의 PK는 null이 될 수 없다.
     - entity를 식별할 수 있어야 한다는 제약이기 때문에 entity constraint.
   - Referential integrity constraints:
-    - $R_1$에 있는 튜플의 fkey는 $R_2$에 실제 존재하는 튜플의 pkey를 참조해야 한다.
-    - Foreign key: fkey는 자신이 참조하는 pkey와 같은 도메인이어야 한다.
+    - $R_1$에 있는 튜플의 FK는 $R_2$에 실제 존재하는 튜플의 PK를 참조해야 한다.
+    - Foreign key: FK는 자신이 참조하는 PK와 같은 도메인이어야 한다.
 - 또 다른 schema-based constraint는 Domain constraints.
 
 ### Update Operations
@@ -193,9 +193,9 @@
 - DELETE:
   - referential: 다른 튜플이 삭제하려는 값의 주요키를 참조하는 경우.
 - UPDATE:
-  - pkey를 변경하는 경우에는 모든 제약을 위반할 수 있다.
-  - referential: fkey를 변경하는 경우.
-  - domain: 일반적인 어트리뷰트를 변경하는 경우.
+  - PK를 변경하는 경우에는 모든 제약을 위반할 수 있다.
+  - FK를 변경하는 경우: referential, domain.
+  - 일반적인 어트리뷰트를 변경하는 경우: domain.
 
 ## SQL
 
@@ -205,9 +205,9 @@
 
 ### Specifying Constraints
 
-- Key constraints: pkey 값은 중복될 수 없다.
-- Entity integrity constraint: pkey 값은 null이 될 수 없다.
-- Referential integrity constraint: fkey는 pkey로 표현되는 기존 값이거나, null이어야 한다.
+- Key constraints: PK 값은 중복될 수 없다.
+- Entity integrity constraint: PK 값은 null이 될 수 없다.
+- Referential integrity constraint: FK는 PK로 표현되는 기존 값이거나, null이어야 한다.
 - `CONSTRAINT` 구문으로 constraint에 이름을 붙일수도 있음:
   ```sql
   CREATE TABLE EMPLOYEE(
@@ -221,7 +221,7 @@
         ON UPDATE CASCADE
   );
   ```
-- 테이블을 생성하는 시점에 아직 없는 값을 fkey로 참조하면 referential integrity constraint를 위반하는 문제가 생김. 테이블을 생성한 뒤, `ALTER TABLE`해 fkey를 추가하면 된다.
+- 테이블을 생성하는 시점에 아직 없는 값을 FK로 참조하면 referential integrity constraint를 위반하는 문제가 생김. 테이블을 생성한 뒤, `ALTER TABLE`해 FK를 추가하면 된다.
 
 ### Basic Retrieval Queries
 
