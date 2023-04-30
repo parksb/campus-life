@@ -39,8 +39,8 @@
 
 ### 2017년 가을 (1학년 2학기)
 
-* [글쓰기](kor101-korean-writing)
-* [컴퓨터프로그래밍](dmed270-computer-programming)
+* [글쓰기](kor102-korean-writing)
+* [컴퓨터프로그래밍](cse104-computer-programming)
 * [컴퓨터프로그램설계](cse134-computer-program-design)
 * [한국정치의쟁점과과제](pol113-the-reality-and-issues-in-contemporary-korean-society)
 * [확률및통계1](math251-probability-and-statistics-1)
