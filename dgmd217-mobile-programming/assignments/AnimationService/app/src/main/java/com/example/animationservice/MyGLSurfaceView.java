@@ -1,5 +1,6 @@
 package com.example.animationservice;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
@@ -24,9 +25,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     // 1. define and create a handler instance.
     // 2. create a messenger instance with the handler (mAngleReceiver).
-    private Handler handler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private final Handler handler = new Handler() {
         public void handleMessage(Message message) {
-            mRenderer.mAngle = (Float) message.obj;
+            mRenderer.setAngle((Float) message.obj);
             requestRender();
         }
     };

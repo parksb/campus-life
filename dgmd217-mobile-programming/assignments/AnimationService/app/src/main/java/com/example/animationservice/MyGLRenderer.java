@@ -19,7 +19,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mRotationMatrix = new float[16];
     private final float[] mScaleMatrix = new float[16];
 
-    protected float mAngle;
+    private float mAngle;
+
+    public void setAngle(float angle) {
+        mAngle = angle;
+    }
 
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {

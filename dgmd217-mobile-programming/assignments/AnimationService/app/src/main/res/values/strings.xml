@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AnimationService</string>
     <string name="start_animation">Start Animation</string>
+    <string name="stop_animation">Stop Animation</string>
 </resources>
