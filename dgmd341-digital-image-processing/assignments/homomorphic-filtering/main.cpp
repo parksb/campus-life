@@ -2,53 +2,58 @@
 
 using namespace cv;
 
-Mat gaussian_highpass_filter(const Mat& img) {
-    Mat ret(img.size(), img.type());
-    const float D0 = 2.f;
-
-    for (Point p(0, 0); p.y < img.rows; p.y++) {
-        for (p.x = 0; p.x < img.cols; p.x++) {
-            float dx = p.x - img.cols / 2.f;
-            float dy = p.y - img.rows / 2.f;
-            float d = 1 - exp(-(dx * dx + dy * dy) / (2 * D0 * D0));
-
-            ret.at<Vec2f>(p.y, p.x) = img.at<Vec2f>(p.y, p.x) * d;
-        }
-    }
-
-    return ret;
-}
-
 Mat preprocess(const Mat& img) {
-    Mat ret = img;
+    Mat ret;
 
-    ret += 1;
-    log(ret, ret);
+    normalize(img, ret, 0, 1, NORM_MINMAX);
+    log(ret + 1, ret);
     dft(ret, ret, DFT_COMPLEX_OUTPUT);
 
     return ret;
 }
 
 Mat postprocess(const Mat& img) {
-    Mat ret = img;
+    Mat ret;
 
-    dft(ret, ret, DFT_INVERSE | DFT_REAL_OUTPUT | DFT_SCALE);
+    dft(img, ret, DFT_INVERSE | DFT_REAL_OUTPUT | DFT_SCALE);
     exp(ret, ret);
-    ret -= 1;
+    normalize(ret, ret, 0, 1, NORM_MINMAX);
 
     return ret;
+}
+
+Mat homomorphic_filter(const Mat& img) {
+    Mat ret = preprocess(img);
+
+    const float d0 = 10.f;
+    const float gamma_h = 1.6f;
+    const float gamma_l = 0.4f;
+    const float c = 1.f;
+
+    for (Point p(0, 0); p.y < img.rows; p.y++) {
+        for (p.x = 0; p.x < img.cols; p.x++) {
+            float dx = p.x < img.cols / 2 ? p.x : img.cols - p.x;
+            float dy = p.y < img.rows / 2 ? p.y : img.rows - p.y;
+            float d = sqrtf(dx * dx + dy * dy);
+
+            float gaussian = 1 - expf(-c * ((d * d) / (d0 * d0)));
+            float h = (gamma_h - gamma_l) * gaussian + gamma_l;
+
+            ret.at<Vec2f>(p) = ret.at<Vec2f>(p) * h;
+        }
+    }
+
+    return postprocess(ret);
 }
 
 int main() {
     Mat img = imread("images/input.jpeg", 0);
     img.convertTo(img, CV_32FC1, 1 / 255.f);
 
-    Mat preprocessed = preprocess(img);
-    Mat filtered = gaussian_highpass_filter(preprocessed);
-    Mat postprocessed = postprocess(filtered);
+    Mat filtered = homomorphic_filter(img);
 
     imshow("Original image", img);
-    imshow("Filtered image", postprocessed);
+    imshow("Filtered image", filtered);
 
     waitKey();
 }
