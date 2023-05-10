@@ -1,5 +1,5 @@
 -std=c++20
--Wno-deprecated-anon-enum-enum-conversion]
+-Wno-deprecated-anon-enum-enum-conversion
 -I/opt/homebrew/opt/opencv/include/opencv4
 -L/opt/homebrew/opt/opencv/lib
 -lopencv_gapi
