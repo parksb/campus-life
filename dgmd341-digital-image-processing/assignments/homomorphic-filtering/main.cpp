@@ -24,8 +24,8 @@ Mat homomorphic_filter(const Mat& img) {
     Mat ret = preprocess(img);
 
     const float d0 = 20.f;
-    const float gamma_h = 3.5f;
-    const float gamma_l = 0.7f;
+    const float gamma_h = 3.7f;
+    const float gamma_l = 0.8f;
     const float c = 1.f;
 
     for (Point p(0, 0); p.y < img.rows; p.y++) {
