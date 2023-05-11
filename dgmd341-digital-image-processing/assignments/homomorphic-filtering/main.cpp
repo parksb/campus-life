@@ -5,8 +5,7 @@ using namespace cv;
 Mat preprocess(const Mat& img) {
     Mat ret;
 
-    normalize(img, ret, 0, 1, NORM_MINMAX);
-    log(ret + 1, ret);
+    log(img + 1, ret);
     dft(ret, ret, DFT_COMPLEX_OUTPUT);
 
     return ret;
@@ -17,17 +16,16 @@ Mat postprocess(const Mat& img) {
 
     dft(img, ret, DFT_INVERSE | DFT_REAL_OUTPUT | DFT_SCALE);
     exp(ret, ret);
-    normalize(ret, ret, 0, 1, NORM_MINMAX);
 
-    return ret;
+    return ret - 1;
 }
 
 Mat homomorphic_filter(const Mat& img) {
     Mat ret = preprocess(img);
 
-    const float d0 = 30.f;
-    const float gamma_h = 1.3f;
-    const float gamma_l = 0.5f;
+    const float d0 = 20.f;
+    const float gamma_h = 3.5f;
+    const float gamma_l = 0.7f;
     const float c = 1.f;
 
     for (Point p(0, 0); p.y < img.rows; p.y++) {
