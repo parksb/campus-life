@@ -20,34 +20,27 @@ Mat deconvolution(const Mat& src, const Mat& kernel) {
     dft(src, sf, DFT_COMPLEX_OUTPUT);
     dft(kernel, kf, DFT_COMPLEX_OUTPUT);
 
-    // implementation for divSpectrums
-    std::vector<Mat> kfc;
-    split(kf, kfc);
+    // to divide sf by kf.
+    rf.create(sf.size(), sf.type());
 
-    Mat denom, mags, h_inv;
-    magnitude(kfc[0], kfc[1], mags); // ||H||^2 = (\sqrt{h_i^2 + h_r^2})^2
-    multiply(mags, mags, denom);
-    denom = 1 / denom; // make to 1
+    for (Point pt(0, 0); pt.y < rf.rows; pt.y++) {
+        for (pt.x = 0; pt.x < rf.cols; pt.x++) {
+            // (a + bi) / (c + di) = (a + bi) * (c - di) / (c * c + d * d)
+            // {(a * c + b * d) + i(bc - ad)} / (c * c + d * d)
+            float a = sf.at<Vec2f>(pt)[0];
+            float b = sf.at<Vec2f>(pt)[1];
+            float c = kf.at<Vec2f>(pt)[0];
+            float d = kf.at<Vec2f>(pt)[1];
 
-    for (Point pt(0, 0); pt.y < denom.rows; pt.y++) {
-        for (pt.x = 0; pt.x < denom.cols; pt.x++) {
-            float dx = pt.x > denom.cols / 2 ? denom.cols - pt.x : pt.x;
-            float dy = pt.y > denom.rows / 2 ? denom.rows - pt.y : pt.y;
-            float d = sqrtf(dx * dx + dy * dy);
-            if (d > 20) denom.at<float>(pt) *= 0;
+            float dx = pt.x > kf.cols / 2 ? kf.cols - pt.x : pt.x;
+            float dy = pt.y > kf.rows / 2 ? kf.rows - pt.y : pt.y;
+            float D = sqrtf(dx * dx + dy * dy);
+            if (D > 20) rf.at<Vec2f>(pt) = Vec2f(0, 0);
+            else rf.at<Vec2f>(pt) = Vec2f(a * c + b * d, b * c - a * d) / (c * c + d * d);
         }
     }
 
-    Mat zz = Mat::zeros(denom.size(), denom.type());
-    std::vector<Mat> dfc = { denom, zz };
-    merge(dfc, h_inv);
-
-    kfc[1] *= -1;
-    merge(kfc, kf);
-    mulSpectrums(sf, kf, ret, DFT_ROWS);
-    mulSpectrums(ret, h_inv, ret, DFT_ROWS);
-
-    dft(ret, ret, DFT_INVERSE | DFT_SCALE | DFT_REAL_OUTPUT);
+    dft(rf, ret, DFT_INVERSE | DFT_SCALE | DFT_REAL_OUTPUT);
 
     return ret;
 }
