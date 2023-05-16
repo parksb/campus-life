@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("valueMessenger", angleReceiver);
         intent.putExtra("StartValue", 0.0f);
         intent.putExtra("EndValue", 360.0f);
-        intent.putExtra("IncValue", 1.0f);
-        intent.putExtra("UpdateTime", 10.0f);
+        intent.putExtra("UpdateTime", 5000);
 
         bindService(intent, mConnection, BIND_AUTO_CREATE);
     }
