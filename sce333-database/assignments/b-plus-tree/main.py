@@ -63,7 +63,6 @@ class B_PLUS_TREE:
 
             idx = find_idx(parent, k)
             parent.keys.insert(idx, k)
-            parent.values.insert(idx, k)
 
             left = Node()
             left.keys = n.keys[:piv]
@@ -115,6 +114,22 @@ class B_PLUS_TREE:
         pass
 
     def print_tree(self):
+        def print_level(n: Node):
+            fmt = lambda x: "[{}]".format(','.join(x))
+            subs = []
+            for sub in n.subTrees:
+                subs.append(fmt(map(str, sub.keys)))
+                print_level(sub)
+
+            ks = fmt(map(str, n.keys))
+            if len(subs):
+                print("{}-{}".format(ks, ','.join(subs)))
+            elif n is self.root:
+                print(ks)
+            pass
+
+        if self.root is not None:
+            print_level(self.root)
         pass
 
     def find_range(self, k_from: int, k_to: int):
@@ -129,7 +144,7 @@ def main():
     Input: test_bp.txt
     Output: result.txt
     '''
-    sys.stdin = open("test_bp.txt",'r')
+    sys.stdin = open("test_insert.txt",'r')
     sys.stdout = open("result.txt","w")
     myTree = None
 
