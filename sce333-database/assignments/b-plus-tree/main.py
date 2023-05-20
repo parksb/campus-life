@@ -122,7 +122,8 @@ class B_PLUS_TREE:
             # print("{} is inserted {}".format(k, leaf.keys))
             if len(leaf.keys) > self.order - 1:
                 rebalance(leaf)
-            elif idx == 0 and leaf.parent is not None:
+            # FIXME: check correct condition for updating a parent.
+            elif midx != 0 and idx == 0 and leaf.parent is not None:
                 leaf.parent.keys[midx] = k
         pass
 
@@ -177,7 +178,7 @@ def main():
     Input: test_bp.txt
     Output: result.txt
     '''
-    sys.stdin = open("test_find.txt",'r')
+    sys.stdin = open("test_insert_3.txt",'r')
     sys.stdout = open("result.txt","w")
     myTree = None
 
