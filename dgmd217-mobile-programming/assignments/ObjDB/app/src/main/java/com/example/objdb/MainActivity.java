@@ -10,11 +10,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "spheregeom.db";
@@ -77,14 +80,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void queryDatabase(View view) {
-        Cursor cursor;
+        ArrayList<String> data = new ArrayList<>();
 
-        cursor = db.rawQuery("SELECT x, y, z FROM vertices WHERE x < -6;", null);
+        Cursor cursor = db.rawQuery("SELECT x, y, z FROM vertices WHERE x < -6;", null);
         while (cursor.moveToNext()) {
             String x = cursor.getString(0);
             String y = cursor.getString(1);
             String z = cursor.getString(2);
             Log.v("OUT", "vertex pos (" + x + ", " + y + ", " + z + ")");
+            data.add("(" + x + ", " + y + ", " + z + ")");
         }
+
+        ListView list = findViewById(R.id.list);
+        list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data));
     }
 }
