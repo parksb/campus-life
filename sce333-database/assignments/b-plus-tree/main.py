@@ -53,6 +53,7 @@ class B_PLUS_TREE:
             return find_position(sub, k)
 
         def rebalance(n: Node):
+            print("----- rebalance for {} -----".format(n.keys))
             piv = math.floor(len(n.keys) / 2)
             k = n.keys.pop(piv)
 
@@ -61,26 +62,43 @@ class B_PLUS_TREE:
                 parent = Node()
                 self.root = parent
 
-            idx = find_idx(parent, k)
-            parent.keys.insert(idx, k)
-
             left = Node()
             left.keys = n.keys[:piv]
-            left.subTrees = n.subTrees[:piv]
+            left.subTrees = n.subTrees[:piv + 1]
+            for sub in n.subTrees[:piv + 1]:
+                sub.parent = left
+            left.parent = parent
             if not len(left.subTrees):
                 left.isLeaf = True
                 left.values = n.values[:piv]
+            print("keys of left: {}".format(left.keys))
 
             right = Node()
             right.keys = n.keys[piv:]
-            right.subTrees = n.subTrees[piv:]
+            if n.isLeaf:
+                right.keys = [k] + right.keys
+            right.subTrees = n.subTrees[piv + 1:]
+            for sub in n.subTrees[piv + 1:]:
+                sub.parent = right
+            right.parent = parent
             if not len(right.subTrees):
                 right.isLeaf = True
                 right.values = n.values[piv:]
+            print("keys of right: {}".format(right.keys))
 
+            idx = find_idx(parent, k)
+            print("{} will be inserted to {} at idx {}".format(k, parent.keys, idx))
+            parent.keys.insert(idx, k)
+            print("{} is inserted: {}".format(k, parent.keys))
+
+            print("current subtrees of parent is {}".format(list(map(lambda x: x.keys, parent.subTrees))))
+
+            if len(parent.subTrees) > 0:
+                parent.subTrees.pop(idx)
             parent.subTrees.insert(idx, left)
             parent.subTrees.insert(idx + 1, right)
 
+            print("subtrees of parent is {}".format(list(map(lambda x: x.keys, parent.subTrees))))
             if len(parent.keys) > self.order - 1:
                 rebalance(parent)
             pass
@@ -94,7 +112,9 @@ class B_PLUS_TREE:
         else:
             leaf, midx = find_position(self.root, k)
             idx = find_idx(leaf, k)
+            print("gotcha! {} will be inserted to {} at idx {}".format(k, leaf.keys, idx))
             leaf.keys.insert(idx, k)
+            print("{} is inserted {}".format(k, leaf.keys))
             if len(leaf.keys) > self.order - 1:
                 rebalance(leaf)
             elif idx == 0 and leaf.parent is not None:
@@ -119,13 +139,11 @@ class B_PLUS_TREE:
             subs = []
             for sub in n.subTrees:
                 subs.append(fmt(map(str, sub.keys)))
-                print_level(sub)
-
             ks = fmt(map(str, n.keys))
-            if len(subs):
-                print("{}-{}".format(ks, ','.join(subs)))
-            elif n is self.root:
-                print(ks)
+            if len(subs): print("{}-{}".format(ks, ','.join(subs)))
+            elif n is self.root: print(ks)
+            for sub in n.subTrees:
+                print_level(sub)
             pass
 
         if self.root is not None:
