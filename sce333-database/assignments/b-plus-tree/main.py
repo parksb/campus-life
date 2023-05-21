@@ -7,7 +7,7 @@
 
 import sys
 import math
-from typing import Optional, Self
+from typing import Optional
 
 
 class Node:
@@ -34,18 +34,6 @@ class Node:
             idx = i + 1
         return idx
 
-    def find_position_for(self, k: int) -> tuple[Self, int]:
-        idx = self.find_idx(k)
-        if self.isLeaf:
-            return (self, idx)
-        sub = self.subTrees[idx]
-        return sub.find_position_for(k)
-
-    def find_path_to(self, k: int) -> list[Self]:
-        if self.isLeaf: return [self]
-        idx = self.find_idx(k)
-        sub = self.subTrees[idx]
-        return [self] + sub.find_path_to(k)
 
 class B_PLUS_TREE:
     '''
@@ -56,9 +44,21 @@ class B_PLUS_TREE:
         self.root: Optional[Node] = None
         pass
 
+    def _find_position_for(self, n: Node, k: int) -> tuple[Node, int]:
+        idx = n.find_idx(k)
+        if n.isLeaf:
+            return (n, idx)
+        sub = n.subTrees[idx]
+        return self._find_position_for(sub, k)
+
+    def _find_path_to(self, n: Node, k: int) -> list[Node]:
+        if n.isLeaf: return [n]
+        idx = n.find_idx(k)
+        sub = n.subTrees[idx]
+        return [n] + self._find_path_to(sub, k)
+
     def insert(self, k: int):
         def rebalance(n: Node):
-            # print("----- rebalance for {} -----".format(n.keys))
             piv = math.floor(len(n.keys) / 2)
             k = n.keys.pop(piv)
 
@@ -67,17 +67,7 @@ class B_PLUS_TREE:
                 parent = Node()
                 self.root = parent
 
-            left = Node()
-            left.keys = n.keys[:piv]
-            left.subTrees = n.subTrees[:piv + 1]
-            for sub in n.subTrees[:piv + 1]:
-                sub.parent = left
-            left.parent = parent
-            if not len(left.subTrees):
-                left.isLeaf = True
-                left.values = left.keys
-            # print("keys of left: {}".format(left.keys))
-
+            # right
             right = Node()
             right.keys = n.keys[piv:]
             if n.isLeaf:
@@ -89,22 +79,29 @@ class B_PLUS_TREE:
             if not len(right.subTrees):
                 right.isLeaf = True
                 right.values = right.keys
-            # print("keys of right: {}".format(right.keys))
+            if right.isLeaf: right.nextNode = n.nextNode
+            else: right.nextNode = None
+
+            # left
+            n.keys = n.keys[:piv]
+            n.subTrees = n.subTrees[:piv + 1]
+            for sub in n.subTrees[:piv + 1]:
+                sub.parent = n
+            n.parent = parent
+            if not len(n.subTrees):
+                n.isLeaf = True
+                n.values = n.keys
+            if n.isLeaf: n.nextNode = right
+            else: n.nextNode = None
 
             idx = parent.find_idx(k)
-            # print("{} will be inserted to {} at idx {}".format(k, parent.keys, idx))
             parent.keys.insert(idx, k)
-            # print("{} is inserted: {}".format(k, parent.keys))
-
-            # print("current subtrees of parent is {}".format(list(map(lambda x: x.keys, parent.subTrees))))
-
             if len(parent.subTrees) > 0:
                 parent.subTrees.pop(idx)
-            parent.subTrees.insert(idx, left)
+            parent.subTrees.insert(idx, n)
             parent.subTrees.insert(idx + 1, right)
             parent.values = []
 
-            # print("subtrees of parent is {}".format(list(map(lambda x: x.keys, parent.subTrees))))
             if len(parent.keys) > self.order - 1:
                 rebalance(parent)
             pass
@@ -115,11 +112,9 @@ class B_PLUS_TREE:
             n.isLeaf = True
             self.root = n
         else:
-            leaf, midx = self.root.find_position_for(k)
+            leaf, midx = self._find_position_for(self.root, k)
             idx = leaf.find_idx(k)
-            # print("gotcha! {} will be inserted to {} at idx {}".format(k, leaf.keys, idx))
             leaf.keys.insert(idx, k)
-            # print("{} is inserted {}".format(k, leaf.keys))
             if len(leaf.keys) > self.order - 1:
                 rebalance(leaf)
             # FIXME: check correct condition for updating a parent.
@@ -159,13 +154,29 @@ class B_PLUS_TREE:
         pass
 
     def find_range(self, k_from: int, k_to: int):
+        def find_range_in(n: Node, k_from: int, k_to: int):
+            ret: list[int] = []
+            for k in n.keys:
+                if k_from <= k and k <= k_to:
+                    ret.append(k)
+                elif k > k_to:
+                    return (ret, None)
+            return (ret, n.nextNode)
+
+        if self.root is not None:
+            found, _ = self._find_position_for(self.root, k_from)
+            ks, cur = [], found
+            while cur is not None:
+                res, cur = find_range_in(cur, k_from, k_to)
+                ks.extend(res)
+            print(','.join(map(str, ks)))
         pass
 
     def find(self, k: int):
         fmt = lambda x: "[{}]".format(','.join(map(str, x)))
         if self.root is None:
             return None
-        path = self.root.find_path_to(k)
+        path = self._find_path_to(self.root, k)
         if k in path[len(path) - 1].values:
             print('-'.join(map(lambda x: fmt(x.keys), path)))
         else:
@@ -178,8 +189,8 @@ def main():
     Input: test_bp.txt
     Output: result.txt
     '''
-    sys.stdin = open("test_insert_3.txt",'r')
-    sys.stdout = open("result.txt","w")
+    # sys.stdin = open("test_insert_3.txt",'r')
+    # sys.stdout = open("result.txt","w")
     myTree = None
 
     while (True):
