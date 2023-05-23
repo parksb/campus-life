@@ -1,11 +1,16 @@
 package com.example.lunarlander;
 
+import android.animation.ValueAnimator;
 import android.os.AsyncTask;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 
 public class LanderAnimator extends AsyncTask<Integer, Integer, Integer> {
 
     private LunarView mLanderView;
+    private ValueAnimator animator;
+
+    private boolean mPaused = false;
     private int mX, mY;
 
     // Define constructor..
@@ -42,9 +47,23 @@ public class LanderAnimator extends AsyncTask<Integer, Integer, Integer> {
         mLanderView.invalidate();
     }
 
-    private boolean mPaused = false;
     public void pauseAnimator() {
         mPaused = (!mPaused);
+        if (animator != null && animator.isRunning()) animator.isPaused();
+        else if (animator != null && animator.isPaused()) animator.resume();
+    }
+
+    public void fire() {
+        if (animator != null && animator.isRunning()) return;
+
+        animator = ValueAnimator.ofFloat(mY, mY - (mLanderView.getHeight() * (float)(1 / 10)));
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.addUpdateListener(valueAnimator -> {
+            mY -= 5;
+            if (mY < 0) mY = 0;
+        });
+
+        animator.start();
     }
 
 }

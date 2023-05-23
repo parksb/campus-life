@@ -1,9 +1,6 @@
 package com.example.lunarlander;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +31,10 @@ public class LunarLander extends AppCompatActivity {
         // If the lander is moving, it should stop.
         // If the lander is not moving, it starts to go.
         animator.pauseAnimator();
+    }
+
+    public void onFire(View view) {
+        animator.fire();
     }
 
     @Override
