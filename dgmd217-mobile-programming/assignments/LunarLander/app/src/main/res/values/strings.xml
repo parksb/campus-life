@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LunarLander</string>
+    <string name="rocket_fire">Rocket Fire</string>
+</resources>
