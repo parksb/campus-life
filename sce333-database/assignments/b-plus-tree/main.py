@@ -55,7 +55,7 @@ class B_PLUS_TREE:
     def __init__(self, order: int):
         self.order = order
         self.root: Optional[Node] = None
-        pass
+        self.min_order = math.floor((order - 1) / 2)
 
     def _find_leaf_for(self, n: Node, k: int) -> tuple[Node, STidx]:
         idx = n.find_stidx(k)
@@ -125,7 +125,6 @@ class B_PLUS_TREE:
 
             if len(parent.keys) > self.order - 1:
                 rebalance(parent)
-            pass
 
         if self.root is None:
             n = Node()
@@ -141,7 +140,6 @@ class B_PLUS_TREE:
             # FIXME: check correct condition for updating a parent.
             elif midx != 0 and idx == 0 and leaf.parent is not None:
                 leaf.parent.keys[midx] = k
-        pass
 
     def delete(self, k: int):
         def find_prev_node(n: Node):
@@ -150,54 +148,64 @@ class B_PLUS_TREE:
             if idx == 0: return None
             return n.parent.subTrees[idx - 1]
 
+        def steal_from_left(n: Node, m: Node, left: Node, kidx: Kidx):
+            left_last = left.keys.pop()
+            n.keys = [left_last]
+            m.keys[kidx] = left_last
+            if n.parent is not None and len(left.keys) > 0:
+                kidx_to_replace = n.parent.find_kidx_eq(left_last)
+                if kidx_to_replace is None: return
+                n.parent.keys[kidx_to_replace] = left_last
+
+        def steal_from_right(n: Node, m: Node, right: Node, kidx: Kidx):
+            right_first = right.keys.pop(0)
+            n.keys = [right_first]
+            m.keys[kidx] = right_first
+            if n.parent is not None and len(right.keys) > 0:
+                kidx_to_replace = n.parent.find_kidx_eq(right_first)
+                if kidx_to_replace is None: return
+                n.parent.keys[kidx_to_replace] = right.keys[0]
+
         if self.root is None: return
-        n, _ = self._find_leaf_for(self.root, k)
+        n, stidx = self._find_leaf_for(self.root, k)
         kidx = n.find_kidx_eq(k)
+
         if kidx is None: return
+        if self.root == n:
+            n.keys.pop(kidx)
+            if stidx < len(n.subTrees):
+                n.subTrees.pop(stidx)
+            return
 
         if kidx > 0:
             n.keys.pop(kidx)
         else:
-            if len(n.keys) > 1:
+            if len(n.keys) > self.min_order:
                 n.keys.pop(kidx)
                 if n.parent is not None:
                     kidx_to_replace = n.parent.find_kidx_eq(k)
                     if kidx_to_replace is None: return
                     n.parent.keys[kidx_to_replace] = n.keys[0]
             else:
-                internal, _ = self._find_node_eq(self.root, k)
+                internal, internal_stidx = self._find_node_eq(self.root, k)
                 internal_kidx = internal.find_kidx_eq(k)
                 if internal_kidx is None: return
 
-                prev = find_prev_node(n)
-                next = n.nextNode
+                left = find_prev_node(n)
+                right = n.nextNode
 
-                if prev is not None and len(prev.keys) > 1:
-                    prev_last = prev.keys.pop()
-                    n.keys = [prev_last]
-                    internal.keys[internal_kidx] = prev_last
-                    if n.parent is not None and len(prev.keys) > 0:
-                        kidx_to_replace = n.parent.find_kidx_eq(prev_last)
-                        if kidx_to_replace is None: return
-                        n.parent.keys[kidx_to_replace] = prev_last
-                elif next is not None and len(next.keys) > 1:
-                    next_first = next.keys.pop(0)
-                    n.keys = [next_first]
-                    internal.keys[internal_kidx] = next_first
-                    if n.parent is not None and len(next.keys) > 0:
-                        kidx_to_replace = n.parent.find_kidx_eq(next_first)
-                        if kidx_to_replace is None: return
-                        n.parent.keys[kidx_to_replace] = next.keys[0]
+                if left is not None and len(left.keys) > self.min_order:
+                    steal_from_left(n, internal, left, internal_kidx)
+                elif right is not None and len(right.keys) > self.min_order:
+                    steal_from_right(n, internal, right, internal_kidx)
                 else:
-                    if n.parent is not None and len(n.parent.keys) > 1:
+                    if n.parent is not None and len(n.parent.keys) > self.min_order:
                         n.keys.pop(kidx)
                         kidx_to_replace = n.parent.find_kidx_eq(k)
                         if kidx_to_replace is None: return
                         n.parent.keys.pop(kidx_to_replace)
-                        pass
                     else:
                         pass
-        pass
 
     def print_root(self):
         l = "["
@@ -206,7 +214,6 @@ class B_PLUS_TREE:
                 l += "{},".format(k)
         l = l[:-1] + "]"
         print(l)
-        pass
 
     def print_tree(self):
         def print_level(n: Node):
@@ -221,11 +228,9 @@ class B_PLUS_TREE:
                 print(ks)
             for sub in n.subTrees:
                 print_level(sub)
-            pass
 
         if self.root is not None:
             print_level(self.root)
-        pass
 
     def find_range(self, k_from: int, k_to: int):
         def find_range_in(n: Node, k_from: int, k_to: int):
@@ -244,7 +249,6 @@ class B_PLUS_TREE:
                 res, cur = find_range_in(cur, k_from, k_to)
                 ks.extend(res)
             print(','.join(map(str, ks)))
-        pass
 
     def find(self, k: int):
         fmt = lambda x: "[{}]".format(','.join(map(str, x)))
@@ -255,7 +259,6 @@ class B_PLUS_TREE:
             print('-'.join(map(lambda x: fmt(x.keys), path)))
         else:
             print("NONE")
-        pass
 
 
 def main():
