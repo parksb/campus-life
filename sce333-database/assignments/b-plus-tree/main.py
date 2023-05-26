@@ -151,8 +151,9 @@ class B_PLUS_TREE:
             return n.parent.subTrees[idx - 1]
 
         if self.root is None: return
-        n, idx = self._find_leaf_for(self.root, k)
-        kidx = n.to_kidx(idx - 1)
+        n, _ = self._find_leaf_for(self.root, k)
+        kidx = n.find_kidx_eq(k)
+        if kidx is None: return
 
         if kidx > 0:
             n.keys.pop(kidx)
@@ -160,32 +161,39 @@ class B_PLUS_TREE:
             if len(n.keys) > 1:
                 n.keys.pop(kidx)
                 if n.parent is not None:
-                    pstidx = n.parent.find_stidx(n.keys[0])
-                    pkidx = n.parent.to_kidx(pstidx - 1)
-                    n.parent.keys[pkidx] = n.keys[0]
+                    kidx_to_replace = n.parent.find_kidx_eq(k)
+                    if kidx_to_replace is None: return
+                    n.parent.keys[kidx_to_replace] = n.keys[0]
             else:
-                internal, pstidx = self._find_node_eq(self.root, k)
-                pidx = internal.to_kidx(pstidx)
+                internal, _ = self._find_node_eq(self.root, k)
+                internal_kidx = internal.find_kidx_eq(k)
+                if internal_kidx is None: return
+
                 prev = find_prev_node(n)
                 next = n.nextNode
+
                 if prev is not None and len(prev.keys) > 1:
                     prev_last = prev.keys.pop()
                     n.keys = [prev_last]
-                    internal.keys[pidx] = prev_last
+                    internal.keys[internal_kidx] = prev_last
                     if n.parent is not None and len(prev.keys) > 0:
-                        midx = n.parent.to_kidx(n.parent.find_stidx(prev.keys[0]) - 1)
-                        n.parent.keys[midx] = prev.keys[0]
+                        kidx_to_replace = n.parent.find_kidx_eq(prev_last)
+                        if kidx_to_replace is None: return
+                        n.parent.keys[kidx_to_replace] = prev_last
                 elif next is not None and len(next.keys) > 1:
                     next_first = next.keys.pop(0)
                     n.keys = [next_first]
-                    internal.keys[pidx] = next_first
+                    internal.keys[internal_kidx] = next_first
                     if n.parent is not None and len(next.keys) > 0:
-                        midx = n.parent.to_kidx(n.parent.find_stidx(next.keys[0]) - 1)
-                        n.parent.keys[midx] = next.keys[0]
+                        kidx_to_replace = n.parent.find_kidx_eq(next_first)
+                        if kidx_to_replace is None: return
+                        n.parent.keys[kidx_to_replace] = next.keys[0]
                 else:
                     if n.parent is not None and len(n.parent.keys) > 1:
-                        # n.keys.pop(kidx)
-                        # n.parent.keys.pop(n.parent.to_kidx(n.parent.find_stidx(n.keys[0]) - 1))
+                        n.keys.pop(kidx)
+                        kidx_to_replace = n.parent.find_kidx_eq(k)
+                        if kidx_to_replace is None: return
+                        n.parent.keys.pop(kidx_to_replace)
                         pass
                     else:
                         pass
