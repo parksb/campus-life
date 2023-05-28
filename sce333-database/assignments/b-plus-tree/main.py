@@ -55,7 +55,7 @@ class B_PLUS_TREE:
     def __init__(self, order: int):
         self.order = order
         self.root: Optional[Node] = None
-        self.min_order = math.floor((order - 1) / 2)
+        self.min_st = math.ceil((order - 1) / 2)
 
     def _find_leaf_for(self, n: Node, k: int) -> tuple[Node, STidx]:
         idx = n.find_stidx(k)
@@ -142,10 +142,22 @@ class B_PLUS_TREE:
                 leaf.parent.keys[midx] = k
 
     def delete(self, k: int):
+        def find_left_sibling(n: Node):
+            if n.parent is None: return None
+            idx = n.parent.find_stidx(k)
+            if idx == 0: return None
+            return n.parent.subTrees[idx - 1]
+
+        def find_right_sibling(n: Node):
+            if n.parent is None: return None
+            idx = n.parent.find_stidx(k)
+            if idx + 1 >= len(n.parent.subTrees): return None
+            return n.parent.subTrees[idx + 1]
+
         def find_left_node(n: Node, m: Node, up: bool = True):
             if m.parent is None: return None
             if m.nextNode == n: return m
-            if up:
+            if up and len(m.keys) > 0:
                 idx = m.parent.find_stidx(m.keys[0])
                 if idx >= 0:
                     return find_left_node(n, m.parent.subTrees[idx - 1], not up)
@@ -154,71 +166,86 @@ class B_PLUS_TREE:
                 return find_left_node(n, m.subTrees[len(m.subTrees) - 1], up)
             return None
 
+        def borrow_from_left(n: Node, left: Node):
+            left_max = left.keys.pop()
+            n.keys.insert(0, left_max)
+            if n.parent is not None:
+                kidx = n.parent.find_kidx_eq(left_max)
+                if kidx is None: return left_max
+                n.parent.keys[kidx] = left_max
+            return left_max
+
+        def borrow_from_right(n: Node, right: Node):
+            right_min = right.keys.pop(0)
+            n.keys.append(right_min)
+            if n.parent is not None:
+                kidx_to_replace = n.parent.find_kidx_eq(right_min)
+                if kidx_to_replace is None: return right_min
+                n.parent.keys[kidx_to_replace] = right.keys[0]
+            return right_min
+
+        def merge_with_left(n: Node, left: Node, right: Optional[Node]):
+            print("let's merge with left:", left.keys, "+", n.keys)
+            left.keys.extend(n.keys)
+            if left.isLeaf: left.nextNode = right
+            else: left.subTrees.extend(n.subTrees)
+
+            print("now, left is", left.keys)
+            if n.parent is not None:
+                tk = k
+                if len(n.keys): tk = n.keys[0]
+
+                pstidx = n.parent.find_stidx(tk)
+                n.parent.subTrees.pop(pstidx)
+                from_parent = n.parent.keys.pop(pstidx - 1)
+
+                if from_parent != k and not len(n.parent.keys):
+                    rstidx = left.find_stidx(from_parent)
+                    left.keys.insert(rstidx, from_parent)
+
+                print("...and it's parent is", n.parent.keys)
+                if self.root is not n.parent and len(n.parent.keys) < self.min_st:
+                    print("the parent need to be merged")
+                    parent_left = find_left_sibling(n.parent)
+                    if parent_left is not None:
+                        merge_with_left(n.parent, parent_left, None)
+                elif self.root is n.parent and not len(n.parent.keys):
+                    self.root = left
+
         if self.root is None: return
-        n, stidx = self._find_leaf_for(self.root, k)
+        n, _ = self._find_leaf_for(self.root, k)
         kidx = n.find_kidx_eq(k)
-
         if kidx is None: return
-        if self.root == n:
-            n.keys.pop(kidx)
-            if stidx < len(n.subTrees):
-                n.subTrees.pop(stidx)
-            return
 
-        if len(n.keys) > self.min_order and kidx > 0:
-            n.keys.pop(kidx)
-        else:
-            if len(n.keys) > self.min_order:
-                n.keys.pop(kidx)
-                if n.parent is not None:
-                    kidx_to_replace = n.parent.find_kidx_eq(k)
-                    if kidx_to_replace is None: return
-                    n.parent.keys[kidx_to_replace] = n.keys[0]
+        internal, _ = self._find_node_eq(self.root, k)
+        internal_kidx = internal.find_kidx_eq(k)
+        if internal_kidx is None: return
+
+        n.keys.pop(kidx)
+
+        if len(n.keys) < self.min_st:
+            left_sibling = find_left_sibling(n)
+            right_sibling = find_right_sibling(n)
+
+            if left_sibling is not None and len(left_sibling.keys) > self.min_st:
+                left_max = borrow_from_left(n, left_sibling)
+                if not internal.isLeaf:
+                    internal.keys[internal_kidx] = left_max
+            elif right_sibling is not None and len(right_sibling.keys) > self.min_st:
+                borrow_from_right(n, right_sibling)
+                if not internal.isLeaf:
+                    internal.keys[internal_kidx] = n.keys[0]
             else:
-                internal, internal_stidx = self._find_node_eq(self.root, k)
-                internal_kidx = internal.find_kidx_eq(k)
-                if internal_kidx is None: return
-
-                left = find_left_node(n, n)
-                right = n.nextNode
-
-                if left is not None and len(left.keys) > self.min_order:
-                    left_last = left.keys.pop()
-                    n.keys.pop(kidx)
-                    n.keys.insert(0, left_last)
-                    internal.keys[kidx] = n.keys[kidx]
-                    if n.parent is not None and len(left.keys) > 0:
-                        kidx_to_replace = n.parent.find_kidx_eq(left_last)
-                        if kidx_to_replace is None: return
-                        n.parent.keys[kidx_to_replace] = left_last
-                elif right is not None and len(right.keys) > self.min_order:
-                    right_first = right.keys.pop(0)
-                    n.keys.pop(kidx)
-                    n.keys.append(right_first)
-                    internal.keys[internal_kidx] = n.keys[kidx]
-                    if n.parent is not None and len(right.keys) > 0:
-                        kidx_to_replace = n.parent.find_kidx_eq(right_first)
-                        if kidx_to_replace is None: return
-                        n.parent.keys[kidx_to_replace] = right.keys[0]
+                if left_sibling is not None:
+                    merge_with_left(n, left_sibling, right_sibling)
                 else:
-                    if n.parent is not None and len(n.parent.keys) > self.min_order:
-                        n.keys.pop(kidx)
-                        kidx_to_replace = n.parent.find_kidx_eq(k)
-                        if kidx_to_replace is not None:
-                            n.parent.subTrees.pop(n.parent.find_stidx(k))
-                            n.parent.keys.pop(kidx_to_replace)
-                        if len(n.keys):
-                            kidx_to_replace = n.parent.find_kidx_eq(n.keys[0])
-                            if kidx_to_replace is not None:
-                                n.parent.subTrees.pop(n.parent.find_stidx(n.keys[0]))
-                                n.parent.keys.pop(kidx_to_replace)
-                        if left is not None:
-                            left.keys.extend(n.keys)
-                            left.nextNode = right
-                        if len(internal.subTrees) > 0:
-                            internal.keys[internal_kidx] = internal.subTrees[len(internal.subTrees) - 1].keys[0]
-                    else:
-                        pass
+                    print("let's merge with right")
+                    pass
+        else:
+            if n.parent is not None:
+                kidx_to_replace = n.parent.find_kidx_eq(k)
+                if kidx_to_replace is None: return
+                n.parent.keys[kidx_to_replace] = n.keys[0]
 
     def print_root(self):
         l = "["

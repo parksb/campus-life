@@ -1,5 +1,5 @@
 test:
-	make test_default && make test_insert_3 && make test_insert_5 && make test_range && make test_delete_3 && make test_delete_5
+	make test_default && make test_insert_3 && make test_insert_5 && make test_range && make test_delete_3 && make test_delete_3m && make test_delete_5 && make test_delete_5m
 
 test_default:
 	python3 main.py < test_bp.txt > result.txt && delta result.txt gold.txt
@@ -16,5 +16,11 @@ test_range:
 test_delete_3:
 	python3 main.py < test_delete_3.txt > result.txt && delta result.txt gold_delete_3.txt
 
+test_delete_3m:
+	python3 main.py < test_delete_3m.txt > result.txt && delta result.txt gold_delete_3m.txt
+
 test_delete_5:
 	python3 main.py < test_delete_5.txt > result.txt && delta result.txt gold_delete_5.txt
+
+test_delete_5m:
+	python3 main.py < test_delete_5m.txt > result.txt && delta result.txt gold_delete_5m.txt
