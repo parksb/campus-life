@@ -154,18 +154,6 @@ class B_PLUS_TREE:
             if idx + 1 >= len(n.parent.subTrees): return None
             return n.parent.subTrees[idx + 1]
 
-        def find_left_node(n: Node, m: Node, up: bool = True):
-            if m.parent is None: return None
-            if m.nextNode == n: return m
-            if up and len(m.keys) > 0:
-                idx = m.parent.find_stidx(m.keys[0])
-                if idx >= 0:
-                    return find_left_node(n, m.parent.subTrees[idx - 1], not up)
-                return find_left_node(n, m.parent, up)
-            if len(m.subTrees) > 0:
-                return find_left_node(n, m.subTrees[len(m.subTrees) - 1], up)
-            return None
-
         def borrow_from_left(n: Node, left: Node):
             left_max = left.keys.pop()
             n.keys.insert(0, left_max)
@@ -185,32 +173,66 @@ class B_PLUS_TREE:
             return right_min
 
         def merge_with_left(n: Node, left: Node, right: Optional[Node]):
-            print("let's merge with left:", left.keys, "+", n.keys)
+            # print("let's merge with left:", left.keys, "+", n.keys)
             left.keys.extend(n.keys)
-            if left.isLeaf: left.nextNode = right
-            else: left.subTrees.extend(n.subTrees)
+            if left.isLeaf:
+                left.nextNode = right
+            else:
+                left.subTrees.extend(n.subTrees)
+                for st in n.subTrees: st.parent = left
 
-            print("now, left is", left.keys)
-            if n.parent is not None:
-                tk = k
-                if len(n.keys): tk = n.keys[0]
+            if left.parent is not None:
+                lstidx = left.parent.find_stidx(k)
+                left.parent.subTrees.pop(lstidx)
+                if lstidx > 0:
+                    from_parent = left.parent.keys.pop(lstidx - 1)
+                    left.parent.subTrees[lstidx - 1] = left
+                    # FIXME: have to merge parent's key into left?
+                    if from_parent != k and from_parent not in left.keys:
+                        pstidx = left.find_stidx(from_parent)
+                        left.keys.insert(pstidx, from_parent)
 
-                pstidx = n.parent.find_stidx(tk)
-                n.parent.subTrees.pop(pstidx)
-                from_parent = n.parent.keys.pop(pstidx - 1)
+                if len(left.parent.keys) < self.min_st:
+                    new_left = find_left_sibling(left.parent)
+                    new_right = find_left_sibling(left.parent)
+                    if new_left is not None:
+                        merge_with_left(left.parent, new_left, new_right)
+                    elif new_right is not None:
+                        merge_with_right(left.parent, new_left, new_right)
+                    else:
+                        self.root = left
+                        left.parent = None
 
-                if from_parent != k and not len(n.parent.keys):
-                    rstidx = left.find_stidx(from_parent)
-                    left.keys.insert(rstidx, from_parent)
+        def merge_with_right(n: Node, left: Optional[Node], right: Node):
+            # print("let's merge with right:", right.keys, "+", n.keys)
+            right.keys.extend(n.keys)
+            if right.isLeaf:
+                right.nextNode = right
+            else:
+                right.subTrees.extend(n.subTrees)
+                for st in n.subTrees: st.parent = right
 
-                print("...and it's parent is", n.parent.keys)
-                if self.root is not n.parent and len(n.parent.keys) < self.min_st:
-                    print("the parent need to be merged")
-                    parent_left = find_left_sibling(n.parent)
-                    if parent_left is not None:
-                        merge_with_left(n.parent, parent_left, None)
-                elif self.root is n.parent and not len(n.parent.keys):
-                    self.root = left
+            if right.parent is not None:
+                lstidx = right.parent.find_stidx(k)
+                right.parent.subTrees.pop(lstidx)
+                if lstidx > 0:
+                    from_parent = right.parent.keys.pop(lstidx - 1)
+                    right.parent.subTrees[lstidx - 1] = right
+                    # FIXME: have to merge parent's key into right?
+                    if from_parent != k and from_parent not in right.keys:
+                        pstidx = right.find_stidx(from_parent)
+                        right.keys.insert(pstidx, from_parent)
+
+                if len(right.parent.keys) < self.min_st:
+                    new_left = find_left_sibling(right.parent)
+                    new_right = find_right_sibling(right.parent)
+                    if new_left is not None:
+                        merge_with_left(right.parent, new_left, new_right)
+                    elif new_right is not None:
+                        merge_with_right(right.parent, new_left, new_right)
+                    else:
+                        self.root = left
+                        right.parent = None
 
         if self.root is None: return
         n, _ = self._find_leaf_for(self.root, k)
@@ -238,9 +260,8 @@ class B_PLUS_TREE:
             else:
                 if left_sibling is not None:
                     merge_with_left(n, left_sibling, right_sibling)
-                else:
-                    print("let's merge with right")
-                    pass
+                elif right_sibling is not None:
+                    merge_with_right(n, left_sibling, right_sibling)
         else:
             if n.parent is not None:
                 kidx_to_replace = n.parent.find_kidx_eq(k)
