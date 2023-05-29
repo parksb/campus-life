@@ -137,18 +137,17 @@ class B_PLUS_TREE:
             leaf.keys.insert(idx, k)
             if len(leaf.keys) > self.order - 1:
                 rebalance(leaf)
-            # FIXME: check correct condition for updating a parent.
             elif midx != 0 and idx == 0 and leaf.parent is not None:
                 leaf.parent.keys[midx] = k
 
     def delete(self, k: int):
-        def find_left_sibling(n: Node):
+        def find_left_sibling(n: Node, k: int):
             if n.parent is None: return None
             idx = n.parent.find_stidx(k)
             if idx == 0: return None
             return n.parent.subTrees[idx - 1]
 
-        def find_right_sibling(n: Node):
+        def find_right_sibling(n: Node, k: int):
             if n.parent is None: return None
             idx = n.parent.find_stidx(k)
             if idx + 1 >= len(n.parent.subTrees): return None
@@ -195,15 +194,14 @@ class B_PLUS_TREE:
                 if lstidx > 0: lstidx = lstidx - 1
 
                 from_parent = into.parent.keys.pop(lstidx)
-                into.parent.subTrees[lstidx] =into
-                # FIXME: have to merge parent's key into into?
+                into.parent.subTrees[lstidx] = into
                 if from_parent != k and from_parent not in into.keys:
                     pstidx = into.find_stidx(from_parent)
                     into.keys.insert(pstidx, from_parent)
 
                 if len(into.parent.keys) < self.min_st:
-                    new_left = find_left_sibling(into.parent)
-                    new_right = find_right_sibling(into.parent)
+                    new_left = find_left_sibling(into.parent, from_parent)
+                    new_right = find_right_sibling(into.parent, from_parent)
                     if new_left is not None:
                         merge_with_left(into.parent, new_left, new_right)
                     elif new_right is not None:
@@ -224,8 +222,8 @@ class B_PLUS_TREE:
         n.keys.pop(kidx)
 
         if len(n.keys) < self.min_st:
-            left_sibling = find_left_sibling(n)
-            right_sibling = find_right_sibling(n)
+            left_sibling = find_left_sibling(n, k)
+            right_sibling = find_right_sibling(n, k)
 
             if left_sibling is not None and len(left_sibling.keys) > self.min_st:
                 left_max = borrow_from_left(n, left_sibling)
@@ -237,8 +235,12 @@ class B_PLUS_TREE:
                     internal.keys[internal_kidx] = n.keys[0]
             else:
                 if left_sibling is not None:
+                    if not internal.isLeaf:
+                        internal.keys[internal_kidx] = left_sibling.keys[0]
                     merge_with_left(n, left_sibling, right_sibling)
                 elif right_sibling is not None:
+                    if not internal.isLeaf:
+                        internal.keys[internal_kidx] = n.keys[0] if len(n.keys) > 0 else right_sibling.keys[0]
                     merge_with_right(n, right_sibling)
         else:
             if n.parent is not None:
