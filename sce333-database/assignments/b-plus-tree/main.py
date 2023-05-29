@@ -179,58 +179,38 @@ class B_PLUS_TREE:
             else:
                 left.subTrees.extend(n.subTrees)
                 for st in n.subTrees: st.parent = left
-
-            if left.parent is not None:
-                lstidx = left.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
-                left.parent.subTrees.pop(lstidx)
-                if lstidx > 0: lstidx = lstidx - 1
-
-                from_parent = left.parent.keys.pop(lstidx)
-                left.parent.subTrees[lstidx] = left
-                # FIXME: have to merge parent's key into left?
-                if from_parent != k and from_parent not in left.keys:
-                    pstidx = left.find_stidx(from_parent)
-                    left.keys.insert(pstidx, from_parent)
-
-                if len(left.parent.keys) < self.min_st:
-                    new_left = find_left_sibling(left.parent)
-                    new_right = find_right_sibling(left.parent)
-                    if new_left is not None:
-                        merge_with_left(left.parent, new_left, new_right)
-                    elif new_right is not None:
-                        merge_with_right(left.parent, new_right)
-                    else:
-                        self.root = left
-                        left.parent = None
+            merge_with(n, left)
 
         def merge_with_right(n: Node, right: Node):
             right.keys = n.keys + right.keys
             if not n.isLeaf:
                 right.subTrees = n.subTrees + right.subTrees
                 for st in n.subTrees: st.parent = right
+            merge_with(n, right)
 
-            if right.parent is not None:
-                lstidx = right.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
-                right.parent.subTrees.pop(lstidx)
+        def merge_with(n: Node, into: Node):
+            if into.parent is not None:
+                lstidx = into.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
+                into.parent.subTrees.pop(lstidx)
                 if lstidx > 0: lstidx = lstidx - 1
 
-                from_parent = right.parent.keys.pop(lstidx)
-                right.parent.subTrees[lstidx] = right
-                # FIXME: have to merge parent's key into right?
-                if from_parent != k and from_parent not in right.keys:
-                    pstidx = right.find_stidx(from_parent)
-                    right.keys.insert(pstidx, from_parent)
+                from_parent = into.parent.keys.pop(lstidx)
+                into.parent.subTrees[lstidx] =into
+                # FIXME: have to merge parent's key into into?
+                if from_parent != k and from_parent not in into.keys:
+                    pstidx = into.find_stidx(from_parent)
+                    into.keys.insert(pstidx, from_parent)
 
-                if len(right.parent.keys) < self.min_st:
-                    new_left = find_left_sibling(right.parent)
-                    new_right = find_right_sibling(right.parent)
+                if len(into.parent.keys) < self.min_st:
+                    new_left = find_left_sibling(into.parent)
+                    new_right = find_right_sibling(into.parent)
                     if new_left is not None:
-                        merge_with_left(right.parent, new_left, new_right)
+                        merge_with_left(into.parent, new_left, new_right)
                     elif new_right is not None:
-                        merge_with_right(right.parent, new_right)
+                        merge_with_right(into.parent, new_right)
                     else:
-                        self.root = right
-                        right.parent = None
+                        self.root = into
+                        into.parent = None
 
         if self.root is None: return
         n, _ = self._find_leaf_for(self.root, k)
@@ -259,7 +239,7 @@ class B_PLUS_TREE:
                 if left_sibling is not None:
                     merge_with_left(n, left_sibling, right_sibling)
                 elif right_sibling is not None:
-                    merge_with_right(n, left_sibling, right_sibling)
+                    merge_with_right(n, right_sibling)
         else:
             if n.parent is not None:
                 kidx_to_replace = n.parent.find_kidx_eq(k)
