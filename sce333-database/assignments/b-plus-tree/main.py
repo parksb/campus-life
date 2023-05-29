@@ -173,7 +173,6 @@ class B_PLUS_TREE:
             return right_min
 
         def merge_with_left(n: Node, left: Node, right: Optional[Node]):
-            # print("let's merge with left:", left.keys, "+", n.keys)
             left.keys.extend(n.keys)
             if left.isLeaf:
                 left.nextNode = right
@@ -182,46 +181,45 @@ class B_PLUS_TREE:
                 for st in n.subTrees: st.parent = left
 
             if left.parent is not None:
-                lstidx = left.parent.find_stidx(k)
+                lstidx = left.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
                 left.parent.subTrees.pop(lstidx)
-                if lstidx > 0:
-                    from_parent = left.parent.keys.pop(lstidx - 1)
-                    left.parent.subTrees[lstidx - 1] = left
-                    # FIXME: have to merge parent's key into left?
-                    if from_parent != k and from_parent not in left.keys:
-                        pstidx = left.find_stidx(from_parent)
-                        left.keys.insert(pstidx, from_parent)
+                if lstidx > 0: lstidx = lstidx - 1
+
+                from_parent = left.parent.keys.pop(lstidx)
+                left.parent.subTrees[lstidx] = left
+                # FIXME: have to merge parent's key into left?
+                if from_parent != k and from_parent not in left.keys:
+                    pstidx = left.find_stidx(from_parent)
+                    left.keys.insert(pstidx, from_parent)
 
                 if len(left.parent.keys) < self.min_st:
                     new_left = find_left_sibling(left.parent)
-                    new_right = find_left_sibling(left.parent)
+                    new_right = find_right_sibling(left.parent)
                     if new_left is not None:
                         merge_with_left(left.parent, new_left, new_right)
                     elif new_right is not None:
-                        merge_with_right(left.parent, new_left, new_right)
+                        merge_with_right(left.parent, new_right)
                     else:
                         self.root = left
                         left.parent = None
 
-        def merge_with_right(n: Node, left: Optional[Node], right: Node):
-            # print("let's merge with right:", right.keys, "+", n.keys)
-            right.keys.extend(n.keys)
-            if right.isLeaf:
-                right.nextNode = right
-            else:
-                right.subTrees.extend(n.subTrees)
+        def merge_with_right(n: Node, right: Node):
+            right.keys = n.keys + right.keys
+            if not n.isLeaf:
+                right.subTrees = n.subTrees + right.subTrees
                 for st in n.subTrees: st.parent = right
 
             if right.parent is not None:
-                lstidx = right.parent.find_stidx(k)
+                lstidx = right.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
                 right.parent.subTrees.pop(lstidx)
-                if lstidx > 0:
-                    from_parent = right.parent.keys.pop(lstidx - 1)
-                    right.parent.subTrees[lstidx - 1] = right
-                    # FIXME: have to merge parent's key into right?
-                    if from_parent != k and from_parent not in right.keys:
-                        pstidx = right.find_stidx(from_parent)
-                        right.keys.insert(pstidx, from_parent)
+                if lstidx > 0: lstidx = lstidx - 1
+
+                from_parent = right.parent.keys.pop(lstidx)
+                right.parent.subTrees[lstidx] = right
+                # FIXME: have to merge parent's key into right?
+                if from_parent != k and from_parent not in right.keys:
+                    pstidx = right.find_stidx(from_parent)
+                    right.keys.insert(pstidx, from_parent)
 
                 if len(right.parent.keys) < self.min_st:
                     new_left = find_left_sibling(right.parent)
@@ -229,9 +227,9 @@ class B_PLUS_TREE:
                     if new_left is not None:
                         merge_with_left(right.parent, new_left, new_right)
                     elif new_right is not None:
-                        merge_with_right(right.parent, new_left, new_right)
+                        merge_with_right(right.parent, new_right)
                     else:
-                        self.root = left
+                        self.root = right
                         right.parent = None
 
         if self.root is None: return
