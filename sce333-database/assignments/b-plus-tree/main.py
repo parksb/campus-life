@@ -42,11 +42,6 @@ class Node:
                 return i
         return None
 
-    def to_kidx(self, idx: STidx) -> Kidx:
-        l = len(self.keys)
-        if idx > l - 1: return l - 1
-        return idx
-
 
 class B_PLUS_TREE:
     '''
@@ -157,18 +152,19 @@ class B_PLUS_TREE:
             left_max = left.keys.pop()
             n.keys.insert(0, left_max)
             if n.parent is not None:
-                kidx = n.parent.find_kidx_eq(left_max)
+                tar = n.keys[1] if len(n.keys) > 1 else k
+                kidx = n.parent.find_kidx_eq(tar)
                 if kidx is None: return left_max
-                n.parent.keys[kidx] = left_max
+                n.parent.keys[kidx] = n.keys[0]
             return left_max
 
         def borrow_from_right(n: Node, right: Node):
             right_min = right.keys.pop(0)
             n.keys.append(right_min)
             if n.parent is not None:
-                kidx_to_replace = n.parent.find_kidx_eq(right_min)
-                if kidx_to_replace is None: return right_min
-                n.parent.keys[kidx_to_replace] = right.keys[0]
+                kidx = n.parent.find_kidx_eq(right_min)
+                if kidx is None: return right_min
+                n.parent.keys[kidx] = right.keys[0]
             return right_min
 
         def merge_with_left(n: Node, left: Node, right: Optional[Node]):
