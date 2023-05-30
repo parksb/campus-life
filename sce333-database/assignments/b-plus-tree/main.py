@@ -94,7 +94,7 @@ class B_PLUS_TREE:
             right.parent = parent
             if not len(right.subTrees):
                 right.isLeaf = True
-                right.values = right.keys
+                right.values = right.keys.copy()
             if right.isLeaf: right.nextNode = n.nextNode
             else: right.nextNode = None
 
@@ -106,7 +106,7 @@ class B_PLUS_TREE:
             n.parent = parent
             if not len(n.subTrees):
                 n.isLeaf = True
-                n.values = n.keys
+                n.values = n.keys.copy()
             if n.isLeaf: n.nextNode = right
             else: n.nextNode = None
 
@@ -130,6 +130,7 @@ class B_PLUS_TREE:
             leaf, midx = self._find_leaf_for(self.root, k)
             idx = leaf.find_stidx(k)
             leaf.keys.insert(idx, k)
+            leaf.values.insert(idx, k)
             if len(leaf.keys) > self.order - 1:
                 rebalance(leaf)
             elif midx != 0 and idx == 0 and leaf.parent is not None:
@@ -150,7 +151,9 @@ class B_PLUS_TREE:
 
         def borrow_from_left(n: Node, left: Node):
             left_max = left.keys.pop()
+            if left.isLeaf and len(left.values) > 0: left.values.pop()
             n.keys.insert(0, left_max)
+            if n.isLeaf: n.values.insert(0, left_max)
             if n.parent is not None:
                 tar = n.keys[1] if len(n.keys) > 1 else k
                 kidx = n.parent.find_kidx_eq(tar)
@@ -160,7 +163,10 @@ class B_PLUS_TREE:
 
         def borrow_from_right(n: Node, right: Node):
             right_min = right.keys.pop(0)
+            if right.isLeaf and len(right.values) > 0: right.values.pop(0)
             n.keys.append(right_min)
+            if n.isLeaf: n.values.append(right_min)
+
             if n.parent is not None:
                 kidx = n.parent.find_kidx_eq(right_min)
                 if kidx is None: return right_min
@@ -170,6 +176,7 @@ class B_PLUS_TREE:
         def merge_with_left(n: Node, left: Node, right: Optional[Node]):
             left.keys.extend(n.keys)
             if left.isLeaf:
+                left.values.extend(n.values)
                 left.nextNode = right
             else:
                 left.subTrees.extend(n.subTrees)
@@ -178,7 +185,9 @@ class B_PLUS_TREE:
 
         def merge_with_right(n: Node, right: Node):
             right.keys = n.keys + right.keys
-            if not n.isLeaf:
+            if n.isLeaf:
+                right.values = n.values + right.values
+            else:
                 right.subTrees = n.subTrees + right.subTrees
                 for st in n.subTrees: st.parent = right
             merge_with(n, right)
@@ -194,14 +203,15 @@ class B_PLUS_TREE:
                 if from_parent != k and from_parent not in into.keys:
                     pstidx = into.find_stidx(from_parent)
                     into.keys.insert(pstidx, from_parent)
+                    if into.isLeaf: into.values.insert(pstidx, from_parent)
 
                 if len(into.parent.keys) < self.min_st:
-                    new_left = find_left_sibling(into.parent, from_parent)
-                    new_right = find_right_sibling(into.parent, from_parent)
-                    if new_left is not None:
-                        merge_with_left(into.parent, new_left, new_right)
-                    elif new_right is not None:
-                        merge_with_right(into.parent, new_right)
+                    parent_left = find_left_sibling(into.parent, from_parent)
+                    parent_right = find_right_sibling(into.parent, from_parent)
+                    if parent_left is not None:
+                        merge_with_left(into.parent, parent_left, parent_right)
+                    elif parent_right is not None:
+                        merge_with_right(into.parent, parent_right)
                     else:
                         self.root = into
                         into.parent = None
@@ -216,6 +226,7 @@ class B_PLUS_TREE:
         if internal_kidx is None: return
 
         n.keys.pop(kidx)
+        if n.isLeaf and len(n.values) > 0: n.values.pop()
 
         if len(n.keys) < self.min_st:
             left_sibling = find_left_sibling(n, k)
@@ -292,7 +303,7 @@ class B_PLUS_TREE:
         if self.root is None:
             return None
         path = self._find_path_to(self.root, k)
-        if k in path[len(path) - 1].values:
+        if k in path[len(path) - 1].keys:
             print('-'.join(map(lambda x: fmt(x.keys), path)))
         else:
             print("NONE")
