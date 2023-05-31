@@ -59,14 +59,6 @@ class B_PLUS_TREE:
         sub = n.subTrees[idx]
         return self._find_leaf_for(sub, k)
 
-    def _find_node_eq(self, n: Node, k: int) -> tuple[Node, Kidx]:
-        kidx = n.find_kidx_eq(k)
-        if kidx is not None:
-            return (n, kidx)
-        stidx = n.find_stidx(k)
-        sub = n.subTrees[stidx]
-        return self._find_node_eq(sub, k)
-
     def _find_path_to(self, n: Node, k: int) -> list[Node]:
         if n.isLeaf: return [n]
         idx = n.find_stidx(k)
@@ -150,79 +142,111 @@ class B_PLUS_TREE:
             return n.parent.subTrees[idx + 1]
 
         def borrow_from_left(n: Node, left: Node):
+            # print("borrow from left", left.keys, "to", n.keys)
             left_max = left.keys.pop()
             if left.isLeaf and len(left.values) > 0: left.values.pop()
 
             n.keys.insert(0, left_max)
             if n.isLeaf: n.values.insert(0, left_max)
             else: n.subTrees.insert(0, left.subTrees.pop())
+            # print("now, left is", left.keys, "and n is now", n.keys)
 
             if n.parent is not None:
                 if n.isLeaf:
-                    tar = n.keys[1] if len(n.keys) > 1 else left_max
-                    kidx = n.parent.find_kidx_eq(tar)
-                    if kidx is None: return left_max
-                    n.parent.keys[kidx] = n.keys[0]
+                    # print("it's leaf, so it will update their parent:", n.parent.keys)
+                    pkidx = find_kidx_in_parent_of(n)
+                    # print("who's my parent?", pkidx, "in", n.parent.keys, "right?")
+                    if pkidx is not None:
+                        n.parent.keys[pkidx] = n.keys[0]
+                    # print("now, parent is", n.parent.keys)
                 else:
+                    # print("it's internal, what should i do?")
+                    # 인터널 노드에서 형제 노드 값을 빌린 경우에는
+                    # 부모를 어떻게 업데이트해야 하는지?
                     pass
             return left_max
 
         def borrow_from_right(n: Node, right: Node):
+            # print("borrow from right", right.keys, "to", n.keys)
             right_min = right.keys.pop(0)
             if right.isLeaf and len(right.values) > 0: right.values.pop(0)
 
             n.keys.append(right_min)
             if n.isLeaf: n.values.append(right_min)
             else: n.subTrees.append(right.subTrees.pop(0))
+            # print("now, right is", right.keys, "and n is now", n.keys)
 
             if n.parent is not None:
                 if n.isLeaf:
-                    kidx = n.parent.find_kidx_eq(right_min)
-                    if kidx is None: return right_min
-                    n.parent.keys[kidx] = right.keys[0]
+                    # print("it's leaf, so it will update their parent:", n.parent.keys)
+                    pkidx = find_kidx_in_parent_of(right)
+                    # print("who's my parent?", pkidx, "in", n.parent.keys, "right?")
+                    if pkidx is not None: n.parent.keys[pkidx] = right.keys[0]
+                    # print("now, parent is", n.parent.keys)
                 else:
+                    print("it's internal, what should i do?")
+                    # 인터널 노드에서 형제 노드 값을 빌린 경우에는
+                    # 부모를 어떻게 업데이트해야 하는지?
                     pass
             return right_min
 
         def merge_with_left(n: Node, left: Node):
-            left.keys.extend(n.keys)
-            if left.isLeaf:
-                left.values.extend(n.values)
+            # print("merge with left, left + n =", left.keys, "+", n.keys)
+            n.keys = left.keys + n.keys
+            if n.isLeaf:
+                n.values = left.values + n.values
             else:
-                left.subTrees.extend(n.subTrees)
-                for st in n.subTrees: st.parent = left
-            merge_with(n, left)
+                n.subTrees = left.subTrees + n.subTrees
+                for st in left.subTrees: st.parent = n
+            # print("now, n is:", n.keys)
+            merge_with_parent(n, left)
 
         def merge_with_right(n: Node, right: Node):
-            right.keys = n.keys + right.keys
+            # print("merge with right, n + right =", n.keys, "+", right.keys)
+            n.keys.extend(right.keys)
             if n.isLeaf:
-                right.values = n.values + right.values
+                n.values.extend(right.values)
             else:
-                right.subTrees = n.subTrees + right.subTrees
-                for st in n.subTrees: st.parent = right
-            merge_with(n, right)
+                n.subTrees.extend(right.subTrees)
+                for st in right.subTrees: st.parent = n
+            # print("now, n is:", n.keys)
+            merge_with_parent(n, right)
 
-        def merge_with(n: Node, into: Node):
+        def merge_with_parent(into: Node, t: Node):
+            def remove_from(a: Node, b: Node):
+                for i in range(len(a.subTrees)):
+                    if a.subTrees[i] is b:
+                        a.subTrees.pop(i)
+                        return a.keys.pop(i - 1 if i > 0 else 0)
+                return None
+
             if into.parent is not None:
-                lstidx = into.parent.find_stidx(n.keys[0] if len(n.keys) > 0 else k)
-                into.parent.subTrees.pop(lstidx)
-                if lstidx > 0: lstidx = lstidx - 1
+                # print("target", t.keys, "should be removed from", into.parent.keys, "and it's subtrees are", list(map(lambda x: x.keys, into.parent.subTrees)))
+                from_parent = remove_from(into.parent, t)
+                # print("so, parent is", into.parent.keys, "and it's subtrees are", list(map(lambda x: x.keys, into.parent.subTrees)))
 
-                from_parent = into.parent.keys.pop(lstidx)
-                into.parent.subTrees[lstidx] = into
-                if from_parent != k and from_parent not in into.keys:
-                    pstidx = into.find_stidx(from_parent)
-                    into.keys.insert(pstidx, from_parent)
-                    if into.isLeaf: into.values.insert(pstidx, from_parent)
-
-                if len(into.parent.keys) < self.min_st:
-                    parent_left = find_left_sibling(into.parent, from_parent)
-                    parent_right = find_right_sibling(into.parent, from_parent)
-                    if parent_left is None and parent_right is None:
-                        self.root = into
-                        into.parent = None
+                # print("now, let's merge with parent:", into.parent.keys, "into", into.keys)
+                if from_parent is not None and from_parent not in into.keys:
+                    if into.isLeaf and from_parent == k:
+                        pass
                     else:
-                        delete_by_condition(into.parent, parent_left, parent_right)
+                        pstidx = into.find_stidx(from_parent)
+                        into.keys.insert(pstidx, from_parent)
+                        if into.isLeaf: into.values.insert(pstidx, from_parent)
+
+                # into.parent.subTrees[lstidx] = into
+                # if from_parent not in into.keys:
+                #     if into.isLeaf and from_parent == k:
+                #         pass
+                #     else:
+                #         pstidx = into.find_stidx(from_parent)
+                #         into.keys.insert(pstidx, from_parent)
+                #         if into.isLeaf: into.values.insert(pstidx, from_parent)
+
+                # print("now, it's", into.keys, "and parent is", into.parent.keys)
+                if self.root == into.parent and not len(into.parent.keys):
+                    self.root = into
+                    into.parent = None
 
         def delete_by_condition(n: Node, left: Optional[Node], right: Optional[Node]):
             if left is not None and len(left.keys) > self.min_st:
@@ -231,48 +255,60 @@ class B_PLUS_TREE:
                 borrow_from_right(n, right)
             elif left is not None:
                 merge_with_left(n, left)
-                if left.isLeaf: left.nextNode = right
+                # TODO: left를 바라보는 노드가 n을 바라보도록 변경.
+                if n.parent is not None and len(n.parent.keys) < self.min_st:
+                    parent_left = find_left_sibling(n.parent, n.keys[0])
+                    parent_right = find_right_sibling(n.parent, n.keys[0])
+                    delete_by_condition(n.parent, parent_left, parent_right)
             elif right is not None:
                 merge_with_right(n, right)
+                if n.isLeaf: n.nextNode = right.nextNode
+                if n.parent is not None and len(n.parent.keys) < self.min_st:
+                    parent_left = find_left_sibling(n.parent, n.keys[0])
+                    parent_right = find_right_sibling(n.parent, n.keys[0])
+                    delete_by_condition(n.parent, parent_left, parent_right)
+
+        def find_internal_eq(n: Node, k: int) -> Optional[Node]:
+            if n.isLeaf: return None
+            ekidx = n.find_kidx_eq(k)
+            if ekidx is not None: return n
+            sub = n.subTrees[n.find_stidx(k)]
+            return find_internal_eq(sub, k)
+
+        def find_kidx_in_parent_of(n: Node):
+            if n.parent is not None:
+                for i in range(len(n.parent.subTrees)):
+                    if n.parent.subTrees[i] is n:
+                        if i == 0: return 0
+                        else: return i - 1
+            return None
 
         if self.root is None: return
         n, _ = self._find_leaf_for(self.root, k)
         kidx = n.find_kidx_eq(k)
         if kidx is None: return
 
-        internal, _ = self._find_node_eq(self.root, k)
-        internal_kidx = internal.find_kidx_eq(k)
-
         n.keys.pop(kidx)
         if n.isLeaf and len(n.values) > 0: n.values.pop()
 
-        if len(n.keys) < self.min_st:
-            left_sibling = find_left_sibling(n, k)
-            right_sibling = find_right_sibling(n, k)
+        if n.parent is not None:
+            # print("you have a parent")
+            if len(n.keys) < self.min_st:
+                # print("somebody help me")
+                left = find_left_sibling(n, k)
+                right = find_right_sibling(n, k)
+                delete_by_condition(n, left, right)
+            elif kidx == 0:
+                # print("but you don't need to nothing", kidx)
+                if n.keys[0] not in n.parent.keys:
+                    pkidx = find_kidx_in_parent_of(n)
+                    if pkidx is not None and pkidx > 0:
+                        n.parent.keys[pkidx] = n.keys[0]
 
-            if left_sibling is not None and len(left_sibling.keys) > self.min_st:
-                left_max = borrow_from_left(n, left_sibling)
-                if not internal.isLeaf and internal_kidx is not None:
-                    internal.keys[internal_kidx] = left_max
-            elif right_sibling is not None and len(right_sibling.keys) > self.min_st:
-                borrow_from_right(n, right_sibling)
-                if not internal.isLeaf and internal_kidx is not None:
-                    internal.keys[internal_kidx] = n.keys[0]
-            else:
-                if left_sibling is not None:
-                    if not internal.isLeaf and internal_kidx is not None:
-                        internal.keys[internal_kidx] = left_sibling.keys[0]
-                    merge_with_left(n, left_sibling)
-                    if left_sibling.isLeaf: left_sibling.nextNode = right_sibling
-                elif right_sibling is not None:
-                    if not internal.isLeaf and internal_kidx is not None:
-                        internal.keys[internal_kidx] = n.keys[0] if len(n.keys) > 0 else right_sibling.keys[0]
-                    merge_with_right(n, right_sibling)
-        else:
-            if n.parent is not None:
-                kidx_to_replace = n.parent.find_kidx_eq(k)
-                if kidx_to_replace is None: return
-                n.parent.keys[kidx_to_replace] = n.keys[0]
+        internal = find_internal_eq(self.root, k)
+        internal_kidx = internal.find_kidx_eq(k) if internal is not None else None
+        if internal is not None and internal_kidx is not None and kidx is not None:
+            internal.keys[internal_kidx] = n.keys[kidx]
 
     def print_root(self):
         l = "["
