@@ -129,6 +129,18 @@ class B_PLUS_TREE:
                 leaf.parent.keys[midx] = k
 
     def delete(self, k: int):
+        def find_left(n: Node, k: int, u: bool = True) -> Optional[Node]:
+            if u:
+                if n.parent is None: return None
+                left_sibling = find_left_sibling(n, n.keys[0] if len(n.keys) > 0 else 0)
+                if left_sibling is None:
+                    return find_left(n.parent, n.parent.keys[0] if len(n.parent.keys) > 0 else 0)
+                return find_left(left_sibling, left_sibling.keys[-1], False)
+            if n.isLeaf: return n
+            lstidx = n.find_stidx(k)
+            right_child = n.subTrees[lstidx + 1 if lstidx + 1 < len(n.subTrees) else -1]
+            return find_left(right_child, right_child.keys[-1], False)
+
         def find_left_sibling(n: Node, k: int):
             if n.parent is None: return None
             idx = n.parent.find_stidx(k)
@@ -160,7 +172,7 @@ class B_PLUS_TREE:
                         n.parent.keys[pkidx] = n.keys[0]
                     # print("now, parent is", n.parent.keys)
                 else:
-                    # print("it's internal, what should i do?")
+                    print("it's internal, what should i do?", n.keys, n.parent.keys)
                     # 인터널 노드에서 형제 노드 값을 빌린 경우에는
                     # 부모를 어떻게 업데이트해야 하는지?
                     pass
@@ -184,7 +196,7 @@ class B_PLUS_TREE:
                     if pkidx is not None: n.parent.keys[pkidx] = right.keys[0]
                     # print("now, parent is", n.parent.keys)
                 else:
-                    print("it's internal, what should i do?")
+                    print("it's internal, what should i do? n is", n.keys, "parent is", n.parent.keys)
                     # 인터널 노드에서 형제 노드 값을 빌린 경우에는
                     # 부모를 어떻게 업데이트해야 하는지?
                     pass
@@ -234,15 +246,6 @@ class B_PLUS_TREE:
                         into.keys.insert(pstidx, from_parent)
                         if into.isLeaf: into.values.insert(pstidx, from_parent)
 
-                # into.parent.subTrees[lstidx] = into
-                # if from_parent not in into.keys:
-                #     if into.isLeaf and from_parent == k:
-                #         pass
-                #     else:
-                #         pstidx = into.find_stidx(from_parent)
-                #         into.keys.insert(pstidx, from_parent)
-                #         if into.isLeaf: into.values.insert(pstidx, from_parent)
-
                 # print("now, it's", into.keys, "and parent is", into.parent.keys)
                 if self.root == into.parent and not len(into.parent.keys):
                     self.root = into
@@ -255,7 +258,8 @@ class B_PLUS_TREE:
                 borrow_from_right(n, right)
             elif left is not None:
                 merge_with_left(n, left)
-                # TODO: left를 바라보는 노드가 n을 바라보도록 변경.
+                foundl = find_left(left, left.keys[0])
+                if foundl is not None: foundl.nextNode = n
                 if n.parent is not None and len(n.parent.keys) < self.min_st:
                     parent_left = find_left_sibling(n.parent, n.keys[0])
                     parent_right = find_right_sibling(n.parent, n.keys[0])
