@@ -172,10 +172,12 @@ class B_PLUS_TREE:
                         n.parent.keys[pkidx] = n.keys[0]
                     # print("now, parent is", n.parent.keys)
                 else:
-                    print("it's internal, what should i do?", n.keys, n.parent.keys)
+                    # print("it's internal, what should i do?", n.keys, n.parent.keys)
                     # 인터널 노드에서 형제 노드 값을 빌린 경우에는
                     # 부모를 어떻게 업데이트해야 하는지?
-                    pass
+                    if len(n.keys) > 0 and len(n.parent.keys) > 0 and n.keys[-1] > n.parent.keys[-1]:
+                        n.keys[-1], n.parent.keys[-1] = n.parent.keys[-1], n.keys[-1]
+
             return left_max
 
         def borrow_from_right(n: Node, right: Node):
@@ -196,10 +198,12 @@ class B_PLUS_TREE:
                     if pkidx is not None: n.parent.keys[pkidx] = right.keys[0]
                     # print("now, parent is", n.parent.keys)
                 else:
-                    print("it's internal, what should i do? n is", n.keys, "parent is", n.parent.keys)
                     # 인터널 노드에서 형제 노드 값을 빌린 경우에는
                     # 부모를 어떻게 업데이트해야 하는지?
-                    pass
+                    # print("it's internal, what should i do?")
+                    if len(n.keys) > 0 and len(n.parent.keys) > 0 and n.keys[-1] > n.parent.keys[-1]:
+                        n.keys[-1], n.parent.keys[-1] = n.parent.keys[-1], n.keys[-1]
+
             return right_min
 
         def merge_with_left(n: Node, left: Node):
@@ -256,17 +260,14 @@ class B_PLUS_TREE:
                 borrow_from_left(n, left)
             elif right is not None and len(right.keys) > self.min_st:
                 borrow_from_right(n, right)
-            elif left is not None:
-                merge_with_left(n, left)
-                foundl = find_left(left, left.keys[0])
-                if foundl is not None: foundl.nextNode = n
-                if n.parent is not None and len(n.parent.keys) < self.min_st:
-                    parent_left = find_left_sibling(n.parent, n.keys[0])
-                    parent_right = find_right_sibling(n.parent, n.keys[0])
-                    delete_by_condition(n.parent, parent_left, parent_right)
-            elif right is not None:
-                merge_with_right(n, right)
-                if n.isLeaf: n.nextNode = right.nextNode
+            elif left is not None or right is not None:
+                if left is not None:
+                    merge_with_left(n, left)
+                    foundl = find_left(left, left.keys[0])
+                    if foundl is not None: foundl.nextNode = n
+                elif right is not None:
+                    merge_with_right(n, right)
+                    if n.isLeaf: n.nextNode = right.nextNode
                 if n.parent is not None and len(n.parent.keys) < self.min_st:
                     parent_left = find_left_sibling(n.parent, n.keys[0])
                     parent_right = find_right_sibling(n.parent, n.keys[0])
