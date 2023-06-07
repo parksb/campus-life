@@ -342,8 +342,8 @@ def main():
     Input: test_bp.txt
     Output: result.txt
     '''
-    # sys.stdin = open("test_insert_3.txt",'r')
-    # sys.stdout = open("result.txt","w")
+    sys.stdin = open("test_bp.txt",'r')
+    sys.stdout = open("result.txt","w")
     myTree = None
 
     while (True):
