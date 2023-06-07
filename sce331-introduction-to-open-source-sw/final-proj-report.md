@@ -1,8 +1,8 @@
 # FOSS2023-1_final
 
-- 주제: Command Line Applications in Rust 번역
-- 저장소: https://github.com/parksb/rust-cli-book-ko-kr
+- **주제: Command Line Applications in Rust 번역**
 - 번역 결과물: https://parksb.github.io/rust-cli-book-ko-kr/
+- 저장소: https://github.com/parksb/rust-cli-book-ko-kr
 
 ## 주제 선정 동기
 
@@ -23,7 +23,7 @@ Command Line Applications in Rust는 러스트 코어팀의 CLI Working Group에
 - 번역해야 할 텍스트가 생각보다 많은 편이었고, 러스트와 리눅스에 대한 이해가 필요했다.
 - 문체와 각종 기술 용어, 고유 명사 등은 이제 막 러스트를 공부하기 시작할 때 가장 먼저 보게 되는 책 The Rust Programming Language(TRPL)의 번역을 최대한 따랐다. TRPL은 이 책에서도 자주 인용하는 책이기 때문에 일관된 톤앤매너를 따르는 것이 중요하다고 판단했다. 어색한 번역투를 지양하고, 원어로 통용되는 용어(shell, panic 등)는 직역하는 대신 음차했다.
   - 콜론으로 이어진 문장을 번역했을 때 어색한 경우에는 자연스러운 방식으로 문장을 재구성했다: `It has one problem, though: We don’t store the original error, only its string representation.`→ `그러나 원본 에러를 저장하지 않고 문자열만 보여준다는 문제가 있습니다.`
-  - 가주어를 '그것은'과 같이 번역하지 않고 단어를 반복 언급하여 한국어로 자연스럽게 읽히도록 번역했다.
+  - 가주어를 '그것은'과 같이 번역하지 않고 단어를 재언급하여 한국어로 자연스럽게 읽히도록 번역했다.
   - 외부 문서(위키피디아, MS Docs 등) 인용에 한국어로 번역된 문서가 있는 경우, 번역된 문서를 인용했다.
 - 원본 저장소에 [PR](https://github.com/rust-cli/book/pull/219)을 보내 내 번역본으로 향하는 링크를 추가했다.
 - mdBook으로 빌드해 누구나 웹으로 책을 읽을 수 있도록 했다. 이를 위해 푸시할 때마다 자동으로 문서를 빌드, GitHub Pages로 배포하는 [워크플로우](https://github.com/parksb/rust-cli-book-ko-kr/blob/master/.github/workflows/deploy.yml)를 작성했다.
@@ -31,12 +31,13 @@ Command Line Applications in Rust는 러스트 코어팀의 CLI Working Group에
 
 ## 감상
 
-Command Line Applications in Rust를 통해 더 많은 한국 개발자들이 러스트를 접하고, 러스트의 문제의식과 철학에 공감할 수 있다면 좋겠다. 특히 러스트의 대략적인 문법과 개념은 살펴봤지만, 아직 완결된 프로그램을 만들어 보지 못한 사람들이 Command Line Applications in Rust로 시작해 보면 좋을 것 같다.
+이번 프로젝트를 통해 작게나마 러스트 생태계에 기여할 수 있어서 성취감이 들었다. Command Line Applications in Rust를 통해 더 많은 한국 개발자들이 러스트를 접하고, 러스트의 문제의식과 철학에 공감해주길 기대한다. 특히 러스트의 대략적인 문법과 개념은 살펴봤지만, 아직 완결된 프로그램을 만들어 보지 못한 사람들이 Command Line Applications in Rust로 시작해 보면 좋을 것 같다.
 
 ## 부록
 
 - [원본 저장소와의 차이](diffs): `git diff upstream/master origin/master > diffs`
 - [변경 내역](changelog): `git log b121539.. > changelog`
+- 번역본: https://parksb.github.io/rust-cli-book-ko-kr/
 - 번역 저장소: https://github.com/parksb/rust-cli-book-ko-kr
-- 번역 결과물: https://parksb.github.io/rust-cli-book-ko-kr/
+- 원본: https://rust-cli.github.io/book/
 - 원본 저장소: https://github.com/rust-cli/book
