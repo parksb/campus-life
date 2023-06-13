@@ -30,14 +30,16 @@ Command Line Applications in Rust는 러스트 코어팀의 CLI Working Group에
 - 외부 문서(위키피디아, MS Docs 등) 인용에 한국어로 번역된 문서가 있는 경우, 번역된 문서를 인용했다.
 - 원본 저장소에 [PR](https://github.com/rust-cli/book/pull/219)을 보내 내 번역본으로 향하는 링크를 추가했다.
 - mdBook으로 빌드해 누구나 웹으로 책을 읽을 수 있도록 했다. 이를 위해 푸시할 때마다 자동으로 문서를 빌드, GitHub Pages로 배포하는 [워크플로우](https://github.com/parksb/rust-cli-book-ko-kr/blob/master/.github/workflows/deploy.yml)를 작성했다.
+- 개발자 커뮤니티에 번역본을 공유해 많은 호응을 얻었다.
 
 ## 감상
 
 이번 프로젝트를 통해 작게나마 러스트 생태계에 기여할 수 있어서 성취감이 들었다. Command Line Applications in Rust를 통해 더 많은 한국 개발자들이 러스트를 접하고, 러스트의 문제의식과 철학에 공감해주길 기대한다. 특히 러스트의 대략적인 문법과 개념은 살펴봤지만, 아직 완결된 프로그램을 만들어 보지 못한 사람들이 Command Line Applications in Rust로 시작해 보면 좋을 것 같다.
 
-## 부록
+## 링크
 
-- [원본 저장소와의 차이](diffs): `git diff upstream/master origin/master > diffs`
+- 원본 저장소와의 차이: https://github.com/parksb/rust-cli-book-ko-kr/compare/upstream...master#files_bucket
+- [원본 저장소와의 차이 (파일)](diffs): `git diff upstream/master origin/master > diffs`
 - [변경 내역](changelog): `git log b121539.. > changelog`
 - 번역본: https://parksb.github.io/rust-cli-book-ko-kr/
 - 번역 저장소: https://github.com/parksb/rust-cli-book-ko-kr
