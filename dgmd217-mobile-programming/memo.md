@@ -6,7 +6,9 @@
 - 안드로이드의 특징:
   - 재사용 가능한 애플리케이션 프레임워크.
   - 최적화된 ART(Android Run Time) 가상 머신:
-    - Ahead-of-time(AOT) 컴파일: 달빅의 JIT과 달리 미리 앱을 커파일해둔다.
+    - ART: DEX > dex2oat > 네이티브 코드 > ART 런타임
+    - 달빅: DEX > dexopt > DEX 바이트코드 > 달빅 가상머신
+    - Ahead-of-time(AOT) 컴파일: 달빅의 JIT과 달리 미리 앱을 컴파일해둔다.
     - GC, 디버깅 개선.
     - 메모리 사용량, 설치 시간 증가.
   - WebKit, OpenGL, SQLite 지원.
@@ -63,7 +65,7 @@
 
 ## 고급 위젯 다루기
 
-- 커스텀 컴포넌트
+- 커스텀 컴포넌트: View 클래스를 상속받는 개발자 정의 위젯.
 - 화면 터치 이벤트:
   - ACTION_DOWN: 화면을 터치하는 첫 번째 포인터.
   - ACTION_POINTER_DOWN: 첫 번째 포인터 이후의 포인터.
@@ -94,6 +96,9 @@
     }
     ```
 - 애니메이션:
+  - 프로퍼티 애니메이션: 뷰를 비롯한 모든 객체의 속성을 애니메이션.
+  - 뷰 애니메이션: 뷰 객체를 애니메이션.
+  - 드로워블 애니메이션: 여러 장의 이미지를 사용한 애니메이션.
   - ValueAnimator:
     ```java
     ValueAnimator animator = ValueAnimator.ofFloat(100, 1000);
@@ -169,7 +174,14 @@
   - 사용자가 방문한 액티비티가 스택에 push (백 버튼으로 돌아가면 pop)
   - 스택에 들어간 액티비티의 순서는 바뀌지 않음.
   - 이미 스택에 있는 액티비티가 중복 추가될 수 있음.
-  - last 액티비티가 현재 실행되고 있는 액티비티.
+  - top 액티비티가 현재 실행되고 있는 액티비티.
+  - launchMode에 따라 동작이 달라짐:
+    - Standard: 기본 스택 동작과 동일, 중복 액티비티 허용.
+    - SingleTop: top 액티비티와 바로 다음 액티비티가 중복되지 않게 함. 중복되면 `onNewIntent()`만 콜백.
+      ![](https://user-images.githubusercontent.com/6410412/245743288-98e7803b-8475-4794-9600-c3c167f1e8bd.png)
+    - SingleTask: 새로운 태스크에 액티비티가 생성됨. 백그라운드에 해당 액티비티가 수행되는 태스크가 있으면 새로운 태스크를 만들지 않고, 백그라운드 태스크를 포그라운드로 가져온다.
+      ![](https://user-images.githubusercontent.com/6410412/245743388-8551c196-6a89-4fab-bd94-a5c4bd8ad1c0.png)
+    - SingleInstance: SingleTask와 유사하지만, 액티비티 스택에 다른 액티비티들을 구동하지 않음.
 - 인텐트:
   - 명시적 인텐트:
     - 명시적으로 지정된 인텐트, 동일 앱 내의 액티비티를 구동.
@@ -245,6 +257,9 @@
   - 내부 저장소와 달리 외부 저장소는 누구나 읽을 수 있음.
   - 공개 공유 디렉토리 (앱을 제거해도 삭제되지 않음): `getExternalStoragePublicDirectory`
   - 사적 데이터를 저장하는 디렉토리: `getExternalFilesDir`
+- Shared preferences:
+  - kvp로 저장되는 애플리케이션의 환경 설정.
+  - 앱의 모든 context에서 저장된 환경 설정을 사용할 수 있음.
 
 ## 스레드
 
