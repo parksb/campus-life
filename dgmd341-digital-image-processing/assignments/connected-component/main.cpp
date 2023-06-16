@@ -23,7 +23,7 @@ void on_click(int event, int x, int y, int flag, void* param) {
     if (event != EVENT_LBUTTONDOWN) return;
 
     Mat* input = (Mat*) param;
-    Mat seed(input->size(), input->type());
+    Mat seed = Mat::zeros(input->size(), input->type());
     seed.at<uchar>(y, x) = input->at<uchar>(y, x);
 
     Mat found = connected_component(seed, *input);
