@@ -13,10 +13,8 @@
 
 - 중복 데이터는 저장 공간을 낭비.
 - Insertion anomalies
-- Deletion anomalies:
-  - 한 레코드를 지우려면 중복된 모든 레코드를 제거해야.
-- Update anomalies:
-  - 레코드의 내용을 변경하려면 중복된 모든 레코드를 변경해야.
+- Deletion anomalies: 한 레코드를 지우려면 중복된 모든 레코드를 제거해야.
+- Update anomalies: 레코드의 내용을 변경하려면 중복된 모든 레코드를 변경해야.
 
 ### Null values
 
@@ -53,8 +51,8 @@
 
 ![](https://user-images.githubusercontent.com/6410412/244057741-f4e29ee6-9288-41c3-8a89-a6a711d01e97.png)
 
-- 모든 non-prime attr이 PK에 FD한 형식.
-- 더 일반화된 정의: 모든 non-prime attr이 모든 키에 FD한 형식.
+- 모든 non-prime attr이 PK에 Fully FD한 형식.
+- 더 일반화된 정의: 모든 non-prime attr이 모든 키에 Fully FD한 형식.
 - PK가 진짜 prime한 것만으로 구성되어 있는가?
 - Full FD: e.g., (Ssn, Pnumber) $\rightarrow$ Hours. Ssn $\rightarrow$ Hours, Pnumber $\rightarrow$ Hours 둘 다 표현할 수 없으므로.
 - Not a Full FD (Partial dependency): e.g., (Ssn , Pnumber) $\rightarrow$ Ename. Ssn $\rightarrow$ Ename으로 표현할 수 있으므로.
@@ -137,8 +135,8 @@
 
 ![](https://user-images.githubusercontent.com/6410412/237428049-c2b58446-911a-41a3-bc27-7791b3458c34.png)
 
-- primary index가 이미 있다고 가정.
-- 정렬되지 않은 데이터(e.g., candidate keys)를 위한 dense index. (물론 정렬된 경우에도 사용 가능.)
+- primary index가 이미 있다고 가정, candidate keys에 사용하는 추가적인 인덱스.
+- 정렬되지 않은 데이터를 위한 dense index. (물론 정렬된 경우에도 사용 가능.)
 - 따라서 secondary index에는 레코드 수만큼의 엔트리가 필요하다.
 - 인덱스는 두 개의 필드로 정렬되어 있음:
   - 첫 번째 필드: 데이터 파일의 non-ordering field와 같은 데이터 타입.
@@ -158,8 +156,7 @@
 
 - 페이지 당 하나의 엔트리를 두려면 많은 저장공간이 필요함.
 - 만약 secondary index가 엄청 커진다면?
-- 인덱스의 인덱스를 만들어보자.
-- 더 적은 접근으로 데이터를 찾을 수 있지만, 많은 메모리 공간이 필요하다는 트레이드오프가 있음.
+- 인덱스의 인덱스를 만들면 더 적은 접근으로 데이터를 찾을 수 있다.
 
 > 예시:
 > - r = 300000, b = 4096B
