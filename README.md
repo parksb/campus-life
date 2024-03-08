@@ -2,6 +2,11 @@
 
 ## 수업
 
+### 2024년 봄 (4학년 2학기)
+
+* [몰입형미디어프로그래밍](dgmd318-immersive-media-programming)
+* [과학기술과법](sci116-science-technology-and-law)
+
 ### 2023년 가을 (4학년 1학기)
 
 * [일본근현대사](are231-japanese-modern-history)
