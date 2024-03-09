@@ -1,0 +1,6 @@
+[submodule "dgmd353-information-design/project"]
+	path = dgmd353-information-design/project
+	url = git@github.com:parksb/blockbuster.git
+[submodule "cart1016-understanding-media-art/project"]
+	path = cart1016-understanding-media-art/project
+	url = git@github.com:parksb/the-work-of-art-in-the-age-of-mechanical-generation.git
