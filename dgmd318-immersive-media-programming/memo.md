@@ -17,3 +17,27 @@
 - Mesh: 게임 오브젝트의 모양.
 - Colliders: 물체의 물리적 경계. 충돌 판정에 필요.
 - Scene: 하나의 게임 화면이며, 여러 게임 오브젝트를 배치할 수 있다.
+
+## Unity scripting
+
+- C# 스크립트를 사용한다. prefab을 만들고, 여기에 스크립트를 추가할 수 있음.
+- 스크립트 파일에는 `Start`와 `Update` 함수가 있음:
+  - `Start`: 게임이 시작되기 전에 호출됨. 각종 초기화 작업.
+  - `Update`: 게임 시작 후 매 프레임마다 호출됨.
+- 스크립트에서 게임오브젝트를 참조할 수 있다:
+  - `GameObject` 타입 변수를 `public`으로 만들고 유니티에서 연결하면 됨.
+  - `private`으로 만들고 스크립트에서 `GameObject.Find("name")`으로 찾을수도.
+  - `Instantiate`: 새 게임오브젝트를 생성한다.
+  - 언제 스크립트에서 오브젝트를 생성해야 할까?
+    - 레벨 시작시 prefab을 여러 다른 장소에 복제해야 할 때.
+    - 무기에서 뭔가를 발상할 때, 총알이나 화살 등.
+    - 게임오브젝트가 여러 조각으로 분해될 때, 폭발 등.
+- 유니티의 벡터:
+  - 유니티 좌표계는 왼손법칙을 따름.
+  - `Vector3` 타입으로 오브젝트의 위치, 스칼라, 방향, 속도 등을 다룰 수 있음.
+  - `MoveTowards`, `Lerp`, `Slerp` 같은 함수들을 유용하게 사용할 수 있음.
+  - `Update` 함수 안에 `transform.Translate(transform.forward * Time.deltaTime * 0.5)`을 작성하면 단위 시간마다 0.5씩 앞으로 이동.
+- 중요한 클래스들:
+  - `GameObject`
+  - `Transform`
+  - `MonoBehavior`
