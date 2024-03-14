@@ -6,8 +6,12 @@
 
 * [몰입형미디어프로그래밍](dgmd318-immersive-media-programming)
 * [과학기술과법](sci116-science-technology-and-law)
+* [이산수학](sce141-discrete-mathematics/2024)
+* [선형대수1(MOOC)](math211-linear-algebra)
 
 ### 2023년 가을 (4학년 1학기)
+
+![](./timetables/2023-fall.png)
 
 * [일본근현대사](are231-japanese-modern-history)
 * [미디어아트의이해](cart1016-understanding-media-art)
@@ -18,6 +22,8 @@
 
 ### 2023년 봄 (3학년 2학기)
 
+![](./timetables/2023-spring.png)
+
 * [영상처리](dgmd341-digital-image-processing)
 * [데이터베이스](sce333-database)
 * [모바일프로그래밍](dgmd217-mobile-programming)
@@ -27,6 +33,8 @@
 
 ### 2022년 가을 (3학년 1학기)
 
+![](./timetables/2022-fall.png)
+
 * [알고리즘](cse350-algorithms)
 * [컴퓨터그래픽스](dgmd241-computer-graphics)
 * [데이터사이언스개론](dgmd333-introduction-to-data-science)
@@ -35,7 +43,9 @@
 
 ### 2018년 가을 (2학년 2학기)
 
-* [이산수학](sce141-discrete-mathematics)
+![](./timetables/2018-fall.png)
+
+* [이산수학](./sce141-discrete-mathematics/2018)
 * [컴퓨터구조](sce212-computer-organization-and-architecture)
 * [컴퓨터네트워크](sce221-computer-networks)
 * [비주얼커뮤니케이션디자인](dgmd251-visual-communication-design)
@@ -43,6 +53,8 @@
 * [창업실습2](dgmd472-business-start-up-practice-2)
 
 ### 2018년 봄 (2학년 1학기)
+
+![](./timetables/2018-spring.png)
 
 * [그래픽디자인](dgmd151-graphic-design)
 * [자료구조](cse200-data-structures)
@@ -53,6 +65,8 @@
 
 ### 2017년 가을 (1학년 2학기)
 
+![](./timetables/2017-fall.png)
+
 * [글쓰기](kor102-korean-writing)
 * [컴퓨터프로그래밍](cse104-computer-programming)
 * [컴퓨터프로그램설계](cse134-computer-program-design)
@@ -62,6 +76,8 @@
 * [아주인성](cajo113-ajou-virtues-ethics-responsibility-and-sustainability)
 
 ### 2017년 봄 (1학년 1학기)
+
+![](./timetables/2017-spring.png)
 
 * [소셜미디어](mibs101-social-media)
 * [미디어통계](mibs131-media-statistics)

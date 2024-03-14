@@ -1,3 +1,7 @@
 # 확률및통계1
 
-* 1학년 1학기에 들은 [미디어 통계](../mibs131-media-statistics) 수업과 크게 다르지 않았다.
+| 과목코드 | 과목명      | 교수명  | 강의시기    |
+|----------|-------------|---------|-------------|
+| MATH251  | 확률및통계1 | 이준숙  | 2017년 가을 |
+
+- 주교재: Ronald E. Walpole et al., "Probability & Statistics for Engineers & Scientists 9th Edition", Pearson, 2012.

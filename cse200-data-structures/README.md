@@ -1,18 +1,19 @@
 # 자료구조
 
-* 2학년 1학기에 가장 고생했고, 아쉬움이 많은 남은 수업이었다.
-* 수업은 파이썬으로 진행됐다. 1학년 1학기 동아리에서 파이썬 세미나를 들었고, 파이썬으로 과제를 하는 친구들을 도와줬던 경험이 있어서 언어에는 큰 제약이 없었다.
-* stack, queue, linked list 정도는 고등학생 때 이미 공부를 했기 때문에 어렵지 않았으나 heap tree부터 어려워지기 시작했다.
-* 시간복잡도를 구하는 것도 쉽지 않았다. 특히 점화식을 세워 증명하는 과정이 무척 혼란스러웠다.
-* 무엇보다 재귀적인 코드를 짜다 보면 머리가 이리저리 꼬이곤 했다. 다행히 나중에는 재귀의 모든 단계를 생각하지 않아도 부분을 통해 전체를 설계하는 감이 생겼다. 이게 힘들던 초반에는 재귀가 너무 어려웠다. 하지만 교수님은 재귀적인 정의와 구현을 사랑하셨다. "recursive하게 구현하세요"가 아직도 맴돈다.
-* 교재는 Data Structures & Algorithms in Python (Michael T. Goodrich, Wiley, 2013)을 썼다. 초반에는 파이썬 문법과 OOP에 대한 설명이 간단하게 나오고, 이후로는 다양한 자료구조와 알고리즘에 관한 설명이 나온다. 내용이 탄탄해서 앞으로 자료구조 관련해서는 바이블로 가지고 있어도 되겠다는 생각이 들 정도였다.
-* 과제는 acm-icpc 문제 같은 것들이 나왔다. 과제는 일주일에 하나씩 나오며, 점수를 후하게 주는 건지 거의 다 만점이었다.
-* 독특하게 flipped learning 방식으로 진행됐는데, 한 번씩 오프라인 수업 대신 온라인 강의를 듣고 1시간 이내에 문제를 풀어 제출하는 식이었다.
-* 처음에는 1시간이라는 압박이 너무 크게 느껴져 엉망인 코드를 내기도 했다.
-* 무엇보다 끊김없이 온라인 강의를 들을 수 있는 환경을 찾는 게 어려웠다. 산학원이 워낙 고립된 곳에 있어서 다음 수업을 들으려면 멀리 갈 수 없었다. 강의실 와이파이는 속도가 느렸고, 동방은 집중이 어려웠다. 기숙사 안 나왔으면 방에서 했을 텐데.
-* 중간고사, 기말고사 모두 오픈북으로 진행됐다. 당연히 문제가 쉽지 않았고, 책을 열어볼 시간도 없었다.
-* 가장 난감했던 것은 '시험공부를 어떻게 할 것인가'였는데, [BOJ](https://www.acmicpc.net/) 문제를 푸는 것이 가장 도움이 되지 않았나 싶다.
-* 수업 중에 한 번씩 깜짝퀴즈를 봤는데, 나중에는 너무 자주 퀴즈를 봐서 전혀 '깜짝'하지 않았다. 칠판에서 너무 먼 자리에 앉는 바람에 문제가 보이지 않아서 내 멋대로 답을 쓰기도(...) 했다. 그 이후로 무조건 첫 줄에 앉았다.
-* 그냥 아쉽다. 수업 내용도 좋았고 교수님도 좋은 분이었고 교재도 좋았는데... 성적이 안 좋았다. 강의평에 "교수님은 똑똑하시다. 학생들은 똑똑하지 않다."라는 말이 있었다.
-* 지금 보면 그렇게 어렵지 않은 내용인데 왜 그랬는지 모르겠다. 사실 마음 같아서는 다시 듣고 싶다. 교수님을 통해 좋은 인사이트를 얻을 수 있을 것 같아서 최근에 [교수님이 참여한 대담록](https://m.blog.naver.com/PostView.nhn?blogId=greatajou&logNo=221118119898&proxyReferer=https%3A%2F%2Fwww.google.co.kr%2F)을 봤는데 정말 자료구조 수업을 한 번 더 듣고 싶다고 생각했다.
-* 마지막 수업은 개발자의 역량에 관한 내용이었는데, 바이블로 불리는 명저들을 소개해주신 것이 좋았다.
+| 과목코드 | 과목명   | 교수명 | 강의시기  |
+|----------|----------|--------|-----------|
+| CSE200   | 자료구조 | 최정주 | 2018년 봄 |
+
+- 주교재: Michael T. Goodrich, "Data Structures & Algorithms in Python", Wiley, 2013.
+- 과제:
+  - [Anagram generator](./assignments/anagram_generator.py)
+  - [Fraction](./assignments/fraction.py)
+  - [Hanoi](./assignments/hanoi.py)
+  - [Single linked list](./assignments/singly_linked_list.py)
+  - [Sum of matrix](./assignments/sum_of_matrix.py)
+  - [Sum of K](./assignments/sum_to_k.py)
+  - [Arithmetic expression](./assignments/arithmetic_expression)
+  - [Binary tree traversal](./assignments/binary_tree_traversal)
+  - [Full adder](./assignments/full_adder)
+  - [Heap sort](./assignments/heap_sort)
+  - [Infix expression to postfix](./assignments/infix_expr_to_postfix_expr)
