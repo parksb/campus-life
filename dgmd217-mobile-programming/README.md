@@ -10,8 +10,9 @@
   - [Simple calculator](./assignments/SimpleCalculator)
   - [Simple drawing](./assignments/SimpleDrawing)
   - [Dictionary](./assignments/Dictionary)
-  - [Animation service)(./assignments/AnimationService)
+  - [Animation service](./assignments/AnimationService)
   - [Lunar lander](./assignments/LunarLander)
   - [Obj DB](./assignments/ObjDB)
   - [Restaurant reservation](./assignments/RestaurantReservation)
-- [프로젝트](./project)
+- 프로젝트:
+  - [S-BA](./project)

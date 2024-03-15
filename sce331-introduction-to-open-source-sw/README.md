@@ -4,6 +4,7 @@
 |----------|----------------|--------|-----------|
 | SCE331   | 오픈소스SW입문 | 이환용 | 2023년 봄 |
 
-- [프로젝트](https://github.com/parksb/rust-cli-book-ko-kr)
+- 프로젝트:
+  - [러스트 커맨드라인 애플리케이션](https://github.com/parksb/rust-cli-book-ko-kr)
 
 > ![](https://mstdn-cdn.e14forest.net/media_attachments/files/109/416/104/413/892/682/original/a7c7b7465987f8ec.jpg)

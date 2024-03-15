@@ -10,4 +10,5 @@
   - [대시보드 목업](./practice/dashboard-mockup)
   - [차트](./practice/charts)
   - [네트워크 데이터](./practice/data-from-net)
-- [프로젝트](./project)
+- 프로젝트:
+  - [Blockbuster](./project)

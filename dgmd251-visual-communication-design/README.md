@@ -9,4 +9,5 @@
   - [그래픽 디자인과 비주얼 커뮤니케이션 디자인의 차이](./assignments/difference-between-graphic-design-and-visual-communication-design.pdf)
   - [표지 디자인](./assignments/covers)
   - [내지 디자인](./assignments/pages)
-- [프로젝트](./project)
+- 프로젝트:
+  - [Typography: 얀 치홀트의 뉴 타이포그래피](./project)

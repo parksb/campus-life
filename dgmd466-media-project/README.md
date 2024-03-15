@@ -4,7 +4,8 @@
 |----------|----------------|--------|-------------|
 | DGMD466  | 미디어프로젝트 | 고욱   | 2023년 가을 |
 
-- [프로젝트](https://github.com/zap-lib):
+- 프로젝트:
+  - [Zap](https://github.com/zap-lib)
   - [아이디어 발표](./idea.pdf)
   - [레퍼런스 발표](./reference.pdf)
   - [최종 발표](./final.pdf)
