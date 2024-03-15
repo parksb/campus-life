@@ -52,3 +52,40 @@
   - 스레드 프로그래밍 해봤죠? 유니티에는 코루틴이 있다.
   - 함수 실행을 일시정지하고, 유니티에게 제어권을 넘겨준 다음, 나중에 재개할 수 있음.
   - 가령 함수 안에서 `yield return WaitForSeconds(x)`하면 `x`초 뒤에 함수가 재개됨.
+- Rigidbody:
+  - 게임오브젝트가 rigidbody 컴포넌트를 갖는다면, 중력에 영향을 받는다. (비활성화하지 않는 이상)
+  - 콜라이더를 쓰면 충돌에도 영향을 받음.
+- Kinematic:
+  - rigidbody 게임 오브젝트가 키네마틱이라면, 물리엔진에 의해 움직이지 않음.
+  - 즉, 중력이나 힘, 토크의 영향을 받지 않음.
+  - 오직 스크립트나 애니메이션에 의해서만 움직이게 됨.
+  - 스크립트로 임의의 force나 torque를 추가해줄 수 있음.
+  - 여전히 collisions에 영향을 받기는 한다.
+- Collision detection:
+  - 다른 게임오브젝트와 콜라이더가 충돌했는지 판단:
+    ```cs
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTage("Enemy")) {
+            Debug.Log("Collided with an enemy");
+        }
+    }
+    ```
+  - `OnCollisionEnter`는 딱 충돌했을 때 한번만 호출됨.
+  - `OnCollisionStay`를 쓰면 콜라이더가 맞닿은 내내 반복 호출된다.
+- Trigger:
+  - 트리거로도 충돌을 판정할 수 있음.
+  ```cs
+  void OnTriggerEnter(Collider other) {
+      if (other.CompareTag("Food")) {
+          Debug.Log("Yum");
+      }
+  }
+  ```
+  - 트리거를 쓰면 다른 콜라이더를 통과할 수 있다.
+- Raycasting:
+  - 어떤 점 A부터 B로 향하는 보이지 않는 라인.
+  - 레이캐스팅을 하면 ray가 어떤 콜라이더와 충돌하는지 체크할 수 있다.
+  - 충돌한 오브젝트가 무엇인지, 그것과의 거리는 얼마인지, 충돌 좌표는 어디인지 알 수 있다.
+  - e.g., FPS 게임에서 총쏘면 총알이 어디 착탄했는지 알 수 있음.
+  - e.g., 플레이어가 추락하고 있다면 바닥과의 거리를 알 수 있음.
+  - e.g., 플레이어와 적 사이에 뭔가가 있는지 체크할 수 있음.
