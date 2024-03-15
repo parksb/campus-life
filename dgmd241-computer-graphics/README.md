@@ -13,3 +13,5 @@
   - [Specular lighting](./assignments/specular-lighting)
   - [Diffuse and bump texture](./assignments/diffuse-and-bump-texture)
   - [Diffuse and ambient lighting](./assignments/diffuse-and-ambient-lighting)
+
+> 절대 XCode를 쓰지 않겠다는 의지로 과제했다.
