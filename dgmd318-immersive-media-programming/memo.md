@@ -39,5 +39,16 @@
   - `Update` 함수 안에 `transform.Translate(transform.forward * Time.deltaTime * 0.5)`을 작성하면 단위 시간마다 0.5씩 앞으로 이동.
 - 중요한 클래스들:
   - `GameObject`
-  - `Transform`
-  - `MonoBehavior`
+  - `Transform`:
+    - 게임오브젝트의 위치, 회전, 크기를 표현한다.
+    - 유니티는 회전을 나타내는 두 방법이 있음, Euler angles와 quaternions
+  - `MonoBehavior`: 스크립트의 베이스 클래스. 게임오브젝트에 대한 각종 정보가 있음.
+- 이벤트 함수: 이벤트가 발생하는 특정 시점에 호출되는 함수들. `Update`도 이벤트 함수임.
+- 키 입력으로 오브젝트 움직이기:
+  - `Input.GetAxis("Horizontal")`, `Input.GetAxis("Vertical")`
+  - `transform.Translate(new Vector3(horizontal, 0, vertical) * (5.0f * Time.deltaTime))`
+  - 근데 이러면 대각선으로 움직일 때 속도가 빨라짐. 이걸 해결하려면 벡터를 normalize해줘야.
+- Coroutines:
+  - 스레드 프로그래밍 해봤죠? 유니티에는 코루틴이 있다.
+  - 함수 실행을 일시정지하고, 유니티에게 제어권을 넘겨준 다음, 나중에 재개할 수 있음.
+  - 가령 함수 안에서 `yield return WaitForSeconds(x)`하면 `x`초 뒤에 함수가 재개됨.
