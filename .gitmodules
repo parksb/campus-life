@@ -1,9 +1,0 @@
-[submodule "cart1016-understanding-media-art/project"]
-	path = cart1016-understanding-media-art/project
-	url = git@github.com:parksb/the-work-of-art-in-the-age-of-mechanical-generation.git
-[submodule "dgmd217-mobile-programming/project/source"]
-	path = dgmd217-mobile-programming/project/source
-	url = git@github.com:safe-bicycle-assistant/s-ba.git
-[submodule "dgmd353-information-design/project/source"]
-	path = dgmd353-information-design/project/source
-	url = git@github.com:parksb/blockbuster.git

@@ -15,4 +15,7 @@
   - [Obj DB](./assignments/ObjDB)
   - [Restaurant reservation](./assignments/RestaurantReservation)
 - 프로젝트:
-  - [S-BA](./project)
+  - [S-BA](https://github.com/safe-bicycle-assistant/s-ba)
+  - [아이디어 발표](./project/s-ba-proposal.pdf)
+  - [중간 발표](./project/s-ba-proposal.pdf)
+  - [최종 발표](./project/s-ba-proposal.pdf)
