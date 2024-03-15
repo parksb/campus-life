@@ -18,7 +18,7 @@
 * [정보디자인](dgmd353-information-design)
 * [미디어프로젝트](dgmd466-media-project)
 * [인간과컴퓨터상호작용](sce436-human-computer-interaction)
-* [컴퓨터프로그래밍및실습(튜터링)](tutor-sce103-computer-programming-and-practice)
+* [컴퓨터프로그래밍및실습(튜터링)](sce103-computer-programming-and-practice)
 
 ### 2023년 봄 (3학년 2학기)
 
