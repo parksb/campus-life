@@ -1,0 +1,30 @@
+\documentclass[a4paper, hidelinks, 9pt, figtabcapt, footnote, twocolumn]{oblivoir}
+\usepackage{fapapersize}
+\usefapapersize{210mm, 297mm, 3mm, 3mm, 2mm, 7mm}
+
+\usepackage[document]{ragged2e}
+\usepackage{graphicx}
+\graphicspath{{../images}}
+
+\setmainhangulfont{Noto Serif KR}
+\setmainhanjafont {Noto Serif KR}
+\setsanshangulfont{Noto Sans KR}
+
+\setstretch{1.2}
+\oblivoirlists
+
+\newcommand{\bitmz}{\begin{itemize}}
+\newcommand{\eitmz}{\end{itemize}}
+\newcommand{\benum}{\begin{enumerate}}
+\newcommand{\eenum}{\end{enumerate}}
+\newcommand{\itm}[1]{\item #1}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\bcode}{\begin{verbatim}}
+\newcommand{\ecode}{\end{verbatim}}
+
+\newcommand{\img}[1]{\begin{figure}[h] \centering \includegraphics[width=\columnwidth]{#1} \end{figure}}
+\newcommand{\rarr}{$\rightarrow \;$}
+\newcommand{\sectiondense}[1]{\vspace{-6mm} \section{#1} \vspace{-3mm}}
+
+\begin{document}

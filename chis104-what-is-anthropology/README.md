@@ -5,4 +5,4 @@
 | CHIS104  | 인류학이란무엇인가 | 구본규 | 2022년 가을 |
 
 - 과제:
-  - [나의 생애과정](./the-course-of-my-life.pdf)
+  - [나의 생애과정](./the-course-of-my-life/the-course-of-my-life.pdf)

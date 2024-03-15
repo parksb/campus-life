@@ -1,0 +1,7 @@
+[doc]
+name = 'production-sponsership-is-threatening-the-publicity-of-broadcasting'
+bundle = 'https://data1.fullyjustified.net/tlextras-2021.3r1.tar'
+
+[[output]]
+name = 'production-sponsership-is-threatening-the-publicity-of-broadcasting'
+type = 'pdf'

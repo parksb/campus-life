@@ -5,5 +5,5 @@
 | CART1013 | 한국영화사 | 남기웅 | 2023년 봄 |
 
 - 과제:
-  - [<미몽> 및 <하녀> 분석: 당대 주요담론을 중심으로](./assignment-1.pdf)
-  - [<박하사탕> 및 <마더> 분석](./assignment-2.pdf)
+  - [<미몽> 및 <하녀> 분석: 당대 주요담론을 중심으로](./assignment-1/assignment-1.pdf)
+  - [<박하사탕> 및 <마더> 분석](./assignment-2/assignment-2.pdf)

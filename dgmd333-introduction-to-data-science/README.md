@@ -8,7 +8,7 @@
 - 프로젝트:
   - [DLinear](./dlinear.ipynb)
   - [Informer](./informer.ipynb)
-  - [기말 프로젝트 기획서](./final-project-plan.pdf)
+  - [기말 프로젝트 기획서](./final-project-plan/final-project-plan.pdf)
   - [Informer 모델과 DLinear 모델의 장기 시계열 예측 성능 비교](./comparison-of-ltsf-performance-of-informer-and-dlinear-models.pdf)
 
 > CS231n 듣는 수업. 과목명의 '개론'에 속은 사람들이 고통받는다.
