@@ -7,7 +7,8 @@
 * [몰입형미디어프로그래밍](dgmd318-immersive-media-programming)
 * [과학기술과법](sci116-science-technology-and-law)
 * [이산수학](sce141-discrete-mathematics/2024)
-* [선형대수1(MOOC)](math211-linear-algebra)
+* [선형대수1(녹화)](math211-linear-algebra)
+* [운영체제(녹화)](sce213-operating-systems)
 
 ### 2023년 가을 (4학년 1학기)
 
