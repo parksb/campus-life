@@ -10,5 +10,3 @@
   - [Mutex lock](./assignments/mutex-lock)
   - [Page replacement simulation](./assignments/page-replacement-simulation)
   - [Student](./assignments/student)
-
-
