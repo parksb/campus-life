@@ -62,7 +62,7 @@
       3 & 1 & -2 & 2 & 3
   \end{array} \right]
   $$
-  행 연산 3을 두 번해서 첫 열에서 두 개의 nonzero 엔트리를 소거한다.
+  행 연산 3을 두 번해서 첫 번째 열에서 두 개의 nonzero 엔트리를 소거한다.
   $$
   \left[ \begin{array}{cccc|c}
       1 & -1 & -1 & 1 & 6 \\
@@ -71,7 +71,7 @@
       0 & -2 & -5 & -1 & -15
   \end{array} \right]
   $$
-  이제 두 번째 행이 pivot이 되고, 두 번째열을 소거한다.
+  이제 두 번째 행이 pivot이 되고, 두 번째 열을 소거한다.
   $$
   \left[ \begin{array}{cccc|c}
       1 & -1 & -1 & 1 & 6 \\
@@ -80,7 +80,7 @@
       0 & 0 & -3 & -3 & -15
   \end{array} \right]
   $$
-  마지막으로 세 번째 행이 pivot이 되고, 세 번째 컬럼을 소거한다.
+  마지막으로 세 번째 행이 pivot이 되고, 세 번째 열을 소거한다.
   $$
   \left[ \begin{array}{cccc|c}
       1 & -1 & -1 & 1 & 6 \\
@@ -109,3 +109,72 @@
 - Reduced Row Echelon Form (RREF):
   - 행렬이 REF이고, 각 행의 lead variable이 그 열에서 유일한 nonzero인 경우.
   - RREF를 사용하는 소거법이 가우스-조던 소거법.
+
+### Matrix arithmetic
+
+- 행렬을 연산할 수 있음: 덧셈, 뺄셈, 곱셈.
+- 행렬의 구성 성분은 실수 스칼라 값. 행렬 표현법, 열 벡터와 행 벡터, 스칼라 얘기...
+  - 우리는 주로 열 벡터를 쓸거임: $\bf{x}$
+  - 행 벡터는 화살표를 붙일게요: $\bf{\overrightarrow x}$
+- 스칼라 곱셈(scalar multiplication):
+  $$
+  \begin{bmatrix}
+  3 & 2 & 1 \\
+  4 & 5 & 6
+  \end{bmatrix} \times
+  10 =
+  \begin{bmatrix}
+  30 & 20 & 10 \\
+  40 & 50 & 60
+  \end{bmatrix}
+  $$
+  - 행렬 $A$에 스칼라 $\alpha$를 곱하면 $\alpha A$로 표기.
+  - $A$의 모든 요소에 $\alpha$를 곱하면 됨.
+- 행렬 덧셈(matrix addtion):
+  $$
+  \begin{bmatrix}
+  3 & 2 & 1 \\
+  4 & 5 & 6
+  \end{bmatrix} +
+  \begin{bmatrix}
+  2 & 2 & 2 \\
+  1 & 2 & 3
+  \end{bmatrix} =
+  \begin{bmatrix}
+  5 & 4 & 3 \\
+  5 & 7 & 9
+  \end{bmatrix}
+  $$
+  - 두 행렬 $A$와 $B$의 차원이 같을 때 두 행렬을 더할 수 있음: $A + B$
+  - 두 행렬의 같은 위치에 있는 값을 더해서($a_{ij} + b_{ij}$) 새로운 행렬을 만들 수 있음.
+- 행렬 곱셈(matrix multiplication):
+  - 선형방적식 $ax = b$를 행렬로 표현하면: $[a][x] = [b]$.
+  - $m \times n$ 선형 시스템을 행렬 방정식으로 표현하면: $A\bf x = \bf b$
+  - 이때, $A\mathbf{x} = a_1x_1 + a_2x_2 + \cdots + a_nx_n = \bf b$
+  - 곱셈은 두 행렬의 차원이 달라도 됨. 단, 좌측 행렬의 열 개수와 우측 행렬의 행 개수가 같아야.
+  - 선형 방정식 $3x_1 + 2x_2 + 5x_3 = 4$는 아래와 같은 행렬 곱으로 표현할 수 있음:
+    $$
+    A\mathbf{x} =
+    \begin{bmatrix}
+    3 & 2 & 5
+    \end{bmatrix}
+    \begin{bmatrix}
+    x_1 \\ x_2 \\ x_3
+    \end{bmatrix} =
+    3x_1 + 2x_2 + 5x_3 = 4
+    $$
+  - 행렬 곱셈에서 교환법칙은 성립하지 않음.
+  - 두 행렬 $A$는 $m \times n$이고, $B$는 $n \times r$이라면:
+    $$
+    A=\begin{bmatrix}a_{11} & a_{12} & \cdots & a_{1n} \\ {\color{blue}a_{21}} & {\color{blue}a_{22}} & {\color{blue}\cdots} & {\color{blue}a_{2n}} \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} & a_{m2} & \cdots & a_{mn}\end{bmatrix},\space
+    B=\begin{bmatrix}{\color{red}b_{11}} & b_{12} & \cdots & b_{1r} \\ {\color{red}b_{21}} & b_{22} & \cdots & b_{2r} \\ {\color{red}\vdots} & \vdots & \ddots & \vdots \\ {\color{red}b_{n1}} & b_{n2} & \cdots & b_{nr}\end{bmatrix}
+    $$
+    이때 두 행렬의 곱 $AB$는 $m \times r$ 행렬:
+    $$
+    AB=\begin{bmatrix}\sum_k a_{1k}b_{k1} & \sum_k a_{1k}b_{k2} & \cdots & \sum_k a_{1k}b_{kr} \\ {\color{#C0C}\sum_k a_{2k}b_{k1}} & \sum_k a_{2k}b_{k2} & \cdots & \sum_k a_{2k}b_{kr} \\ \vdots & \vdots & \ddots & \vdots \\ \sum_k a_{mk}b_{k1} & \sum_k a_{mk}b_{k2} & \cdots & \sum_k a_{mk}b_{kr}\end{bmatrix}
+    $$
+    여기서 $AB$의 $i$행 $j$열의 성분은 $\sum_k a_{ik}b_{kj}$. 예를 들어, $AB$의 2행 1열의 성분은 ${\color{#C0C}\sum_k a_{2k}b_{k1}}$. 이는 $A$의 ${\color{blue}\text{2행}}$의 각 성분과 $B$의 ${\color{red}\text{1열}}$의 대응되는 성분의 곱을 모두 합한 것과 같음.
+- 전치(transpose):
+  - $m \times n$ 행렬의 열과 행을 뒤바꿔서 $n \times m$ 행렬로 변형.
+  - $A$에 대한 전치행렬은 $A^T$로 표현. 당연하지만 ${A^T}^T = A$.
+  - $n \times n$ 행렬 $A$가 $A^T = A$라면 대칭(symmetric).
