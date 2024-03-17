@@ -94,6 +94,45 @@ static int parse_command(char *command, int *nr_tokens, char *tokens[])
 		*nr_tokens = 2;
 	 */
 
+  int i = 0;
+  int j = 0;
+
+  int cnt = 0;
+  char buf[MAX_TOKEN_LEN];
+
+  bool is_empty = true;
+  bool is_quoted = false;
+
+  while (command[i] != '\0') {
+    if (isspace(command[i])) {
+      if (is_quoted) {
+        buf[j] = command[i];
+        j += 1;
+      } else {
+        if (!is_empty) {
+          buf[j] = '\0';
+          tokens[cnt] = malloc(j * sizeof(char));
+          for (int k = 0; k <= j; k++) tokens[cnt][k] = buf[k];
+          j = 0;
+          cnt += 1;
+          is_empty = true;
+        }
+      }
+
+      i += 1;
+    } else if (command[i] == '"') {
+      is_quoted = !is_quoted;
+      i += 1;
+    } else {
+      if (is_empty) is_empty = false;
+      buf[j] = command[i];
+      j += 1;
+      i += 1;
+    }
+  }
+
+  *nr_tokens = cnt;
+
 	return 0;
 }
 
