@@ -240,4 +240,133 @@
 
 ### Matrices
 
-- 우리 전공에서 행렬은 정말 많이 씁니다.
+- 우리 전공에서 행렬은 정말 많이 씁니다. 행렬은 행과 열로 구성된 사각형 숫자 배열.
+- 행렬 $A$가 $m$개의 행, $n$개의 열로 구성될 때, $A$는 $m \times n$ 행렬.
+  - $m$과 $n$이 같다면 정방행렬(square matrix)라고 부름.
+  - 정방행렬에서 대각선 원소들($i = j$)을 주대각 원소라고 부름.
+  - 행렬은 수열의 또 다른 표현. 하나의 행렬은 길이가 $n$인 수열 $m$개로 이뤄짐.
+- 행렬 $A$는 원소 $a_{ij}$로 구성된다:
+  $$
+  A = \begin{bmatrix}
+  a_{11} & a_{12} & \cdots & a_{1n} \\
+  a_{21} & a_{22} & \cdots & a_{2n} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  a_{m1} & a_{m2} & \cdots & a_{mn}
+  \end{bmatrix}
+  $$
+  - $i$번째 행은 $1 \times n$ 행렬:
+    $$[a_{i1}, a_{i2}, \cdots, a_{in}]$$
+  - $j$번째 열은 $m \times 1$ 행렬:
+    $$
+    \begin{bmatrix}
+    a_{1j} \\
+    a_{2j} \\
+    \vdots \\
+    a_{mj}
+    \end{bmatrix}
+    $$
+- 행렬의 덧셈:
+  $$
+  \begin{bmatrix}
+  1 & 0 & -1 \\
+  2 & 2 & -3 \\
+  3 & 4 & 0
+  \end{bmatrix} +
+  \begin{bmatrix}
+  3 & 4 & -1 \\
+  1 & -3 & 0 \\
+  -1 & 1 & 2
+  \end{bmatrix} =
+  \begin{bmatrix}
+  4 & 4 & -2 \\
+  3 & -1 & -3 \\
+  2 & 5 & 2
+  \end{bmatrix}
+  $$
+  - 각 요소끼리 더한다: $A + B = [a_{ij} + b_{ij}]$
+  - 두 행렬의 크기가 같아야 더할 수 있음.
+- 행렬의 곱셈:
+  $$
+  \begin{bmatrix}
+  1 & 0 & 4 \\
+  2 & 1 & 1 \\
+  3 & 1 & 0 \\
+  0 & 2 & 2
+  \end{bmatrix} \cdot
+  \begin{bmatrix}
+  2 & 4 \\
+  1 & 1 \\
+  3 & 0
+  \end{bmatrix} =
+  \begin{bmatrix}
+  14 & 4 \\
+  8 & 9 \\
+  7 & 13 \\
+  8 & 2
+  \end{bmatrix}
+  $$
+  - $i$ 행 요소들을 $j$ 열 요소들과 곱한 값의 합을 구한다: $AB = [c_{ij}]$, $c_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{ik}b_{kj}$
+  - $m \times k$ 행렬 $A$와 $k \times n$ 행렬 $B$의 곱셈 결과 행렬의 크기는 $m \times n$.
+  - 좌측 행렬의 열 개수와 우측 행렬의 행 개수가 같아야 곱할 수 있음.
+  - 행렬 곱은 교환 법칙이 성립하지 않는다: $AB \neq BA$
+  - 항등행렬(identity matrix) 또는 단위행렬(unit matrix):
+    $$
+    I_n =
+    \begin{bmatrix}
+    1 & 0 & \cdots & 0 \\
+    0 & 1 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 1
+    \end{bmatrix}
+    $$
+    - 정방행렬($n \times n$)이고, 주대각 원소가 모두 1, 나머지는 0인 행렬.
+    - 항등원이 뭐예요? $a + x = x + a = a$에서 $a$가 나오게 하는 $x$.
+      - $A + x = x + A = A$의 항등원은? 모든 원소가 0인 영행렬(zero matrix).
+      - 행렬의 곱셈에서 항등원은 항등행렬, $AI_n = I_mA = A$
+  - 행렬의 거듭제곱:
+    - $A^r = \underbrace{AAA \cdots A}_{r \text{ times}}$
+    - 약속: $A^0$ = I_n$
+- 행렬의 전치(transpose):
+  - 행을 열로, 열을 행으로 뒤바꾸는 연산.
+  - $m \times n$ 행렬 $A$를 전치하는 예시:
+    $$
+    A =
+    \begin{bmatrix}
+    1 & 2 & 3 \\
+    4 & 5 & 6
+    \end{bmatrix}
+    \space
+    A^T=
+    \begin{bmatrix}
+    1 & 4 \\
+    2 & 5 \\
+    3 & 6
+    \end{bmatrix}
+    $$
+  - 전치한 결과가 그 전과 같은($A^T = A$) 행렬을 대칭(symmetric)이라고 한다.
+    $$
+    \begin{bmatrix}
+    1 & 1 & 0 \\
+    1 & 0 & 1 \\
+    0 & 1 & 0 \\
+    \end{bmatrix}
+    $$
+    - $a_{ij}$와 $a_{ji}$가 같은 대칭행렬. 주대각은 뭐가 되든 상관없음.
+- 0-1 행렬과 논리연산:
+  - 모든 원소가 0 또는 1만으로 구성된 행렬.
+  - 0과 1에 대한 연산을 불리언 연산 혹은 비트 연산이라고 한다.
+    - 논리곱($\land$, meet): $b_1 \land b_2 = \begin{cases} 1 &\text{if } b_1 = b_2 = 1 \\ 0 &\text{otherwise}\end{cases}$
+    - 논리합($\lor$, join): $b_1 \lor b_2 = \begin{cases} 1 &\text{if } b_1 = 1 \text{ or } b_2 = 1 \\ 0 &\text{otherwise}\end{cases}$
+  - 어떤 두 행렬에 대해 논리연산을 하면 덧셈처럼 각 원소끼리 연산하면 됨.
+  - 논리연산도 두 행렬의 크기가 같아야 가능함.
+  - 불리언 곱(boolean product):
+    - 행렬의 곱셈과 비슷한데, 곱셈을 논리곱으로, 덧셈을 논리합으로: $A \odot B$.
+    - 즉, $c_{ij} = (a_{i1} \land b_{1j}) \lor (a_{i2} \land b_{2j}) \lor \cdots \lor (a_{ik} \land b_{kj})$.
+    - 행렬 곱과 마찬가지로 $A$의 행 개수와 $B$의 열 개수가 같아야하고, 교환법칙이 성립하지 않음.
+    - 불리언 거듭제곱: $A^{[r]} = \underbrace{A \odot A \odot \cdots \odot A}_{r \text{ times}}$
+      - 약속: $A^{[0]} = I_n$.
+      - 행렬이 1로만 채워져 있다면 아무리 불리언 곱을 해도 항상 1로만 채워진 행렬이 나옴.
+
+## Number Theory and Cryptography
+
+- 정수론에 대해서 살펴볼게요. 암호학이나 활용까지는 못 볼듯.
