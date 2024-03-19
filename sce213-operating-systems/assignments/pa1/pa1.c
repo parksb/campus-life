@@ -65,26 +65,66 @@ static void set_timeout(unsigned int timeout)
  *   Return 0 when user inputs "exit"
  *   Return <0 on error
  */
-static char* name;
-static void sig_handler(int sig);
-static int takenTime;
-static pid_t pid; // process id
+static char* command;
+static pid_t pid;
 
 static int run_command(int nr_tokens, char *tokens[])
 {
 	/* This function is all yours. Good luck! */
 
+  command = tokens[0];
+
+  if (__timeout > 0) {
+    alarm(__timeout);
+  }
+
+  if (!strcmp(command, "prompt")) {
+    strcpy(__prompt, tokens[1]);
+  } else if (!strcmp(command, "cd")) {
+    char* path = tokens[1];
+    if (path == NULL || !strcmp(path, "~")) {
+      chdir(getenv("HOME"));
+    } else {
+      chdir(path);
+    }
+  } else if (!strcmp(command, "timeout")) {
+    char* timeout = tokens[1];
+    if (timeout == NULL) {
+      fprintf(stdout, "Current timeout is %d second\n", __timeout);
+    } else {
+      set_timeout(atoi(timeout));
+    }
+  } else if (!strcmp(command, "for")) {
+    int repeat = atoi(tokens[1]);
+    for (int i = 0; i < repeat; i += 1) {
+      run_command(nr_tokens - 2, tokens + 2);
+    }
+  } else if (!strcmp(command, "exit")) {
+    return 0;
+  } else {
+    pid = fork();
+    if (pid == 0) {
+      if (execvp(command, tokens) == -1) {
+        fprintf(stderr, "No such file or directory\n");
+      }
+      exit(0);
+    } else {
+      wait(NULL);
+    }
+  }
+
+  alarm(0);
 	return 1;
 }
 
 static void sig_handler(int sig)
 {
-	if(sig == SIGALRM)
-	{
-		fprintf(stderr, "%s is timed out\n", name);
-		kill(pid, SIGKILL);
+	if (sig == SIGALRM) {
+    fprintf(stderr, "%s is timed out\n", command);
+    kill(pid, SIGKILL);
 	}
 }
+
 /***********************************************************************
  * initialize()
  *
@@ -98,7 +138,14 @@ static void sig_handler(int sig)
  */
 static int initialize(int argc, char * const argv[])
 {
-	return 0;
+  static struct sigaction act = {
+    .sa_handler = sig_handler,
+    .sa_flags = 0,
+  }, old_act;
+
+  sigaction(SIGALRM, &act, &old_act);
+
+  return 0;
 }
 
 
