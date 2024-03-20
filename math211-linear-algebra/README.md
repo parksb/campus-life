@@ -6,5 +6,6 @@
 
 - 주교재: Steven J. Leon et al., "Linear Algebra with Applications 10th Edition", Pearson, 2020.
 - 부교재: 마이크 X 코헨, "개발자를 위한 실전 선형대수학", 장정호 역, 한빛미디어, 2023.
+- [실습](./practice)
 
-> 2022년 봄 수업 녹화 영상이 올라왔다. 부교재는 내 마음대로 선정.
+> 2022년 봄 수업 녹화본. 부교재는 내 마음대로 선정.
