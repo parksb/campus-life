@@ -178,3 +178,30 @@
   - $m \times n$ 행렬의 열과 행을 뒤바꿔서 $n \times m$ 행렬로 변형.
   - $A$에 대한 전치행렬은 $A^T$로 표현. 당연하지만 ${A^T}^T = A$.
   - $n \times n$ 행렬 $A$가 $A^T = A$라면 대칭(symmetric).
+
+### Elementary matrices
+
+- 기본행렬: $A\bf x = \bf b$의 양변에 곱했을 때 등가시스템을 만족하게 하는 행렬.
+  - 그냥 수라면 $\bf x = \bf b / A$ 같은 식으로 했겠지만, 행렬이니까 $A^{-1}A\bf x = A^{-1}\bf b$, $\bf x = A^{-1}\bf b$처럼 구해야.
+  - $m \times m$의 nonsingular 행렬 $M$을 가정: $MA\bf x = M\bf b = A\bf x = \bf b$.
+- 기본행연산이 3개니까 기본 행렬의 종류도 3개:
+  - Type 1:
+    - 단위행렬에서 서로 다른 두 행을 교환한 행렬 $E_1$.
+    - 행렬 $A$의 좌측에 곱하면($E_1A$): $A$의 두 행이 교환됨.
+    - 행렬 $A$의 우측에 곱하면($AE_1$): $A$의 두 열이 교환됨.
+  - Type 2:
+    - 단위행렬에서 한 행에 nonzero 상수를 곱한 행렬 $E_2$.
+    - 행렬 $A$의 좌측에 곱하면($E_2A$): $A$의 행에 상수가 곱해짐.
+    - 행렬 $A$의 우측에 곱하면($AE_2$): $A$의 열에 상수가 곱해짐.
+  - Type 3:
+    - 단위행렬에서 한 행에 nonzero 상수를 곱한 값을 다른 행에 더한 행렬 $E_3$.
+    - 행렬 $A$의 좌측에 곱하면($E_3A$): $A$의 행에 상수가 곱해진 값이 더해짐.
+    - 행렬 $A$의 우측에 곱하면($AE_3$): $A$의 열에 상수가 곱해진 값이 더해짐.
+- 기본행렬로 복잡한 행렬을 분해하여 간소화할 수 있음.
+- 간소화에 쓰이는 몇가지 행렬들:
+  - Upper triangular: $\begin{bmatrix} 3 & 2 & 1 \\ \color{blue}0 & 2 & 1 \\ \color{blue}0 & \color{blue}0 & 5 \end{bmatrix}$
+    - 왼쪽 아래 삼각형 요소가 모두 0.
+  - Lower triangular: $\begin{bmatrix} 1 & \color{blue}0 & \color{blue}0 \\ 6 & 0 & \color{blue}0 \\ 1 & 4 & 3 \end{bmatrix}$
+    - 오른쪽 위 삼각형 요소가 모두 0.
+  - Diagonal: $\begin{bmatrix} \color{blue}1 & 0 & 0 \\ 0 & \color{blue}3 & 0 \\ 0 & 0 & \color{blue}1 \end{bmatrix}$
+     - 주대각을 제외한 모든 원소가 0.
