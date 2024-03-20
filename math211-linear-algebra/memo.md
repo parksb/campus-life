@@ -205,3 +205,31 @@
     - 오른쪽 위 삼각형 요소가 모두 0.
   - Diagonal: $\begin{bmatrix} \color{blue}1 & 0 & 0 \\ 0 & \color{blue}3 & 0 \\ 0 & 0 & \color{blue}1 \end{bmatrix}$
      - 주대각을 제외한 모든 원소가 0.
+
+## Determinants
+
+- 행렬의 특성을 나타낼 수 있도록 행렬를 하나의 실수에 대응시켜 표현해보자.
+- 세 가지 방법이 있음: determinant, norm, eigenvalue
+
+### Determinant of matrix
+
+- Determinant: 행렬식. 역행렬이 존재하게 하는 값. 행렬에 역행렬이 존재하는지 확인할 수 있다.
+- $\text{det}(A) \neq 0$이라면 $A$는 nonsingular 행렬이다. (역행렬이 존재한다)
+- 크기가 $1 \times 1$인 행렬을 가정해보자:
+  - 역행렬이 있어야 하므로 nonsingular 행렬이어야.
+  - 즉, $A^{-1} = {1 \over a}$. $a \neq 0$.
+  - 이때 $\text{det}(A) = a \neq 0$.
+- 크기가 $2 \times 2$인 행렬을 가정해보자:
+  - $A = \begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix}$
+  - $a_{22} - {a_{21} \over a_{11}} a_{12} \neq 0$
+  - 양변에 $a_{11}$을 곱해 정리하면: $\text{det}(A) = a_{11}a_{22} - a_{12}a_{21} \neq 0$
+  - $A^{-1} = {1 \over \text{det}(A)} \begin{bmatrix} a_{22} & -a_{12} \\ -a_{21} & a_{11} \end{bmatrix}$
+- $3 \times 3$부터는 복잡해짐. 특정 행이나 열을 기준으로(0이 많을수록 연산이 적음) cofactor 계산.
+- 전치행렬에 대한 행렬식은? $\text{det}(A) = \text{det}(A^{-1})$
+- 행렬 $A$가 $n \times n$ triangular 행렬이라면?
+  - 상삼각 행렬이거나 하삼각 행렬 중 하나일것.
+  - 주대각 원소의 곱으로 구할 수 있다.
+  - 행렬을 triangular form으로 바꿀 수 있다면 행렬식을 쉽게 구할 수 있을 것.
+- 모두 0으로 채워진 행이나 열이 있다면 $\text{det}(A) = 0$.
+- 동일한 행이나 열이 두 개 있다면 $\text{det}(A) = 0$.
+
