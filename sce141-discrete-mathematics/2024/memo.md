@@ -254,17 +254,9 @@
   a_{m1} & a_{m2} & \cdots & a_{mn}
   \end{bmatrix}
   $$
-  - $i$번째 행은 $1 \times n$ 행렬:
-    $$[a_{i1}, a_{i2}, \cdots, a_{in}]$$
+  - $i$번째 행은 $1 \times n$ 행렬: $[a_{i1}, a_{i2}, \cdots, a_{in}]$
   - $j$번째 열은 $m \times 1$ 행렬:
-    $$
-    \begin{bmatrix}
-    a_{1j} \\
-    a_{2j} \\
-    \vdots \\
-    a_{mj}
-    \end{bmatrix}
-    $$
+    $\begin{bmatrix} a_{1j} \\ a_{2j} \\ \vdots \\ a_{mj} \end{bmatrix}$
 - 행렬의 덧셈:
   $$
   \begin{bmatrix}
@@ -325,7 +317,7 @@
       - 행렬의 곱셈에서 항등원은 항등행렬, $AI_n = I_mA = A$
   - 행렬의 거듭제곱:
     - $A^r = \underbrace{AAA \cdots A}_{r \text{ times}}$
-    - 약속: $A^0$ = I_n$
+    - 약속: $A^0 = I_n$
 - 행렬의 전치(transpose):
   - 행을 열로, 열을 행으로 뒤바꾸는 연산.
   - $m \times n$ 행렬 $A$를 전치하는 예시:
@@ -343,15 +335,9 @@
     3 & 6
     \end{bmatrix}
     $$
-  - 전치한 결과가 그 전과 같은($A^T = A$) 행렬을 대칭(symmetric)이라고 한다.
-    $$
-    \begin{bmatrix}
-    1 & 1 & 0 \\
-    1 & 0 & 1 \\
-    0 & 1 & 0 \\
-    \end{bmatrix}
-    $$
+  - 전치한 결과가 그 전과 같은($A^T = A$) 행렬을 대칭(symmetric)이라고 한다:
     - $a_{ij}$와 $a_{ji}$가 같은 대칭행렬. 주대각은 뭐가 되든 상관없음.
+    - 예시: $\begin{bmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & 0 \end{bmatrix}$
 - 0-1 행렬과 논리연산:
   - 모든 원소가 0 또는 1만으로 구성된 행렬.
   - 0과 1에 대한 연산을 불리언 연산 혹은 비트 연산이라고 한다.

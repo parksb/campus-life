@@ -90,6 +90,7 @@
   - 각 프로세스는 Process Control Blcok(PCB)로 표현된다.
   - 프로세스에 대한 모든 정보가 PCB에 담겨있음.
   - 상태, PC(Program Counter), PID, PPID, 레지스터, 메모리 제한, CPU 스케줄링 정보 등.
+  - 리눅스에서 프로세스는 `task_struct`로 구현된다.
 - IPC(Inter-Process Communication):
   - 하나의 프로그램을 여러 프로세스로 만드는게 굉장히 흔한 모델.
   - 프로세스끼리 통신을 해야 하는데...
@@ -175,5 +176,68 @@
     - Two-level 모델: 특정 유저 스레드만 커널 스레드에 일대일 대응하고, 나머지는 M:M.
     - 현실적으로 많이 쓰이지는 않음.
 - 스레드 라이브러리:
-  - POSIX를 잘 지키는 운영체제라면 Pthread (POSIX thread)가 있다.
+  - POSIX를 잘 지키는 운영체제라면 pthread (POSIX thread)가 있다.
   - 스레드 생성과 동기화를 위한 POSIX 표준(IEEE 1003.1c)
+- 암묵적 스레딩:
+  - 실제로 멀티스레드 프로그래밍을 하는건 어려운 일임.
+    - 물론 성능이 향상되고, 스레드를 잘 사용하는건 중요함. 하지만 인간은 멀티태스킹이 안 되는 동물.
+    - 하이레벨에만 신경쓰고 싶다면 다른 방법이 필요. 암묵적 스레딩은 스레드의 생성과 반납을 추상화.
+  - 스레드 풀:
+    - 풀에 미리 스레드를 만들어두고, 필요할 때 풀에서 하나를 가져와 사용 후 반납.
+    - 스레드의 생성과 사용이 분리되는 것. 개발자는 사용만하면 되니 편리하다.
+  - Fork Join:
+    - 메인 스레드에서 `fork`해서 두 개의 스레드로 분리, 각 스레드의 결과는 `join`으로 병합.
+    - divide and conquer 문제를 멀티스레딩으로 해결할 때 유용.
+  - OpenMP:
+    - C/C++, FORTRAN 컴파일러를 똑똑하게 만들어서 멀티스레딩을 쉽게 만들자.
+    - `#pragma omp parallel` 같은 디렉티브를 만나면 코어 개수만큼 스레드를 만들고 알아서 병렬 처리.
+    - 공유 메모리 환경으로 병렬 프로그래밍을 지원한다.
+- 멀티 스레딩의 문제들:
+  - 앞서 배운 `fork`와 `exec`는 싱글코어를 상정한 것.
+  - 스레드 하나에서 `fork`하면 어떻게 되나? 스레드도 다 복사되나?
+    - In pthread: 호출한 스레드만 복사한다.
+    - UNIX: 두 개의 시스템 콜을 제공한다.
+      > A call to forkall() replicates in the child process all of the threads in the parent process.
+      >
+      > A call to fork1() replicates only the calling thread in the child process. (...) In  Solaris 10, a call to fork() is identical to a call to fork1(); only the calling thread is replicated in the child process. This is the POSIX-specified behavior for fork().
+      - `forkall`: 부모의 모든 스레드를 자식으로 복사한다. (강의에서는 `fork`로 소개함.)
+      - `fork`, `fork1`: 호출한 스레드만 복사한다.
+  - `exec`는 멀티스레딩이어도 상관없죠. 어떤 스레드 하나가 `exec`하면 그냥 프로세스의 모든 스레드가 죽음.
+- 시그널 핸들링:
+  - 시그널이 오면 누가 받아야 하나? 시그널을 어떤 스레드가 받느냐에 따라 동작이 달라질거임.
+  - 스레드마다 받을 수 있는 시그널을 명시하기. 명시하지 않으면 아무 스레드에 시그널이 간다.
+- 스레드 삭제:
+  - 한 스레드에서 다른 스레드를 죽이려면? 특정 스레드를 삭제하는 API가 있음.
+  - Deferred cancellation:
+    - 스레드를 삭제하긴 하는데, 그 스레드가 죽기전에 뭘하고 있었는지 알고싶다.
+    - 즉지 죽지 않고 cancellation point에 도달할 때까지 기다리고 죽는다.
+  - Asynchronous cancellation: 대상 스레드를 즉시 삭제한다.
+- Thraed-Local Storage(TLS):
+  - TLS 타입의 변수를 만들 수 있다.
+    - 전역변수처럼 여러 스레드에서 접근할 수 있음.
+    - 지역변수처럼 스레드에 종속되어 자체적인 값을 갖는다.
+    - 특정 스레드에서 TLS 변수에 값을 써도 그 스레드에서만 변경된다.
+  - TLS를 쓰면 동기화 오버헤드를 줄일 수 있다:
+    ```diff
+    for (i = 0; i < 10; i++) {
+    -   LOCK();
+    -   sum_global = sum_global + i
+    -   UNLOCK();
+        sum_tls = sum_tls + i;
+    }
+
+    + LOCK();
+    + sum_global = sum_tls;
+    + UNLOCK();
+    ```
+  - `errno` 값을 다룰 때도 유용하다:
+    - 스레드 하나가 에러나서 `errno`를 `-1`로 설정, 이어서 들어온 다른 스레드가 `errno`를 `0`으로 덮는 문제.
+    - `errno`를 TLS로 만들면 문제를 해결할 수 있음.
+- 리눅스의 스레드:
+  - 사실 프로세스도, 스레드도 그냥 `task_struct`로 구현됨.
+    - 스레드는 그저 같은 주소 공간을 공유하는 `task_struct`.
+    - 주소 공간이 다르다면 다른 프로세스.
+  - `clone`:
+    > clone() creates a new process, in a manner similar to fork(2). (...) The main use of clone() is to implement threads: multiple threads of control in a program that run concurrently in a shared memory space.
+    - 실행 컨텍스트를 복제해서 새로운 `task_struct`를 만든다.
+    - 주소 공간이 같은 `task_struct`를 만들 수 있다. 즉, 스레드를 만드는 것.
