@@ -1,0 +1,34 @@
+r 0
+r 1
+w 16
+w 17
+r 8
+r 7
+w 6
+w 5
+show
+
+switch 1
+show
+
+switch 2
+show
+
+switch 1
+w 5
+w 6
+w 7
+w 8
+show
+
+switch 2
+show
+w 0
+w 1
+show
+
+switch 3
+show
+w 0
+w 1
+show

@@ -1,0 +1,19 @@
+r 0
+r 1
+r 2
+r 3
+w 16
+w 17
+w 18
+w 19
+r 8
+r 7
+w 6
+w 5
+show
+
+switch 1
+show
+
+switch 0
+show
