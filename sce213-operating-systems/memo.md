@@ -5,6 +5,7 @@
 ### System Calls
 
 - 폰 노이만 구조, 모드 얘기, privileged instructions.
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter1/1_5_HowItWorks.jpg)
 - 인터럽트:
   - 인터럽트는 하드웨어 장치가 만드는 신호. 비동기적으로 발생.
   - 현대 컴퓨터는 인터럽트 주도 방식으로 동작. 인터럽트가 발생하면 모드가 전환될 수 있음.
@@ -14,6 +15,7 @@
     - 의도를 갖고 일으킨 익셉션은 트랩(trap).
     - 예상치 못한 익셉션은 폴트(fault)
 - 시스템 콜:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter2/2_06_Open.jpg)
   - 식당에서 벨 누르면 주방에서 커널모드로 일하던 사장님이 홀에 나와서 유저모드로 전환하심.
   - OS가 서비스에게 제공하는 프로그래밍 인터페이스:
     - Win32 API for Windows, POSIX API for POSIX-based systems, Java API for JVM 등.
@@ -57,37 +59,41 @@
   - 프로그램은 디스크에 저장된 정적인 엔티티.
 - 각 프로세스는 메모리에서 자기만의 주소 공간을 갖는다: code, data, heap, stack.
 - 프로세스의 상태: new, ready, running, wait, terminated.
-- `pid_t fork(void)`:
-  - 루트에 init 프로세스가 있는데, 여기에 자식 프로세스를 만드는 것. 결국 하나의 트리를 이루게 됨.
-  - 새 프로세스를 만드려면 당연히 커널 모드에서 해야. 따라서 시스템 콜(`fork`)을 사용해야 한다.
-  - 어떤 프로세스에서 `fork()`를 하면 동일한 프로세스가 만들어짐.
-  - 프로세스가 제대로 만들어지면 부모에게는 자식 프로세스의 PID를 반환, 자식에게는 0을 반환.
-    - `pid_t getpid(void)`: 자신의 (진짜) PID.
-    - `pid_t getppid(void)`: 부모의 PID.
-  - 자식 프로세스는 `fork` 직후의 인스트럭션을 실행한다.
-  - `fork`하는 시점의 메모리 섹션을 그대로 복제하므로, 변수도 `fork` 시점의 값을 갖는다.
-  - 부모 프로세스와 자식 프로세스는 독립적임. 자식은 자식의 인생을 살아야 해요.
-- `exec` family:
-  - 현재 프로세스의 이미지를 새 프로세스 이미지로 교체.
-  - 현재 주소 공간을 날리고 새로운 내용을 채운다. `exec("vi")`하면 vi를 실행하는 프로세스가 됨.
-  - 여러분이 탐색기를 띄웠어요. 탐색기에서 파워포인트를 더블클릭하면 탐색기가 운영체제한테 `fork`를 날리죠. 그러면 탐색기 프로세스가 하나 더 만들어집니다. 근데 파워포인트를 실행해야하니 `exec`로 스스로를 교체.
-- `void exit(int status)`:
-  - 프로세스를 삭제한다. 프로세스의 반환 값이 부모 프로세스에게 전달됨.
-  - `pid_t wait(int *wstatus)`: 부모 프로세스는 `wait` 시스템 콜을 통해 자식의 반환 값을 기다림.
-  - `pid_t waitpid(pid_t pid, int* status, int options)`: 특정 자식을 기다림.
-  - `void abort(void)`: 특정 프로세스와 그 부모까지 삭제.
-  - 좀비 프로세스:
-    - 자식이 삭제됐는데 부모 프로세스가 `wait`를 하지 않는다면?
-    - 자식의 반환 값과 PID가 남음. 따라서 종료되었지만 삭제되지는 않은 좀비가 됨.
-  - 고아 프로세스:
-    - 부모가 삭제된 자식 프로세스.
-    - 고아 프로세스를 방지하려면:
-      - 부모가 삭제될 때 그 자식도 삭제해는 cascading termination.
-      - 아니면 다른 프로세스의 자식으로 만드는 reparenting. 어떤 프로세스의 자식으로 만들 것인가?
-        - 옛날 시스템 중에는 부모의 부모가 입양하는 경우도 있었음.
-        - 리눅스는 `init` 프로세스의 자식으로 만든다. `init`은 주기적으로 `wait`을 호출해 자식을 정리.
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_02_ProcessState.jpg)
+- 시스템 콜을 이용한 프로세스 관리:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_10_ProcessCreation.jpg)
+  - `pid_t fork(void)`:
+    - 루트에 init 프로세스가 있는데, 여기에 자식 프로세스를 만드는 것. 결국 하나의 트리를 이루게 됨.
+    - 새 프로세스를 만드려면 당연히 커널 모드에서 해야. 따라서 시스템 콜(`fork`)을 사용해야 한다.
+    - 어떤 프로세스에서 `fork()`를 하면 동일한 프로세스가 만들어짐.
+    - 프로세스가 제대로 만들어지면 부모에게는 자식 프로세스의 PID를 반환, 자식에게는 0을 반환.
+      - `pid_t getpid(void)`: 자신의 (진짜) PID.
+      - `pid_t getppid(void)`: 부모의 PID.
+    - 자식 프로세스는 `fork` 직후의 인스트럭션을 실행한다.
+    - `fork`하는 시점의 메모리 섹션을 그대로 복제하므로, 변수도 `fork` 시점의 값을 갖는다.
+    - 부모 프로세스와 자식 프로세스는 독립적임. 자식은 자식의 인생을 살아야 해요.
+  - `exec` family:
+    - 현재 프로세스의 이미지를 새 프로세스 이미지로 교체.
+    - 현재 주소 공간을 날리고 새로운 내용을 채운다. `exec("vi")`하면 vi를 실행하는 프로세스가 됨.
+    - 여러분이 탐색기를 띄웠어요. 탐색기에서 파워포인트를 더블클릭하면 탐색기가 운영체제한테 `fork`를 날리죠. 그러면 탐색기 프로세스가 하나 더 만들어집니다. 근데 파워포인트를 실행해야하니 `exec`로 스스로를 교체.
+  - `void exit(int status)`:
+    - 프로세스를 삭제한다. 프로세스의 반환 값이 부모 프로세스에게 전달됨.
+    - `pid_t wait(int *wstatus)`: 부모 프로세스는 `wait` 시스템 콜을 통해 자식의 반환 값을 기다림.
+    - `pid_t waitpid(pid_t pid, int* status, int options)`: 특정 자식을 기다림.
+    - `void abort(void)`: 특정 프로세스와 그 부모까지 삭제.
+- 좀비 프로세스:
+  - 자식이 삭제됐는데 부모 프로세스가 `wait`를 하지 않는다면?
+  - 자식의 반환 값과 PID가 남음. 따라서 종료되었지만 삭제되지는 않은 좀비가 됨.
+- 고아 프로세스:
+  - 부모가 삭제된 자식 프로세스.
+  - 고아 프로세스를 방지하려면:
+    - 부모가 삭제될 때 그 자식도 삭제해는 cascading termination.
+    - 아니면 다른 프로세스의 자식으로 만드는 reparenting. 어떤 프로세스의 자식으로 만들 것인가?
+      - 옛날 시스템 중에는 부모의 부모가 입양하는 경우도 있었음.
+      - 리눅스는 `init` 프로세스의 자식으로 만든다. `init`은 주기적으로 `wait`을 호출해 자식을 정리.
 - 프로세스의 구현:
   - 각 프로세스는 Process Control Blcok(PCB)로 표현된다.
+    ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_03_PCB.jpg)
   - 프로세스에 대한 모든 정보가 PCB에 담겨있음.
   - 상태, PC(Program Counter), PID, PPID, 레지스터, 메모리 제한, CPU 스케줄링 정보 등.
   - 리눅스에서 프로세스는 `task_struct`로 구현된다.
@@ -136,9 +142,10 @@
   - 스레드는 실타래입니다. 만약 실타래가 여러 개가 된다면?
   - 프로세스의 실행 상태를 분리해낸다면 어떨까?
 - 각 스레드는 주소 공간을 공유한다
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter4/4_01_ThreadDiagram.jpg)
   - 스레드가 서로 공유하는 것: 코드, 전역변수, 힙, 파일
   - 각자에 속한 것: 스레드 ID, PC와 SP를 비롯한 레지스터, 스택
-- 한 프로세스는 여러 스레드를 가질 수 있고, 스레드는 하나의 프로세스에 종속됨.
+  - 한 프로세스는 여러 스레드를 가질 수 있고, 스레드는 하나의 프로세스에 종속됨.
 - 멀티 스레딩의 장점:
   - 멀티 코어 아키텍처의 장점을 살릴 수 있다.
   - 멀티 프로세스에 비해 리소스가 덜 든다. IPC가 필요없고 그냥 주소 공간에 접근하면 됨.
@@ -241,3 +248,75 @@
     > clone() creates a new process, in a manner similar to fork(2). (...) The main use of clone() is to implement threads: multiple threads of control in a program that run concurrently in a shared memory space.
     - 실행 컨텍스트를 복제해서 새로운 `task_struct`를 만든다.
     - 주소 공간이 같은 `task_struct`를 만들 수 있다. 즉, 스레드를 만드는 것.
+
+## Process Scheduling
+
+- CPU 코어가 20개인데 프로세스가 100개면 어떡하죠?
+- 운영체제의 스케줄러가 어떤 프로세스를 할당할지 적절히 스케줄링해주면 된다.
+- 프로세스 상태 다이어그램 생각나시죠? 프로세스 상태가 바뀔 때 스케줄러가 개입한다.
+- 스케줄링을 배운다는게 뭘 배운다는건가?
+  - 프로세스간 스위치를 어떻게 하는가?
+  - 스케줄링 가능한 프로세스를 어떻게 찾고 관리할 것인가?
+  - 다음에 실행할 프로세스를 어떻게 선택할 것인가?
+- Time sharing:
+  - 운영체제가 하드웨어 타이머와 인터럽트 핸들러로 시분할을 제공.
+  - 간단한 예시:
+    1. 운영체제가 타이머에 1초 뒤 울리라는 알람을 설정.
+    2. 어떤 프로세스가 유저모드에서 돌다가, 1초가 지나서 인터럽트가 발생.
+    3. 인터럽트 핸들러로 넘어가면서 커널 모드로 전환.
+    4. 인터럽트 핸들러를 통해 스케줄러가 돌고, 다음 프로세스를 선정.
+    5. 스케줄러가 기존 프로세스를 빼고 새 프로세스를 CPU에 할당.
+    6. 다시 유저모드로 실행하고 1번으로 돌아간다.
+- 컨텍스트 스위치:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_04_ProcessSwitch.jpg)
+  - CPU가 다른 프로세스를 실행하려면, 현재 프로세스의 상태를 저장하고, 다음 프로세스의 상태를 로드해야.
+  - 프로세스의 컨텍스트는 PCB로 표현된다. PCB에 각종 레지스터가 있었죠.
+  - 컨텍스트 스위치 자체가 오버헤드. 컨텍스트 스위치를 너무 자주하면 안 좋아요.
+  - 그렇다고 컨텍스트 스위치가 너무 안 일어나도 문제. 더 중요한 작업이 있는데 그 작업을 못한다.
+- 프로세스는 큐로 관리됨:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_06_QueueingDiagram.jpg)
+  - Job queue: 모든 프로세스.
+  - Ready queue: ready 상태인 프로세스
+    - 프로세스 스케줄러가 레디 큐에서 프로세스를 꺼내서 CPU에 할당.
+    - CPU에서 처리하면 적절한 절차를 따라 다시 레디 큐로 들어간다.
+  - Device queue: 사용할 디바이스를 기다리는 프로세스.
+  - 그 외 큐들은 필요에 따라 만들고 사용한다.
+- 스케줄링 평가 지표:
+  - Want to maximize: CPU utilization, throughput
+  - Want to minimize: turnaround time, waiting time, response time
+- 각종 알고리즘:
+  - OSTEP에도 잘 설명되어 있음: https://pages.cs.wisc.edu/~remzi/OSTEP/Korean/07-cpu-sched.pdf
+  - FIFO(First In First Out), SJF, SRJF, RR, Priority scheduling, MLFQ
+  - Priority inversion:
+    - 나사의 화성 패스파인더. 착륙 후 컴퓨터가 반복 재부팅되는 일이 일어남.
+    - 와치독 타이머가 태스크가 한동안 실행되지 않으면 컴퓨터를 재부팅시킴.
+    - 패스파인더에는 3가지 태스크가 있었음: 버스 관리, 통신, 데이터 수집
+      - 데이터 수집 태스크가 락을 릴리즈하면 버스 관리 태스크가 락을 얻어야 함.
+      - 만약 데이터 수집 태스크가 락을 갖고 있으면 락을 얻지 못하고 대기한다.
+      - 그런데 중간에 통신 태스크가 끼어든다. 때문에 우선순위가 높은 태스크가 아니라 끼어든 태스크를 수행함.
+    - 해결법:
+      - Priority Inheritance Protocol(PIP):
+        - 실제 우선순위가 높은 태스크의 우선순위를 빌려준다.
+        - 락을 릴리즈할 때 원래 우선순위로 돌아온다.
+      - Priority ceiling protocol(PCP)
+        - 우선순위를 높일 때 그 천장을 정해둔다.
+  - 실제 리눅스 스케줄러는?
+    - MLFQ 아이디어를 기반으로 Completely Fair Scheduling(CFS).
+    - 사용자와 인터랙티브하는 프로세스는 우선순위를 높임.
+    - preemptive, time-shared based on time slice
+    - 온갖 휴리스틱과 부두 상수가 난무합니다.
+  - Real-time systems:
+    - Hard real-time: 어떤 태스크를 데드라인 안에 끝내지 못하면 치명적인 시스템. e.g., 자율주행, 로봇
+    - Soft real-time:
+      - 태스크를 데드라인 안에 끝내지 못해도 치명적이지 않은 시스템.
+      - 실시간 태스크가 non-critical 태스크보다 우선권을 받는다.
+    - Real-time CPU Scheduling:
+      - 주기적인 프로세스가 있다고 생각하자. 인터벌 $p$, 처리시간 $t$, 데드라인 $d$.
+      - Rate Monotonic Scheduling(RMS):
+        - $p = d$, $1 / p$가 높은 프로세스를 preemptive하게 우선 할당.
+        - 데드라인을 못 지킬 수 있음. RMS는 feasible한 real-time scheduling을 찾을 수 없음.
+      - Ealiest Deadline First(EDF):
+        - $p = d$, 현재 상황에서 데드라인이 임박한 프로세스를 우선 할당.
+        - 데드라인까지 남은 기간이 priority가 되는 셈. 님들이 과제할 때 이렇게 하죠.
+        - 인터벌 없이 데드라인만 있어도 잘 동작. 이론적으로 optimal하다. 데드라인을 안 놓친다.
+
