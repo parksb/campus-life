@@ -330,24 +330,187 @@ struct scheduler rr_scheduler = {
 /***********************************************************************
  * Priority scheduler
  ***********************************************************************/
+static struct process *prio_schedule(void)
+{
+  struct process *next = NULL;
+
+  if (!current || current->status == PROCESS_WAIT) {
+    goto pick_next;
+  }
+
+  if (current->age < current->lifespan) {
+    current->prio = current->prio_orig;
+    list_add_tail(&current->list, &readyqueue);
+  }
+
+pick_next:
+  if (!list_empty(&readyqueue)) {
+    struct process *temp = NULL;
+
+    next = list_first_entry(&readyqueue, struct process, list);
+
+    list_for_each_entry(temp, &readyqueue, list) {
+      if (next->prio < temp->prio) {
+        next = temp;
+      } else {
+        temp->prio += 1;
+      }
+    }
+
+    list_del_init(&next->list);
+  }
+
+  return next;
+}
+
+bool prio_acquire(int resource_id)
+{
+  struct resource *r = resources + resource_id;
+
+  if (!r->owner) {
+    r->owner = current;
+    return true;
+  }
+
+  current->status = PROCESS_WAIT;
+  list_add_tail(&current->list, &r->waitqueue);
+
+  return false;
+}
+
+void prio_release(int resource_id)
+{
+	struct resource *r = resources + resource_id;
+
+	assert(r->owner == current);
+
+	r->owner = NULL;
+
+	if (!list_empty(&r->waitqueue)) {
+    struct process *temp = NULL;
+
+		struct process *waiter =
+				list_first_entry(&r->waitqueue, struct process, list);
+
+    list_for_each_entry(temp, &r->waitqueue, list) {
+      if (waiter->prio < temp->prio) {
+        waiter = temp;
+      }
+    }
+
+		assert(waiter->status == PROCESS_WAIT);
+
+		list_del_init(&waiter->list);
+		waiter->status = PROCESS_READY;
+		list_add_tail(&waiter->list, &readyqueue);
+	}
+}
+
 struct scheduler prio_scheduler = {
 	.name = "Priority",
 	/**
 	 * Implement your own acqure/release function to make priority
 	 * scheduler correct.
 	 */
+  .acquire = prio_acquire,
+  .release = prio_release,
 	/* Implement your own prio_schedule() and attach it here */
+  .schedule = prio_schedule,
 };
 
 
 /***********************************************************************
  * Priority scheduler with priority inheritance protocol
  ***********************************************************************/
+static struct process *pip_schedule(void)
+{
+  struct process *next = NULL;
+
+  if (!current || current->status == PROCESS_WAIT) {
+    goto pick_next;
+  }
+
+  if (current->age < current->lifespan) {
+    current->prio = current->prio_orig;
+    list_add_tail(&current->list, &readyqueue);
+  }
+
+pick_next:
+  if (!list_empty(&readyqueue)) {
+    struct process *temp = NULL;
+
+    next = list_first_entry(&readyqueue, struct process, list);
+
+    list_for_each_entry(temp, &readyqueue, list) {
+      if (next->prio < temp->prio) {
+        next = temp;
+      } else {
+        temp->prio += 1;
+      }
+    }
+
+    list_del_init(&next->list);
+  }
+
+  return next;
+}
+
+bool pip_acquire(int resource_id)
+{
+	struct resource *r = resources + resource_id;
+
+	if (!r->owner) {
+		r->owner = current;
+		return true;
+	}
+
+  if (current->prio > r->owner->prio) {
+    r->owner->prio = current->prio;
+  }
+
+	current->status = PROCESS_WAIT;
+	list_add_tail(&current->list, &r->waitqueue);
+
+	return false;
+}
+
+void pip_release(int resource_id)
+{
+	struct resource *r = resources + resource_id;
+
+	assert(r->owner == current);
+
+	r->owner = NULL;
+  current->prio = current->prio_orig;
+
+	if (!list_empty(&r->waitqueue)) {
+    struct process *temp = NULL;
+
+		struct process *waiter =
+				list_first_entry(&r->waitqueue, struct process, list);
+
+    list_for_each_entry(temp, &r->waitqueue, list) {
+      if (waiter->prio < temp->prio) {
+        waiter = temp;
+      }
+    }
+
+		assert(waiter->status == PROCESS_WAIT);
+
+		list_del_init(&waiter->list);
+		waiter->status = PROCESS_READY;
+		list_add_tail(&waiter->list, &readyqueue);
+	}
+}
+
 struct scheduler pip_scheduler = {
 	.name = "Priority + Priority Inheritance Protocol",
 	/**
 	 * Implement your own acqure/release function too to make priority
 	 * scheduler correct.
 	 */
+  .acquire = pip_acquire,
+  .release = pip_release,
 	/* It goes without saying to implement your own pip_schedule() */
+  .schedule = pip_schedule,
 };
