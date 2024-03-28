@@ -13,29 +13,28 @@
  *
  **********************************************************************/
 
+#include <errno.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
-#include <errno.h>
-#include <signal.h>
 
-int main(int argc, const char *argv[])
-{
-	fprintf(stderr, "pid  = %d\n", getpid());
-	fprintf(stderr, "argc = %d\n", argc);
+int main(int argc, const char *argv[]) {
+    fprintf(stderr, "pid  = %d\n", getpid());
+    fprintf(stderr, "argc = %d\n", argc);
 
-	for (int i = 0; i < argc; i++) {
-		fprintf(stderr, "argv[%d] = %s\n", i, argv[i]);
-	}
+    for (int i = 0; i < argc; i++) {
+        fprintf(stderr, "argv[%d] = %s\n", i, argv[i]);
+    }
 
-	if (argc >= 3 && strncmp(argv[1], "sleep", strlen("sleep")) == 0) {
-		int sleep_sec = sleep_sec = atoi(argv[2]);
-		sleep(sleep_sec);
-	}
+    if (argc >= 3 && strncmp(argv[1], "sleep", strlen("sleep")) == 0) {
+        int sleep_sec = sleep_sec = atoi(argv[2]);
+        sleep(sleep_sec);
+    }
 
-	fprintf(stderr, "done!\n");
+    fprintf(stderr, "done!\n");
 
-	return 0;
+    return 0;
 }

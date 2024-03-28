@@ -13,16 +13,16 @@
  *
  **********************************************************************/
 
+#include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <ctype.h>
 
 #include "types.h"
 
-#define MAX_NR_TOKENS 32	/* Maximum number of tokens in a command */
-#define MAX_TOKEN_LEN 64	/* Maximum length of single token */
-#define MAX_COMMAND	256		/* Maximum length of command string */
+#define MAX_NR_TOKENS 32 /* Maximum number of tokens in a command */
+#define MAX_TOKEN_LEN 64 /* Maximum length of single token */
+#define MAX_COMMAND 256  /* Maximum length of command string */
 
 /***********************************************************************
  * parse_command
@@ -82,92 +82,92 @@
  *	Return 0 after filling in @nr_tokens and @tokens[] properly
  *
  */
-static int parse_command(char *command, int *nr_tokens, char *tokens[])
-{
-	/**
-	 * TODO
-	 *
-	 * Followings are some example code. Delete them and implement your own
-	 * code here
-		tokens[0] = "hello";
-		tokens[1] = "world";
-		*nr_tokens = 2;
-	 */
+static int parse_command(char *command, int *nr_tokens, char *tokens[]) {
+    /**
+     * TODO
+     *
+     * Followings are some example code. Delete them and implement your own
+     * code here
+            tokens[0] = "hello";
+            tokens[1] = "world";
+            *nr_tokens = 2;
+     */
 
-  int i = 0;
-  int j = 0;
+    int i = 0;
+    int j = 0;
 
-  int cnt = 0;
-  char buf[MAX_TOKEN_LEN];
+    int cnt = 0;
+    char buf[MAX_TOKEN_LEN];
 
-  bool is_empty = true;
-  bool is_quoted = false;
+    bool is_empty = true;
+    bool is_quoted = false;
 
-  while (command[i] != '\0') {
-    if (isspace(command[i])) {
-      if (is_quoted) {
-        buf[j] = command[i];
-        j += 1;
-      } else {
-        if (!is_empty) {
-          buf[j] = '\0';
-          tokens[cnt] = malloc(j * sizeof(char));
-          for (int k = 0; k <= j; k++) tokens[cnt][k] = buf[k];
-          j = 0;
-          cnt += 1;
-          is_empty = true;
+    while (command[i] != '\0') {
+        if (isspace(command[i])) {
+            if (is_quoted) {
+                buf[j] = command[i];
+                j += 1;
+            } else {
+                if (!is_empty) {
+                    buf[j] = '\0';
+                    tokens[cnt] = malloc(j * sizeof(char));
+                    for (int k = 0; k <= j; k++)
+                        tokens[cnt][k] = buf[k];
+                    j = 0;
+                    cnt += 1;
+                    is_empty = true;
+                }
+            }
+
+            i += 1;
+        } else if (command[i] == '"') {
+            is_quoted = !is_quoted;
+            i += 1;
+        } else {
+            if (is_empty)
+                is_empty = false;
+            buf[j] = command[i];
+            j += 1;
+            i += 1;
         }
-      }
-
-      i += 1;
-    } else if (command[i] == '"') {
-      is_quoted = !is_quoted;
-      i += 1;
-    } else {
-      if (is_empty) is_empty = false;
-      buf[j] = command[i];
-      j += 1;
-      i += 1;
     }
-  }
 
-  *nr_tokens = cnt;
+    *nr_tokens = cnt;
 
-	return 0;
+    return 0;
 }
-
 
 /***********************************************************************
  * The main function of this program.
  * SHOULD NOT CHANGE THE CODE BELOW THIS LINE
  */
-int main(int argc, char *argv[])
-{
-	char line[MAX_COMMAND] = { '\0' };
-	FILE *input = stdin;
+int main(int argc, char *argv[]) {
+    char line[MAX_COMMAND] = {'\0'};
+    FILE *input = stdin;
 
-	if (argc == 2) {
-		input = fopen(argv[1], "r");
-		if (!input) {
-			fprintf(stderr, "No input file %s\n", argv[1]);
-			return -EINVAL;
-		}
-	}
+    if (argc == 2) {
+        input = fopen(argv[1], "r");
+        if (!input) {
+            fprintf(stderr, "No input file %s\n", argv[1]);
+            return -EINVAL;
+        }
+    }
 
-	while (fgets(line, sizeof(line), input)) {
-		char *tokens[MAX_NR_TOKENS] = { NULL };
-		int nr_tokens= 0;
+    while (fgets(line, sizeof(line), input)) {
+        char *tokens[MAX_NR_TOKENS] = {NULL};
+        int nr_tokens = 0;
 
-		parse_command(line, &nr_tokens, tokens);
+        parse_command(line, &nr_tokens, tokens);
 
-		fprintf(stderr, "nr_tokens = %d\n", nr_tokens);
-		for (int i = 0; i < nr_tokens; i++) {
-			fprintf(stderr, "tokens[%d] = %s\n", i, tokens[i]);
-		}
-		printf("\n");
-	}
+        fprintf(stderr, "nr_tokens = %d\n", nr_tokens);
+        for (int i = 0; i < nr_tokens; i++) {
+            fprintf(stderr, "tokens[%d] = %s\n", i, tokens[i]);
+        }
+        printf("\n");
+    }
 
-	if (input != stdin) fclose(input);
+    if (input != stdin)
+        fclose(input);
 
-	return 0;
+    return 0;
 }

@@ -17,8 +17,8 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include "types.h"
 #include "list_head.h"
+#include "types.h"
 #include "vm.h"
 
 /**
@@ -43,8 +43,6 @@ extern struct process *current;
  */
 extern unsigned int alloc_page(void);
 
-
-
 /**
  * TODO translate()
  *
@@ -54,20 +52,20 @@ extern unsigned int alloc_page(void);
  *   If such an entry exists and OK to access the pfn in the PTE, fill @pfn
  *   with the pfn of the PTE and return true.
  *   Otherwise, return false.
- *   Note that you should not modify any part of the page table in this function.
+ *   Note that you should not modify any part of the page table in this
+ * function.
  *
  * RETURN
  *   @true on successful translation
  *   @false on unable to translate. This includes the case when @rw is for write
  *   and the @writable of the pte is false.
  */
-bool translate(enum memory_access_type rw, unsigned int vpn, unsigned int *pfn)
-{
-	/*** DO NOT MODIFY THE PAGE TABLE IN THIS FUNCTION ***/
+bool translate(enum memory_access_type rw, unsigned int vpn,
+               unsigned int *pfn) {
+    /*** DO NOT MODIFY THE PAGE TABLE IN THIS FUNCTION ***/
 
-	return false;
+    return false;
 }
-
 
 /**
  * TODO handle_page_fault()
@@ -86,11 +84,9 @@ bool translate(enum memory_access_type rw, unsigned int vpn, unsigned int *pfn)
  *   @true on successful fault handling
  *   @false otherwise
  */
-bool handle_page_fault(enum memory_access_type rw, unsigned int vpn)
-{
-	return true;
+bool handle_page_fault(enum memory_access_type rw, unsigned int vpn) {
+    return true;
 }
-
 
 /**
  * TODO switch_process()
@@ -106,7 +102,4 @@ bool handle_page_fault(enum memory_access_type rw, unsigned int vpn)
  *   page table. Also, should update the writable bit properly to implement
  *   the copy-on-write feature.
  */
-void switch_process(unsigned int pid)
-{
-}
-
+void switch_process(unsigned int pid) {}
