@@ -17,8 +17,8 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include "list_head.h"
 #include "types.h"
+#include "list_head.h"
 #include "vm.h"
 
 /**

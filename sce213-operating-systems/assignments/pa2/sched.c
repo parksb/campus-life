@@ -23,8 +23,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "list_head.h"
 #include "types.h"
+#include "list_head.h"
 
 #include "parser.h"
 #include "process.h"

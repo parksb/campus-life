@@ -19,8 +19,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "list_head.h"
 #include "types.h"
+#include "list_head.h"
 
 /**
  * The process which is currently running
