@@ -320,3 +320,90 @@
         - 데드라인까지 남은 기간이 priority가 되는 셈. 님들이 과제할 때 이렇게 하죠.
         - 인터벌 없이 데드라인만 있어도 잘 동작. 이론적으로 optimal하다. 데드라인을 안 놓친다.
 
+## Synchronization
+
+- 멀티 코어 시스템에서의 각종 동시성 문제.
+- 조건: mutex, progress, bounded waiting
+- critical section과 mutex를 화장실로 설명하심.
+- 스핀락의 나이브한 구현과 피터슨 알고리즘:
+  - 우리 교과서는 mutex lock을 스핀락이랑 같은 걸로 설명한다.
+  - 근데 mutex lock의 정의에 busy-waiting해야 한다는 건 없음. blocking해도 mutex lock일 수 있음.
+  - 그러니까 스핀락은 mutex lock의 서브셋임.
+- 하드웨어 지원: test-and-set, compare-and-swap
+- busy-waiting semaphore, blocking semaphore
+- 모니터: 프로그래밍 언어 차원에서 공유 데이터에 대한 동기화를 지원.
+- 컴파일러와 동기화:
+  - 이건 책에는 없는 내용.
+  - C/C++은 문법적으로 싱글 스레드 실행만을 전제한다.
+  - 컴파일러가 코드를 컴파일할 때 멋대로 최적화해버릴 수 있음.
+    ```c
+    bool ready = false;
+
+    void wait(void) {
+        while (!ready) {
+            do_nothing();
+        }
+    }
+
+    void signal(void) {
+        ready = true;
+    }
+    ```
+    - 가령 busy-waiting할 때 쓰는 `ready` 변수를 레지스터에서 읽도록 최적화하면 문제가 생김.
+    - `volatile` 키워드를 사용하면 매번 메모리에서 변수를 읽도록 개발자가 강제할 수 있다.
+  - 코드는 님들이 작성한대로 실행되지 않는다. 컴파일러도 최적화해주고, 프로세서도 최적화해줌.
+  - 이게 멀티 스레드 환경에서 문제가 됨. 이때 메모리 배리어로 인스트럭션의 순서를 지키게 해야한다.
+- 동기화의 고전적 문제들:
+  - Bounded-buffer problem:
+    - Producer-consumer problem: 하나의 버퍼를 producer와 consumer 동시에 사용하는 상황.
+    - 그런 상황에서 한정된 버퍼에서 일어날 수 있는 문제. (무한 버퍼 상황에서 일어나는 문제는 따로 있음.)
+    - producer는 버퍼가 넘치지 않게 생산해야, consumer는 버퍼에 뭔가 있을 때만 소비할 수 있어야.
+    - 한정 버퍼의 일반적인 구현은 링버퍼: `in == out`일 때 empty, `(in + 1) % SIZE == out`일 때 full.
+    - 한 버퍼에 두 producer가 동시에 값을 쓸 때, 두 consumer가 동시에 값을 읽을 때 문제가 생긴다.
+    - 뮤텍스 락이나 세마포어로 `in`과 `out`을 비롯한 공유 자원에 접근하는 임계 영역에 락을 걸어주면 해결.
+  - Readers and writers problem:
+    - 읽기 동작에 대해서는 몇 명이든 동시에 읽어도 문제가 없음. 문제는 동시 쓰기에서 발생.
+    - 그래서 reader는 writer가 락을 가지고 있지 않은 이상 락을 얻는 데 제한이 없음.
+    - 근데 reader가 끊임없이 들어온다면? writer에게 starvation이 발생하는 문제.
+    - 다양한 방법으로 해결할 수 있음.
+  - Dining philosopher problem: 잘 아는 그거.
+- 리눅스 커널은 동기화를 어떻게 처리하나?
+  - 옛날에는... BKL(Big Kernel Lock)이라는 뮤텍스 락을 커널 전체에 걸었다.
+  - 그래서 커널에는 무조건 하나씩만 들어올 수 있었음.
+  - 이제는 BKL을 잘게 쪼개고 완전 preemptive하게 동작함.
+- Deadlock:
+  ![](https://wiki.factorio.com/images/thumb/Train-deadlock.png/1000px-Train-deadlock.png)
+  - 데드락이 일어나려면 아래 4개 조건을 모두 만족해야:
+    - Mutex: 한 폐색에는 하나의 열차만 진입할 수 있음.
+    - Hold and wait: 하나의 폐색을 점유한 상태로 다음 폐색에 진입할 수 있을 때까지 기다림.
+    - No preemption: 폐색에 진입한 열차를 임의로 제거할 수 없음.
+    - Circular wait: 열차가 서로를 기다리며 사이클을 이룸.
+  - Prevention: 4개 조건 중 하나를 만족하지 않게 함으로써 데드락 발생을 사전에 방지한다.
+    - Mutex: 이건 어쩔 수 없음.
+    - Hold and wait:
+      - 기다리는 건 어쩔 수 없는데 홀드는 하지 않도록 만들 수 있음.
+      - 하지만 리소스 사용률이 떨어지고 리소스를 많이 사용하는 태스크에서 starvation이 일어날 수 있음.
+    - No preemption: preemption해서는 안 되는 리소스도 있기 때문에 현실적으로 막기 어려움.
+    - Circular wait:
+      - 가장 일반적인 접근.
+      - 리소스에 순서를 매겨서 total ordering.
+      - 2번 리소스를 잡을 수 있다해도 1번 리소스를 아직 못 잡았다면 기다린다.
+      - 이렇게 하면 한쪽 방향으로만 리소스를 요구하게 된다. a.k.a. 2PL
+      - 리눅스에는 witness가 있어서 리소스 순서를 이상하게 잡으려는 상황을 감지한다.
+  - Avoidance:
+    - 현재 safe한 상태에서 unsafe한 상태로 전이할 것 같다면 회피한다:
+      - Safe state: 모든 태스크에 리소스를 할당할 수 있는 상태.
+      - unsafe한 상태에서는 dealock이 발생할 수 있음.
+    - 리소스 할당 그래프:
+      - 그래프를 그려보고, 사이클이 있으면 데드락 위험이 있으므로 리소스 할당을 제한한다.
+      - 미래를 예측해야. 잘못하면 리소스 utilization이 떨어질 수 있다.
+    - Banker's algorithm:
+      - Available: 사용 가능한 자원 (현재 얼마나 할당할 수 있는지)
+      - Max: 각 태스크의 최대 리소스 요구
+      - Allocation: 각 태스크에 할당된 자원
+      - Need: 각 태스크에 남아있는 리소스 요구 (앞으로 얼마나 요구할지)
+      - 이 테이블들을 보고 safe sequence를 찾아 리소스를 할당한다.
+    - Ostrich algorithm:
+      - 타조는 위험한 상황에서 머리를 땅에 묻어버린다... 데드락을 모르는 척하고 쌩까겠다는 것.
+      - 실제로 대부분의 운영체제가 이렇게 한다. 데드락이 일어나는 빈도에 비해 대응하는 오버헤드가 너무 크다.
+      - 개발자가 알아서 데드락이 발생하지 않도록 프로그램을 잘 작성해야. 운영체제는 뭘 안해준다.
