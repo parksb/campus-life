@@ -1,7 +1,7 @@
 [doc]
-name = 'memo'
+name = 'cheatsheet'
 bundle = 'https://data1.fullyjustified.net/tlextras-2021.3r1.tar'
 
 [[output]]
-name = 'memo'
+name = 'cheatsheet'
 type = 'pdf'
