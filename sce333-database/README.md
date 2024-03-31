@@ -8,7 +8,7 @@
 - 과제:
   - [Warm-up](./assignments/warm-up)
   - [Top-K query](./assignments/top-k-query)
-  - [SQL](./assignments/sql)
+  - [SQL](./assignments/queries.sql)
   - [B+ Tree](./assignments/b-plus-tree)
 - 프로젝트:
   - [Parking lot management system](./projects/parking-lot-management-system.pdf)
