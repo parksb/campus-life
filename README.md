@@ -4,6 +4,8 @@
 
 ### 2024년 봄 (4학년 2학기)
 
+![](./timetables/2024-spring.png)
+
 * [몰입형미디어프로그래밍](dgmd318-immersive-media-programming)
 * [과학기술과법](sci116-science-technology-and-law)
 * [이산수학](sce141-discrete-mathematics/2024)
@@ -71,10 +73,10 @@
 * [글쓰기](kor102-korean-writing)
 * [컴퓨터프로그래밍](cse104-computer-programming)
 * [컴퓨터프로그램설계](cse134-computer-program-design)
-* [한국정치의쟁점과과제](pol113-the-reality-and-issues-in-contemporary-korean-society)
 * [확률및통계1](math251-probability-and-statistics-1)
 * [영어1](eng111-speaking-and-writing-in-english)
 * [아주인성](cajo113-ajou-virtues-ethics-responsibility-and-sustainability)
+* [한국정치의쟁점과과제(녹화)](pol113-the-reality-and-issues-in-contemporary-korean-society)
 
 ### 2017년 봄 (1학년 1학기)
 
@@ -107,3 +109,7 @@
 ### 대여
 
 * [PC119센터 대여](http://pc119.ajou.ac.kr)
+
+### 자동화
+
+* [Ajou Hack](https://github.com/ajou-hack)
