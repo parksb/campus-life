@@ -18,4 +18,4 @@
   - [프로젝트 진행 상황 발표 1](./project/progress-1.pdf)
   - [프로젝트 진행 상황 발표 2](./project/progress-2.pdf)
   - [프로젝트 진행 상황 발표 3](./project/progress-3.pdf)
-  - [프로젝트 최종 발표](./project/progress-3.pdf)
+  - [프로젝트 최종 발표](./project/final.pdf)
