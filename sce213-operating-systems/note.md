@@ -57,7 +57,7 @@
 - 프로세스는 실행된 프로그램의 인스턴스:
   - 메모리에 로드되어 활성화되어있는 동적인 엔티티.
   - 프로그램은 디스크에 저장된 정적인 엔티티.
-- 각 프로세스는 메모리에서 자기만의 주소 공간을 갖는다: code, data, heap, stack.
+- 각 프로세스는 메모리에서 자기만의 주소공간을 갖는다: code, data, heap, stack.
 - 프로세스의 상태: new, ready, running, wait, terminated.
   ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter3/3_02_ProcessState.jpg)
 - 시스템 콜을 이용한 프로세스 관리:
@@ -74,7 +74,7 @@
     - 부모 프로세스와 자식 프로세스는 독립적임. 자식은 자식의 인생을 살아야 해요.
   - `exec` family:
     - 현재 프로세스의 이미지를 새 프로세스 이미지로 교체.
-    - 현재 주소 공간을 날리고 새로운 내용을 채운다. `exec("vi")`하면 vi를 실행하는 프로세스가 됨.
+    - 현재 주소공간을 날리고 새로운 내용을 채운다. `exec("vi")`하면 vi를 실행하는 프로세스가 됨.
     - 여러분이 탐색기를 띄웠어요. 탐색기에서 파워포인트를 더블클릭하면 탐색기가 운영체제한테 `fork`를 날리죠. 그러면 탐색기 프로세스가 하나 더 만들어집니다. 근데 파워포인트를 실행해야하니 `exec`로 스스로를 교체.
   - `void exit(int status)`:
     - 프로세스를 삭제한다. 프로세스의 반환 값이 부모 프로세스에게 전달됨.
@@ -141,15 +141,15 @@
 - 프로그램의 실행 흐름을 따라 그려보면 하나의 실을 그리게 될 것.
   - 스레드는 실타래입니다. 만약 실타래가 여러 개가 된다면?
   - 프로세스의 실행 상태를 분리해낸다면 어떨까?
-- 각 스레드는 주소 공간을 공유한다
+- 각 스레드는 주소공간을 공유한다
   ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter4/4_01_ThreadDiagram.jpg)
   - 스레드가 서로 공유하는 것: 코드, 전역변수, 힙, 파일
   - 각자에 속한 것: 스레드 ID, PC와 SP를 비롯한 레지스터, 스택
   - 한 프로세스는 여러 스레드를 가질 수 있고, 스레드는 하나의 프로세스에 종속됨.
 - 멀티 스레딩의 장점:
   - 멀티 코어 아키텍처의 장점을 살릴 수 있다.
-  - 멀티 프로세스에 비해 리소스가 덜 든다. IPC가 필요없고 그냥 주소 공간에 접근하면 됨.
-  - 여러 스레드가 주소 공간을 공유하기 때문에 리소스 공유가 투명해짐.
+  - 멀티 프로세스에 비해 리소스가 덜 든다. IPC가 필요없고 그냥 주소공간에 접근하면 됨.
+  - 여러 스레드가 주소공간을 공유하기 때문에 리소스 공유가 투명해짐.
   - 더 많은 I/O 연산을 처리할 수 있고, 더 많은 동시성 이벤트에 응답할 수 있음. (e.g., 웹 서버)
 - 동시성(concurrency) vs 병렬성(parallelism):
   - 님들이 과제1을 풀고, 같은 시각에 친구가 과제2를 풀어주면 병렬적으로 하는거죠.
@@ -242,12 +242,12 @@
     - `errno`를 TLS로 만들면 문제를 해결할 수 있음.
 - 리눅스의 스레드:
   - 사실 프로세스도, 스레드도 그냥 `task_struct`로 구현됨.
-    - 스레드는 그저 같은 주소 공간을 공유하는 `task_struct`.
-    - 주소 공간이 다르다면 다른 프로세스.
+    - 스레드는 그저 같은 주소공간을 공유하는 `task_struct`.
+    - 주소공간이 다르다면 다른 프로세스.
   - `clone`:
     > clone() creates a new process, in a manner similar to fork(2). (...) The main use of clone() is to implement threads: multiple threads of control in a program that run concurrently in a shared memory space.
     - 실행 컨텍스트를 복제해서 새로운 `task_struct`를 만든다.
-    - 주소 공간이 같은 `task_struct`를 만들 수 있다. 즉, 스레드를 만드는 것.
+    - 주소공간이 같은 `task_struct`를 만들 수 있다. 즉, 스레드를 만드는 것.
 
 ## Process Scheduling
 
@@ -407,3 +407,186 @@
       - 타조는 위험한 상황에서 머리를 땅에 묻어버린다... 데드락을 모르는 척하고 쌩까겠다는 것.
       - 실제로 대부분의 운영체제가 이렇게 한다. 데드락이 일어나는 빈도에 비해 대응하는 오버헤드가 너무 크다.
       - 개발자가 알아서 데드락이 발생하지 않도록 프로그램을 잘 작성해야. 운영체제는 뭘 안해준다.
+
+## Memory Management
+
+- 지금까지 거의 프로세서 얘기만 했음. 이제 메모리 얘기를 해보자.
+- 프로세서가 태스크에게 가상화를 제공하듯 메모리도 가상화를 제공한다.
+- 메모리를 값이 저장된 배열로 생각해보자:
+  - 메모리의 특정 위치를 주소로 가리킬 수 있음.
+  - 주소를 여러 다른 형식으로 쓸 수 있음: 물리주소(PA)와 논리주소(LA or VA), 절대주소와 상대주소.
+  - 프로세서는 LA를 뿜어내요. CPU 코어의 일부에 있는 Memory Management Unit(MMU)가 LA를 VA로 바꿔줌.
+    ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_04_DynamicRelocation.jpg)
+  - 님들이 프로그래밍할 때 보는 주소는 모두 LA입니다. MMU가 변환해주는거고, 운영체제가 매핑 테이블을 관리.
+- Fixed partition:
+  - 메모리를 고정된 크기로 쪼개고, 각 파티션에 프로세스를 하나씩 꽂아 넣는다.
+  - 그 파티션이 프로세스의 독립된 가상 공간이 되는 셈.
+  - base register에 오프셋 PA를 저장해두면 LA를 base에 더하면 쉽게 PA를 얻을 수 있음.
+  - 자신의 주소공간이 아닌 위치를 참조하려하면 MMU가 제한.
+  - 프로세스가 스케줄링될 때 base도 그 프로세스의 오프셋에 맞게 변경되어야.
+  - 구현하기도 쉽고 빠르게 컨텍스트 스위치 가능하지만...
+  - 프로세스마다 메모리 요구량이 다르기 때문에 고정된 파티션 크기가 맞지 않을수도.
+  - Internal fragmentation:
+    - 할당된 파티션에 비해 프로세스가 사용하는 메모리 양이 적을 수 있음.
+    - 하나의 파티션은 하나의 프로세스만 사용할 수 있으므로, 남는 공간이 낭비되는 상황.
+- Variable partition:
+  - 천편일률적으로 파티션을 나누지 말고 프로세스의 필요에 맞게 할당하자.
+  - 운영체제가 프로세스의 메모리 요구량을 얻어서 필요한만큼만 메모리를 할당.
+  - LA에 base를 더하는건 fixed partition과 동일, 여기에 limit register가 필요함.
+  - 계산된 PA가 limit보다 작을 때만 접근을 허용. 컨텍스트 스위치마다 base와 limit을 함께 변경해야.
+  - 여러 빈 공간 중 어느 곳에 새 프로세스를 할당해야 할까?
+    - 할당 전략(allocation strategy)에 따라 다름.
+    - First fit: 그냥 첫 번째로 맞는 공간에 할당. 빠르지만 내부 단편화가 심해짐.
+    - Best fit: 최대한 딱 맞는 공간에 할당. 좋을 것 같지만 오버헤드가 큼.
+    - Worst fit: 가장 넓은 공간에 할당. 오버헤드가 큼.
+  - External fragmentation:
+    - 프로세스가 메모리 사용을 마치고 나가면 빈 공간이 생김.
+    - 빈 공간의 총합은 충분히 크지만, 서로 떨어져 있어서 새로운 프로세스를 할당할 공간이 없는 상황.
+- Segmentation:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_08_SegmentationHardware.jpg)
+  - 프로세스가 미래에 어느정도의 메모리를 사용할지 예측할 수 없음.
+  - 주소공간에 힙과 스택 사이에 큰 빈 공간이 있다. fixed/variable 파티션으로는 공간 낭비가 심해짐.
+    - 한 파티션에 하나의 프로세스를 할당하지말고, 한 프로세스를 여러 세그먼트로 쪼개서 할당하자.
+    - variable partition의 확장으로 볼 수도.
+  - code, data, heap, stack 영역을 개별 세그먼트로 나눠서 메모리의 여기저기에 할당할 수 있음.
+  - 각 프로세스는 자기만의 세그먼트 테이블을 갖는다:
+    - CPU의 segment-table base register(STBR)에 저장할 수 있음. 컨텍스트 스위치가 쉬워짐.
+    - 세그먼트에 대한 base, limit을 관리해야. 잘못된 세그먼트에 접근하면 segmentation fault 발생.
+  - 세그먼트 테이블이 문제:
+    - 레지스터에 넣자니 컨텍스트 스위칭 오버헤드가 큼.
+    - 하드웨어로 만들면 세그먼트 개수가 제한됨.
+    - 메모리에 두면 MMU가 메모리를 왔다갔다 해야하니 성능 저하.
+- Paging:
+  - 세그먼트를 써도 결국 단편화가 발생한다. 차라리 아주 작게 파티션을 나눠 놓으면 어떨까?
+  - 프로세스의 주소공간을 일정 크기의 페이지로 잘개 쪼개고, 물리메모리도 같은 크기의 프레임으로 쪼갠다.
+  - 내부 단편화는 발생할 수 있는데, 외부 단편화는 발생하지 않는다. 모든 페이지를 같은 크기로 쪼개놨으니까.
+  - 페이지 사이즈가 작을수록 좋겠지만, 너무 작으면 페이지 테이블이 거대해짐. 요즘에는 보통 4KB 페이지를 사용.
+  - Page table:
+    ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_10_PagingHardware.jpg)
+    - 쪼개는건 둘째치고, 가상 주소공간에서 물리 메모리로 매핑을 어떻게 할 것인지가 중요.
+    - VPN(virtual page number)를 PFN(physical frame number)로 바꿔야 한다:
+      - Virtual address = <VPN, offset>
+      - Physical address = <PFN, offset>
+    - 각 프로세스마다 페이지 테이블을 관리:
+      - 현재 실행 프로세스에 대한 page table base register(PTBR)가 해당 프로세스의 페이지 테이블을 가리킴.
+      - 컨텍스트 스위치할 때 PTBR을 업데이트해줘야. x86에서는 CR3.
+    - 페이지 테이블은 운영체제가 관리하고, MMU가 참조한다.
+    - e.g., 32비트 시스템을 생각해보자:
+      - VA는 32비트(4GB), PA는 20비트(1MB), 페이지 사이즈는 4KB.
+      - 오프셋 비트는 $\log_2 4096 = 12b$.
+      - VPN = $32 - 12 = 20b$.
+      - 페이지 테이블의 최대 엔트리 수는 $2^{20}$개.
+      - 페이지 테이블의 각 엔트리 크기: VPN은 인덱스, PFN은 오프셋을 뺀 나머지 $20b - 12b = 8b$.
+      - 페이지 테이블 크기는 $2^{20} \times 8b$. $2^{20}B$. 즉, 1MB.
+      - VA `00004AFE`가 들어오면, `00004`는 VPN, `AFE`는 오프셋.
+      - 페이지 테이블에서 VPN `00004`를 참조한다. 여기에 대응되는 PFN이 `6`이라고 한다면...
+      - 최종적인 PA는 `46AFE`. 이때 `46`은 PFN, `AFE`는 오프셋.
+    - 사실 페이지 테이블 엔트리에는 추가적인 정보가 있다:
+      - Valid bit(1b)
+      - Reference bit(1b)
+      - Modify bit(1b)
+      - Protection bit(3b)
+    - 무조건 페이지 테이블을 거쳐야 PFN을 얻을 수 있다:
+      - PTBR은 컨텍스트 스위치가 될 때만 변경된다.
+      - 따라서 한 프로세스가 다른 프로세스의 페이지를 읽을 수 없음.
+  - 페이징을 하면 이론적으로는 외부 단편화가 발생하지 않음:
+    - 그런데 물리적으로 연속한 페이지를 요구 한다면?
+    - I/O 버퍼나 in-kernel 자료구조가 이렇게 물리적으로 연속한 페이지를 필요로 할 수 있음.
+- Buddy system allocator:
+  - 외부 단편화를 줄이기 위한 또 다른 매커니즘이 필요하다.
+  - 버디 할당기는 처음에는 메모리를 하나의 청크로 간주. $2^n$개의 페이지를 한 청크로 관리.
+  - 할당이 필요하면 할당하기에 알맞은 크기가 될 때까지 청크를 반복적으로 절반씩 쪼갬.
+  - 할당이 아니라 해제할 때 진가가 드러난다: 자신을 해제할 때 자신의 버디가 비어있다면 병합한다.
+  - 청크가 $2^n$개의 단위로 구성되므로 내부 단편화가 일어날 수 있긴 함.
+- Hierarchical page tables:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_18_AddressTranslation.jpg)
+  - 페이지 테이블 여러 개를 계층적으로 사용해보자. radix 트리가 만들어지는 셈.
+  - PTE(page table entry)가 $2^2$개면 MSB 2개가 인덱스가 되고, $2^3$개면 MSB 3개가 인덱스가 될 것.
+  - 현재 대부분의 시스템은 hierarchical page table을 쓴다.
+  - 장단점:
+    - sparse 주소공간을 효과적으로 지원할 수 있음.
+    - MMU를 하드웨어로 쉽게 구현할 수 있게 됨.
+    - 외부 단편화가 일어나지 않음.
+    - 구현이 복잡함.
+  - 개념적으로 제시만 되고 쓰이지는 않는 매커니즘:
+    - Hashed page table: LA의 VPN 부분을 해시함수에 넣어서 PFN을 얻는다.
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_19_HashedPageTable.jpg)
+    - Inverted page table: 역으로 PFN에 <VPN, PID>을 매핑. LA의 PID와 VPN으로 PFN을 얻는다.
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_20_InvertedPageTable.jpg)
+- Translation Look-aside Buffer(TLB):
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter8/8_14_PagingHardware.jpg)
+  - hierarchical page table 아주 좋아보이죠? 근데 큰 문제가 있어요:
+    - VA 하나를 변환하려고 메모리를 엄청 읽어야 한다.
+    - 페이지 테이블 계층 개수 + 1번이나 메모리를 읽어야 함.
+  - VPN 10이 PFN 30이라는 걸 알았다면 다음에 다시 VPN 10을 변환할 때 페이지 테이블을 읽을 필요가 없다.
+    - MMU는 페이지 테이블을 보기 전에 먼저 TLB를 확인해본다. TLB는 하드웨어라서 빠르게 참조 가능.
+    - TLB에 없으면 페이지 테이블을 본다. 이렇게 PFN을 얻고 나면 TLB에 저장해둔다.
+    - 메모리 참조는 locality of reference가 매우 크기 때문에 캐시 효과가 매우 좋다.
+  - 컨텍스트 스위치할 때는 TLB를 비워야:
+    - 컨텍스트 스위치가 되면 PTBR이 바뀌면서 새 프로세스에 맞는 페이지 테이블을 바라보게 됨.
+    - 하지만 TLB는 변경되지 않기 때문에 새 프로세스와 불일치가 일어남. 그래서 싹 비워버리는 것.
+    - ASID: 어떤 아키텍처는 TLB를 비우는 대신, 이게 어떤 프로세스에 대한 데이터인지 저장해둔다.
+- Swap:
+  - 메모리에서 잘 쓰이지 않는 프로세스를 backing store로 swap out.
+  - 다시 실행을 재개할 때 backing store에서 메인 메모리로 swap in.
+- Demand page:
+  - 프로세스 전체를 swap하지말고, 특정 페이지만 swap하는 모델.
+  - 필요할 때 특정 페이지만 메모리에 로드하자.
+  - PTE의 valid bit에 특정 페이지가 메모리에 있는지 적어둬야.
+  - Page fault:
+    ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter9/9_06_PageFaultSteps.jpg)
+    - valid bit이 0이면 MMU가 page fault를 일으켜서 트랩을 날림.
+    - 그럼 운영체제는 디스크에 swap된 페이지를 찾아서 메모리에 올리고 PTE를 업데이트한다.
+  - demand paging은 지역성 원칙을 레버리징한다.
+  - 하드웨어 지원이 필요:
+    - 하드웨어 장치에 valid bit가 있어야 함.
+    - 메인 메모리와 보조 기억 장치가 필요.
+    - page fault를 일으킨 instruction을 reset하고 재실행할 수 있어야.
+  - VM(Virtual Memory):
+    - 이렇게 물리 메모리를 가상화해서 사용하는 걸 가상 메모리라고 한다.
+    - 논리 메모리와 물리 메모리를 분리해서 프로그램 개발이 쉬워짐.
+    - 프로세스의 일부만 메모리에 올릴 수 있고, 메인 메모리의 일부만 점유할 수 있음.
+    - 논리 주소공간이 물리 주소공간보다 더 커질 수 있음.
+- Shared memory:
+  - 서로 다른 프로세스가 shared memory를 사용하는 경우 PTE에 같은 PFN을 써두면 된다.
+  - 이 방식을 통해 `fork`가 매우 쉬워짐:
+    - `fork`를 하면 부모의 페이지를 복사하는 대신, 자식이 부모와 같은 페이지 프레임을 바라봄.
+    - 그런데 write를 할 때는 동작이 다름. 부모와 자식의 PTE에 있는 write bit을 임시로 끈다.
+    - 그럼 write를 시도할 때 MMU가 page fault를 날린다.
+    - 운영체제가 page fault handler에서 다른 프레임에 내용을 복사한다.
+    - 새로 복사된 프레임을 읽도록 PTE를 변경하고 write bit를 켜줌.
+    - 이렇게 복사하고 그 위치에 쓰는 방식이 copy-on-write.
+  - `malloc`도 copy-on-write로 동작한다:
+    - `malloc`을 하는 시점에는 아무 일이 일어나지 않음.
+    - 할당한 위치를 읽을 때는 그냥 0으로 채워진 zero page가 읽혀짐.
+    - write할 때 비로소 페이지를 새로 만들어서 바라보게 된다.
+
+## Virtual Memory
+
+- VM Features:
+  - 운영체제는 메모리의 어디에 있나?
+    - 프로세스는 사실 일정한 사용자 주소공간만을 사용함.
+    - 그 아래 운영체제 커널이 shared page를 통해 모든 프로세스에 걸쳐있음. 여기가 커널 주소공간.
+    - 유저 주소공간에서 `jmp 0xc0000100`처럼 커널 주소공간으로 점프하면 커널의 시스템 콜을 실행.
+    - 그래서 모든 프로세스가 쉽게 공유된 운영체제를 사용할 수 있음.
+  - Paging virtual memory:
+    - 코드: 파일에서 read-only로 읽음. file-backed pages.
+    - 스택과 힙: 파일이 아닌 anonymous page로 시작. 0으로 채워진 zero page.
+    - 데이터: 처음에는 file page로 시작, write가 일어나면 페이지가 만들어짐.
+  - Frame allocation: 한정된 페이지 프레임을 절절한 정책에 따라 할당해야.
+  - Thrashing:
+    ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter9/9_18_Thrashing.jpg)
+    - working set: 프로세스에서 자주 사용하는 페이지의 집합.
+    - working set만 메모리에 잘 올라와 있어도 성능 저하가 크게 일어나지 않는다.
+    - 메모리 크기가 working set보다 작다면 페이징이 자주 일어나고 급격한 성능 저하가 발생.
+    - 그럴 때는 프로세스를 죽이거나 메모리를 증설해야.
+  - Prepaging:
+    - 어떤 페이지를 참조하면 지역성 원리에 따라 주변 페이지에도 접근이 일어날 확률이 높음.
+    - 그래서 접근이 일어난 페이지의 주변 페이지를 미리 함께 메모리에 올려놓는 것.
+    - 리눅스 커널에서는 fault-around scheme이라고 한다.
+- Page replacement:
+  - 메모리가 가득 차서 페이지를 디스크로 swap해야 할 때 어떤 페이지를 victim으로 선택할 것인가?
+  - page fault의 페널티가 너무 크다. 메모리 접근은 200ns인데, 디스크 접근은 8ms나 걸림.
+  - $p$ 확률로 페이지 폴트가 발생한다면, $p \times \text{page fault handling time} + (1 - p) \times \text{memory access}$.
+  - 최대한 페이지 폴트를 줄여야. 가장 접근이 적을 것 같은 페이지를 잘 골라서 페이징해야 할 것.
+  - 하지만 미래를 볼 수는 없음. 페이지 교체 알고리즘 자체가 굉장히 챌린징한 일.

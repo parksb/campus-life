@@ -189,4 +189,40 @@
 - 이미지를 인식하고 그에 따른 동작을 프로그래밍할 수 있음.
 - 특정 이미지를 인식하고 3D 개체 띄우는 걸 보여줄게:
   - 교수님이 라이브 코딩하고 시연하는데 잘 안 됨.
-  - 30분동안 디버깅했지만 해결못함...
+  - 30분간 이어지는 눈물의 디버깅쑈... 뭔가 확실히 보여주시려는 듯.
+  - 실습 수업에서 해결됨.
+
+## Plane Tracking and AR Raycasting
+
+- AR Plane Manager로 plane을 인식할 수 있음.
+- 일단 기본적은 AR scene을 설정하고, XR Session Origin > Add Component > AR Plane Manager 선택.
+- hierarchy에 기본 palne을 추가하셈(XR > AR Default Plane)
+- 이렇게 하면 인식된 planes를 시각화해서 볼 수 있음.
+- 터치했을 때 plane 위에 오브젝트 생성하기:
+  - 레이를 쏴서 plane 위에 오브젝트를 올릴 수 있다.
+  - 강의노트 7-8 페이지에 코드가 있음.
+  - 오늘도 라이브 코딩 하시는 중.
+- plane 대신 placement indicator를 쓸 수도 있다.
+
+## Building UI with Unity UI (uGUI)
+
+- 유니티로 UI만드는 법을 알려줄거임. 이건 인터넷에 자료가 많으니 짧게 하겠음.
+- 모든 UI 요소는 Canvas 컴포넌트를 가진 게임 오브젝트의 자식이어야 한다.
+
+## Memo
+
+- 깜짝 퀴즈 볼거임. 지금 당장.
+  - 펜과 종이로 20초 안에 질문에 대답해야 함. 이메일로 당신의 정답을 내셈.
+  1. b) FixedUpdate
+  2. d) Layer mask
+  3. (0, 4, 0)
+  4. A frist AR game
+  5. c) Richie's (?)
+  6. b) Leo (??)
+  7. a) ShanDong (???)
+  8. She's scream was louder than gunshot. (????)
+  9. April fools' day.....
+- lab4 과제가 올라왔는데 arcoreimg.exe 파일이 첨부되어 있음:
+  - 맥이나 리눅스쓴다면 그냥 [AR Core 저장소](https://github.com/google-ar/arcore-android-sdk/tree/master/tools/arcoreimg)에서 받아도 됨.
+  - `$ arcoreimg evel-img --input_image_path=<path>`하면 이미지 인식률을 체크해볼 수 있음.
+  - 점수가 75점 이상 나와야 마커 이미지로 인식이 잘 된다.

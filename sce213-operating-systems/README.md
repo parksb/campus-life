@@ -12,4 +12,4 @@
   - [Project #2: Simulating Processor Schedulers](./assignments/pa2)
   - [Project #3: Virtual Memory Simulator](./assignments/pa3)
 
-> 2021년 봄 수업 녹화본. 과제는 2020년 봄 수업.
+> 2021년 봄 수업 [녹화본](https://moca.ajou.ac.kr/). 과제는 2020년 봄 수업.

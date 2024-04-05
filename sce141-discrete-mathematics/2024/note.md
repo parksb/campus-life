@@ -5,6 +5,7 @@ $$
 \gdef\bmod{\text{mod }}
 \gdef\nequiv{\not\equiv}
 \gdef\sbmatrix#1{\begin{bmatrix}#1\end{bmatrix}}
+\gdef\relation#1#2#3{{}_#2#1_#3}
 $$
 
 - 정수, 그래프, 논리 등 연속되지 않은 값을 가지는 대상의 구조와 성질에 관심.
@@ -496,7 +497,7 @@ $$
   - 모듈러: $b^n \mod m$을 계산하자.
     - $b^n$이 엄청나게 커져서 오버플로우가 터질 수 있음.
     - 지수를 이진수로 표현하면 작은 수의 조합으로 풀 수 있다.
-    - e.g, $3^11$
+    - e.g, $3^{11}$
       1. 일단 11을 이진수로 바꾼다: $(1011)_2$
       1. 분해한다: $3^{11} = 3^8 \cdot 3^2 \cdot 3^1 = ((3^2)^2)^2 \cdot 3^2 \cdot 3^1$
       1. 조립한다
@@ -522,7 +523,7 @@ $$
     - 기본 단계: $P(1)$이 참임을 보인다.
     - 귀납 단계: 모든 양의 정수 $k$에 대해 $P(k) \to P(k + 1)$이 참임을 보인다.
     - 이 두 단계를 따라 명제를 증명하는 기법이 귀납법.
-    - 즉, $(P(1) \land \all k(P(k) \to P(k + 1))) \to \all n P(n)$
+    - 즉, $(P(1) \land \forall k(P(k) \to P(k + 1))) \to \forall n P(n)$
 - 수학적 귀납법의 동작법:
   - 무한 계단 예시말고 무한 도미노 예시도 많이 쓰임.
   - 첫 도미노를 넘어뜨려서 모든 도미노를 순차적으로 넘어뜨릴 수 있나?
@@ -589,7 +590,7 @@ $$
     - Recursive step: $f_n = f_{n-1} + f_{n-2}$
   - e.g., $n \geq 3$에 대해 $\alpha = (1 + \sqrt{5}) / 2$일 때, $f_n \gt \alpha^{n-2}$를 증명:
     - Basis step:
-      - $P(3)$일 때 ${4 \over 2} = {{1 + 3} \over 2 \gt {{1 + \sqrt{5}} \over 2}$.
+      - $P(3)$일 때 ${4 \over 2} = {{1 + 3} \over 2} \gt {{1 + \sqrt{5}} \over 2}$.
       - $P(4)$일 때 $3 \gt {{3 + \sqrt 5} \over 2}$.
     - Inductive step:
       - $\alpha^{k-1} = \alpha^2 \cdot \alpha^{k-3} = (\alpha + 1) \cdot \alpha^{k-3} = \alpha^{k-2} + \alpha^{k-3}$.
@@ -600,5 +601,239 @@ $$
   - 자료구조를 재귀적으로 정의할 수 있음.
   - 함수와 마찬가지로 basis step과 recursive step으로 정의한다.
   - e.g., 정수 집합의 부분 집합 $S$를 정의하라:
+    - 이미 알려진 집합의 원소를 기반으로 확장하면 됨.
     - Basis step: $3 \in S$
+    - Recursive step:
+      - IF $x \in S$ AND $y \in S$, THEN $x + y \in S$
+      - $S = \{ 3, 3+3=6, 3+6=9, \cdots \}$
   - e.g., 자연수 집합 $\Bbb N$을 정의하라:
+    - Basis step: $0 \in \Bbb N$
+    - Recursive step:
+      - IF $n \in \Bbb N$, THEN $n + 1 \in \Bbb N$
+      - $\Bbb N = \{ 0, 0+1=1, 1+1=2, \cdots \}$
+    - 여기서는 0을 자연수로 정의했네요. 음이 아닌 정수 집합을 정의했다고 볼 수도.
+- Strings:
+  - 숫자가 아니라 문자도 재귀적으로 정의할 수 있을 것.
+  - 문자열의 정의는 문자열을 구성하는 알파벳의 집합: $\Sigma$
+  - 알파벳 집합 $\Sigma$의 원소로부터 생성한 문자열의 집합: $\Sigma \ast$
+  - Basis step: $\lambda \in \Sigma \ast$
+  - Recursive step: IF $w \in \Sigma \ast$ AND $x \in \Sigma$, THEN $wx \in \Sigma \ast$
+  - e.g., $\Sigma = \{0, 1\}$일 때, $\Sigma \ast$에 속한 모든 문자열은?
+    - 일단 빈 문자열이 있을 것임: $\lambda \in \Sigma \ast$
+    - 빈 문자열에 0을 붙이면: $0 \in \Sigma \ast$
+    - 계속 확장하면 $\Sigma \ast = \{ \lambda, 0, 1, 00, 01, 10, 11, \cdots \}$
+  - e.g., $\Sigma = \{a, b\}$일 때, $aab \in \Sigma \ast$를 증명하라.
+    - $\lambda \in \Sigma \ast$ AND $a \in \Sigma$이므로, $a \in \Sigma \ast$
+    - $a \in \Sigma \ast$ AND $a \in \Sigma$이므로, $aa \in \Sigma \ast$
+    - $aa \in \Sigma \ast$ AND $b \in \Sigma$이므로, $aab \in \Sigma \ast$
+  - String concatenation:
+    - 두 문자열의 연결은 $a \cdot b$ 또는 단순히 $ab$로 표기.
+    - 두 문자열의 연결을 재귀적으로 정의할 수 있음.
+    - Basis step: IF $w \in \Sigma \ast$, THEN $w \cdot \lambda = w$
+    - Recursive step:
+      - IF $w_1 \in \Sigma \ast$ AND $w_2 \in \Sigma \ast$ AND $x \in \Sigma$,
+      - THEN $w_1 \cdot (w_2 x) = (w_1 w_2)x$
+    - e.g., 문자열 $w$의 길이 $l(w)$를 재귀적으로 정의하라:
+      - $l(\lambda) = 0$
+      - $l(wx) = l(w) + 1$ IF $w \in \Sigma \ast$ AND $x \in \Sigma$
+
+## Counting
+
+- 계수는 숫자를 센다는 것. 계수의 기초와 비둘기집 원리, 순열과 조합 얘기를 해보자.
+- 핵심은 경우의 수. 서로 다른 데이터가 몇 가지인지, 확률이 얼마인지 구해보자.
+- 다 아는거지? 뒤에서 배울 내용에서 계산 빨리하려고 짚는거니까 공식 위주로 보셈.
+
+### The Basics of Counting
+
+- 곱셈법칙:
+  - e.g., 7개 비트로 만들 수 있는 비트열의 수는? $2^7 = 128$개.
+  - e.g., 집합 $A(|A| = m)$에서 $B(|B| = n)$로의 함수 개수는? $n^m$개.
+  - e.g., 위 집합에서 함수가 one-to-one이라면? $n(n-1)(n-2) \cdot (n-m+1)$개.
+  - e.g., 유한 집합의 부분집합 개수:
+    - 이건 기억해두자. $S$의 개수가 $n$개일 때, $S$는 $2^n$개의 부분집합을 갖는다.
+    - 각 원소가 집합에 포함되거나/되지 않거나로 생각하면 쉽게 구할 수 있음.
+  - 집합의 곱셈 법칙:
+    - 집합을 카테시안 곱으로 곱한다고 생각해보자: $A_1 \times A_2 \times \cdots \times A_m$
+    - $|A_1 \times A_2 \times \cdots \times A_m| = |A_1| \cdot |A_2| \cdot \cdots \cdot |A_m|$
+    - 카테시안 곱으로 만들어진 순서쌍의 개수를 각 집합의 카디널리티를 모두 곱해서 구할 수 있다.
+- 덧셈법칙:
+  - e.g., 교수 37명과 학생 87명 중 대표를 뽑을 때 경우의 수는? $37 + 83 = 120$
+  - 집합의 덧셈 법칙:
+    - $|A_1 \cup A_2 \cup \cdots \cup A_m| = |A_1| + |A_2| + \cdots + |A_m|$
+    - 합집합의 카티널리티를 각 집합의 카티널리티를 모두 더해서 구할 수 있다.
+  - e.g., 대문자나 숫자로 6~8자리의 패스워드를 만든다. 최소 하나의 숫자를 포함해야.
+    - 패스워드가 6자리인 경우, 7자리인 경우, 8자리인 경우를 구해서 더하면 될 것.
+    - $P_6$ = $(26 + 10)^6 - 26^6$ (6자리를 모두 알파벳으로만 채우는 경우를 빼줌)
+    - $P_7$ = $(26 + 10)^7 - 26^7$
+    - $P_8$ = $(26 + 10)^8 - 26^8$
+    - $P = P_6 + P_7 + P_8$
+- 뺄셈법칙:
+  - $|A_1 \cup A_2| = |A_1| + |A_2| - |A_1 \cap A_2|$
+  - e.g., 1로 시작하거나 00으로 끝나는 8자리 비트열 개수:
+    - 시작은 1이니까 그 아래 7비트의 경우의 수는 $2^7$개.
+    - 마지막은 00이니까 그 앞 6비트의 경우의 수는 $2^6$개.
+    - 시작인 1이고, 마지막이 00이니까 그 사이 5비트의 경우의 수는 $2^5$개.
+    - 따라서 $2^7 + 2^6 - 2^5 = 160$
+- 나눗셈법칙:
+  - e.g., 4명이 원탁에 둘러앉는 경우의 수?
+    - 원탁의 의자 하나를 임의로 선택해서 시작점으로 잡고 시계방향으로 순서를 붙임.
+    - 첫 의자에서의 경우의 수는 4, 다음 의자는 3, ... 세 번째 의자는 1개.
+    - 그럼 총 $4! = 24$가지 경우. 근데 중복되는 경우 4개가 있으니 $24 / 4 = 6$.
+- Tree diagrams:
+  - 5개 사이즈(S, M, L, XL, XXL), 각 4개 색상(W, R, G, B)이 있음. 근데 XL은 RGB, XXL은 GB만 있음.
+  - 너무 복잡하죠. 이걸 트리 다이어그램 그려서 풀면 쉬워짐.
+
+### The Pigeonhole Principle
+
+- 내용 자체는 상식적인데 증명할 때 유용.
+- $k$개의 비둘기집과 비둘기 $k + 1$마리가 있다면, 적어도 한 집에는 비둘기가 2마리가 들어가게 됨.
+- 따름정리 1:
+  - $k+1$개의 원소를 갖는 집합에서 $k$개의 원소를 갖는 집합으로의 함수는 단사함수가 아니다.
+  - 비둘기집 원리로 증명할 수 있음. 무조건 하나는 중복됨.
+- e.g., 367명의 사람이 있다. 이 중 적어도 두 사람은 생일이 같음을 증명.
+- 일반화된 비둘기집 원리:
+  - 비둘기집 개수와 비둘기 수의 차이가 2 이상나는 경우에는?
+  - 비둘기집이 10개고, 비둘기가 12마리 이상인 경우를 일반화해보자.
+  - $N$개 물건을 $k$개 상자에 넣으면, 적어도 한 상자에는 $\lceil N/k \rceil$개 물건이 들어있다.
+  - e.g., 100명의 사람이 있다. 적어도 9명의 사람이 같은 달에 태어났음을 증명:
+    - $N=100$, $k=12$라고 했을 때 $\lceil 100/12 \rceil = 9$.
+
+### Permutations and Combinations
+
+- 님들이 이미 잘 아는 순열과 조합.
+- 뒤에서 경우의 수 구해야 할 때 필요하니까 간단히 살펴보겠음.
+
+#### Permuatations
+
+- 서로 다른 원소를 가진 집합 안에서의 순열(순서를 가진 배열.)
+- 순열은 원소들의 순서있는 배열 자체를 말하는거고, 나열하는 경우의 수를 구하는건 다른거임.
+- $r$개 원소를 가진 순열을 r-permutation이라고 한다.
+- e.g., $S = \{ 1, 2, 3 \}$ 집합이 있다고 하자:
+  - 원소를 나열하는 경우의 수는 $3 \times 2 \times 1 = 6$.
+  - 3개 중 2개를 꺼내서 순서대로 나열하는 것. 즉, $P(n, r)$일 때 $P(3, 2) = 6$.
+- $P(n, r) = n(n-1)(n-2) \cdots (n - r + 1) = {n! \over (n - r)!}$
+- e.g., 100명 중 3명을 고르는 경우의 수: $P(100, 3) = 100 \cdot 99 \cdot 98$
+- e.g., 외판원이 8개의 도시를 방문. 방문 순서에 대한 경우의 수:
+  - 출발 도시는 정해져있으므로 7개 도시에 대한 순열을 구하면 된다.
+  - 따라서 $7 \cdot 6 \cdot 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1 = 7!$.
+
+### Combinations
+
+- 순서없이 고르는 경우의 수.
+- $C(n, r) = {n! \over (n - r)!r!}$
+  - 사실 $C(n, r) = P(n, r) \over P(r, r)$.
+  - 순서를 고려한 경우의 수를 중복되는 경우의 수로 나눠주는 것.
+- 따름정리 2: $C(n, r) = C(n, n - r)$
+
+## Relations
+
+- 지금까지는 이산수학에서 사용하는 수학적 이론만 살펴봄.
+- 이제 이산수학에서 중점적으로 다루는 내용을 보자.
+- 내용이 좀 많습니다.
+
+### Relations and Their Properties
+
+- 이진관계:
+  - $R \subseteq A \times B$
+  - 두 집합간 원소와 원소의 관계.
+  - 원소간 관계는 순서쌍으로 표현할 수 있음.
+  - 이진관계 $R$은 $A$와 $B$의 모든 순서쌍 집합의 부분집합.
+  - $(a, b) \in R$인 경우: $\relation{R}{a}{b}$
+  - $(a, b) \not \in R$인 경우: $\relation{\cancel R}{a}{b}$
+  - 그냥 관계라고 해도 이진관계를 생각하면 됨.
+- 관계는 그래프나 테이블로 표현할 수 있음.
+- 함수랑 비슷하게 느껴지나요?
+  - 관계는 하나의 원소가 여러 원소에 대응될 수 있기 때문에 함수와 관계는 다름.
+  - 관계가 함수를 포함하는 개념임.
+  - 만약 두 집합간 관계에 함수가 있다면 $(a, f(a))$로 표현할 수 있을 것.
+- e.g., $A = \{1, 2, 3, 4\}$이고, $R = \{(a, b) | a \text{divides} b\}$:
+  - $A$에서 $A$로의 관계. 자기 자신으로의 관계.
+  - $A$의 원소 중 하나가 다른 하나를 나눌 수 있는지 본다.
+  - $R = \{(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 4), (3, 3), (4, 4)\}$
+- e.g., 어떤 집합 $A$에 대한 관계는 총 몇 개인가?
+  - 만들 수 있는 모든 순서쌍 개수는 $|A \times A|$개.
+  - 관계는 전체 순서쌍의 부분집합이므로, $2^{|A \times A|}$개.
+- Reflexive relations (반사적 관계):
+  - 집합 $A$에 속한 모든 원소 $a$에 대해 $(a, a) \in R$라면 $R$은 반사적이다.
+  - R is reflexive if and only if $\forall a((a, a) \in R)$.
+  - 자기 자신으로 향하는 순서쌍을 모두 갖고 있어야 반사적.
+  - Irreflexive relations (비반사적 관계):
+    - 책에는 안 나오는데 이런 특성도 있음.
+    - 자기 자신으로 향하는 관계가 아예 없어야: $\forall((a, a) \not \in R)$.
+    - relexive와 반대는 아님. reflexive도 아니고 irreflexive할 수도 있으니까.
+    - 공집합에 대한 관계는 reflexive한 동시에, irreflexive함.
+  - 그래프로 그려보면: a에서 화살표가 나와서 자기자신 a로 들어감.
+  - 행렬로 그려보면: $\sbmatrix{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1}$
+- Symmetric relations (대칭적 관계):
+  - 관계에 $(a, b)$가 있을 때, $(b, a)$가 항상 있다면 반사적.
+  - R is symmetric if and only if $\forall a \forall b ((a, b) \in R \to (b, a) \in R)$
+  - 그래프로 그려보면: a에서 b로 향하는 화살표가 있으면 b에서 a로 향하는 화살표도 있음.
+  - 행렬로 그려보면: $\sbmatrix{0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1}$
+- Transitive relations (전이적 관계)
+
+## Memo
+
+### Sequences and Summations
+
+- 등차수열 $a, a + d, a + 2d, \cdots ,a + nd, \cdots$ $a_n = a + (n - 1)d$
+- 등비수열 $a, ar, ar^2, ar^3, \cdots ,ar^n, \cdots$: $a_n = ar^{n - 1}$
+- $\sum_{k=0}^n ar^k (r \neq 0) = {ar^{n+1} - a \over r - 1}, r \neq 1$
+- $\sum_{k=1}^n k = {n(n + 1) \over 2}$
+- $\sum_{k=1}^n k^2 = {n(n+1)(2n+1) \over 6}$
+- $\sum_{k=1}^n k^3 = {n^2(n+1)^2 \over 4}$
+
+### Cardinality of Sets
+
+- $|A| = |B|$: 일대일 대응 (전단사)
+- $|A| \leq |B|$: one-to-one (단사)
+
+### Divisibility and Modular Arithmetic
+
+- IF $b = ac$, THEN $a | b$.
+- Theorem 1:
+  - (i) IF $a|b$ AND $a|c$, THEN $a | b + c$;
+  - (ii) IF $a|b$, THEN $a|bc$ for all integers c;
+  - (iii) IF $a|b$ AND $b|c$, THEN $a|c$.
+  - Corollary 1: IF $a|b$ AND $a|c$, THEN $a | mb + nc$.
+- Theorem 3: $a \equiv b (\bmod m)$ IF AND ONLY IF $a \mod m = b \mod m$.
+- Theorem 4: $a \equiv b (\bmod m)$ IF AND ONLY IF there is an integer k such that $a = b + km$.
+- Theorem 5: IF $a \equiv b (\bmod m)$ AND $c \equiv d (\bmod m)$,
+  - THEN $a + c \equiv b + d (\bmod m)$
+  - AND $ac \equiv bd (\bmod m)$
+  - Corollary 2:
+    - $(a + b) \mod m = ((a \mod m) + (b \mod m)) \mod m$
+    - $ab \mod m = ((a \mod m)(b \mod m)) \mod m$
+
+### Permutations and Combinations
+
+- $P(n, r) = n(n-1)(n-2) \cdots (n - r + 1) = {n! \over (n - r)!}$
+- $C(n, r) = {n! \over (n - r)!r!}$
+  - Corollary 2: $C(n, r) = C(n, n - r)$
+
+## Examples
+
+### Sequences and Summations
+
+- 10,000달러를 30년간 연 11% 복리로 예금하면?
+  - 점화관계는 $P_n = P_{n - 1} + 0.11P_{n - 1} = (1.11)P_{n - 1}$.
+  - 전향대입을 해보자:
+    - 0년째: $P_0 = 10000$
+    - 1년째: $P_1 = P_0 + 0.11P0 = (1.11)P_0$
+    - 2년째: $P_2 = P_1 + 0.11P1 = (1.11)P_1 = (1.11)^2P_0$
+    - 3년째: $P_3 = P_2 + 0.11P2 = (1.11)P_2 = (1.11)^3P_0$
+    - n년째: $P_n = (1.11)P_{n - 1} = (1.11)^nP_0 = (1.11)^n10000$
+    - 따라서 30년째: $P_{30} =(1,11)^{30}10000$
+- 초봉 50000달러, 매년 1000달러 성과급과 전년도 원징기준 5% 연봉 인상률이라면?
+  - 점화관계는 $a_n = (1.05)a_{n - 1} + 1000$.
+  - 전향대입을 해보자:
+    - 0년째: $a_0 = 50000$
+    - 1년째: $a_1 = 1.05a_0 + 1000
+    - 2년째: $a_2 = 1.05a_1 + 1000 = (1.05)^2a_0 + 1.05(1000) + 1000$
+    - 3년째: $a_3 = 1.05a_2 + 1000 = (1.05)^3a_0 + (1.05)^2(1000) + 1000$
+    - n년째: $a_n = 1000 + 1.05 + (1.05)^2 + \cdots + (1.05)^{n-1} + (1.05)^n a_0$
+    - 공비가 $1.05$인 등비수열, 따라서 ${1000 + {50000 \cdot 1.05^{n-1} - 50000 \over 1.05 - 1} \cdot 50000}$
+
+## Notices
+
+- 4/11 목요일에 2차 과제 나갈거임.
+- 4/12 금요일 개교기념일이라 수업 없음.
