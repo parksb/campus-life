@@ -555,8 +555,14 @@
     - 그럼 write를 시도할 때 MMU가 page fault를 날린다.
     - 운영체제가 page fault handler에서 다른 프레임에 내용을 복사한다.
     - 새로 복사된 프레임을 읽도록 PTE를 변경하고 write bit를 켜줌.
-    - 이렇게 복사하고 그 위치에 쓰는 방식이 copy-on-write.
-  - `malloc`도 copy-on-write로 동작한다:
+    - 이렇게 복사하고 그 위치에 쓰는 방식이 copy-on-write(CoW).
+    - 그림을 보자:
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter9/9_07_Page_C_Unmodified.jpg)
+      - 이그림에서 프로세스2는 프로세스1의 자식임. 모두 같은 PTE를 바라보고 있다.
+      - 만약 프로세스1이 페이지C를 수정하면?
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter9/9_08_Page_C_Modified.jpg)
+      - 페이지C를 복사하고, 복사한 PTE를 바라보고 write한다.
+  - `malloc`도 CoW로 동작한다:
     - `malloc`을 하는 시점에는 아무 일이 일어나지 않음.
     - 할당한 위치를 읽을 때는 그냥 0으로 채워진 zero page가 읽혀짐.
     - write할 때 비로소 페이지를 새로 만들어서 바라보게 된다.
@@ -590,3 +596,176 @@
   - $p$ 확률로 페이지 폴트가 발생한다면, $p \times \text{page fault handling time} + (1 - p) \times \text{memory access}$.
   - 최대한 페이지 폴트를 줄여야. 가장 접근이 적을 것 같은 페이지를 잘 골라서 페이징해야 할 것.
   - 하지만 미래를 볼 수는 없음. 페이지 교체 알고리즘 자체가 굉장히 챌린징한 일.
+- Page replacement policies:
+  - Belady's algorithm(OPT)
+    - 가장 나중에 읽힐 페이지를 victim으로 설정.
+    - 수학적으로 가장 optimal한 알고리즘.
+    - 쩌는 페이지 교체 알고리즘을 만들었다고 가정해봐요:
+      - Page Fault Rate(PFR)을 측정.
+      - OPT 대비 얼마나 좋은지도 살펴볼 필요가 있음.
+  - FIFO(First-In First-Out):
+    - 가장 먼저 로드된 페이지를 victim으로 설정.
+    - 옛날에 들어온 애가 지금 필요없을 확률이 높겠지.
+    - 물론 항상 그렇지는 않음. 언제 참조됐는지를 보지 않으면 locality를 고려하지 못함.
+    - Belady's anomaly:
+      - 페이지 프레임이 늘어났는데 PFR이 증가하는 현상.
+      - FIFO에서 이 현상이 일어남. 투자를 더 했는데 성능이 더 안 좋아짐.
+    - 그래서 FIFO는 잘 쓰지 않는다.
+  - LRU(Least Recently Used):
+    - 가장 과거에 사용된(참조된) 페이지를 victim으로 설정.
+    - locality of reference를 활용하는 것. 과거를 보고 미래를 예측한다.
+    - 이런 알고리즘을 stack algorithm이라고 한다.
+      - Any page in memory with $n$ frames is also in memory with $n + 1$ frames.
+      - belady's anomaly가 발생하지 않음.
+    - 어떻게 구현할 것인가?
+      - 나이브하게 클락이나 카운터를 쓰는 구현:
+        - 모든 메모리 참조에 대해 시간이 지날수록 증가하는 카운터를 관리한다.
+        - 페이징할 때 카운터가 가장 큰 페이지를 찾으려면 매번 $O(n)$ 시간이 걸리는 문제.
+      - 이중 링크드 리스트나 스택을 사용하는 구현:
+        - MRU를 head, LRU를 tail로 갖는 링크드 리스트. 관리가 힘든 문제.
+        - 페이징할 때 빠르지만, 메모리 참조할 때 참조 관계를 재정렬해야 하므로 느려짐.
+  - LRU approximation algorithms:
+    - LRU를 실제 구현해보면 성능이 떨어지므로 LRU와 유사한 알고리즘을 쓴다.
+    - Additional reference bits algorithm:
+      - PTE에는 reference bit가 있음, 페이지에 접근할 때 MMU가 reference bit를 자동으로 설정함.
+      - OS가 추가적인 reference bit를 관리하도록 해보자. 참조가 일어나면 right shift하고, MSB를 업데이트한다.
+      - 즉, additional reference bit가 참조 이력을 유지하게 되는 것.
+      - 따라서 additional reference bit이 가장 작은 페이지를 교체하면 됨.
+    - Second-Chance algorithm:
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter9/9_17_SecondChance.jpg)
+      - clock algorithm이라고도 부름. 페이지로 로지컬한 시계를 만들었다고 생각해보자.
+      - 참조가 일어날 때마다 포인터가 시계방향으로 한칸씩 움직인다.
+      - 포인터가 가리키는 페이지의 reference bit이 0이면 해당 페이지를 victim으로 설정.
+      - reference bit이 1이면 비트를 0으로 클리어하고, 다음 페이지로 넘어간다. (세컨 찬스를 주는 것)
+    - Enhanced second-chance algorithm:
+      - victim 페이지를 evict하면 파일에 기록된다고 생각해보자:
+        - 파일에 기록된 페이지를 메모리로 로드하고, 다시 evict하는 경우.
+        - 메모리에서 페이지가 수정이 되지 않았으면 굳이 파일의 내용을 업데이트하지 않아도 된다.
+        - 파일에 write하는 건 비용이 많이 드는 일.
+      - PTE에 modify bit(또는 dirty bit)가 있다.
+      - reference bit(R)과 modify bit(M)을 보고 판단한다:
+        - `!R && !M`: 최근에 참조도 안 됐고, 수정도 안 됐으므로 바로 교체 가능.
+        - `!R && M`: 참조는 안됐는데 교체 전에 파일에 쓰기가 되어야 함.
+        - `R && !M`: 수정은 안 됐는데 조만간 다시 참조될 가능성이 높음.
+        - `R && M`: 최근에 참조됐고, 수정도 일어났음.
+  - Counting-based algorithm:
+    - 최애 페이지 리스트를 관리한다.
+    - LFU(Least Frequently Used): reference count가 가장 작은 페이지를 victim으로 설정.
+    - MFU(Most Frequently Used): reference count가 가장 큰 페이지를 victim으로 설정.
+    - 구현이 어렵고, OPT에 잘 근접하지 않아서 연구는 많이 됐는데 쓰이지 않음.
+- Issues in page replacement:
+  - Global replacement vs. Local page replacement:
+    - Global: 모든 페이지 프레임을 대상으로 victim을 찾는다.
+    - Local: 페이지 교체를 요구한 프로세스의 페이지 프레임을 대상으로 victim을 찾는다.
+    - local은 성능이 일정하겠지만, 메모리를 덜 쓰게 됨. 결국 local optimal에 가까워지기 때문.
+    - global은 다른 프로세스에게 성능 영향을 받음. 하지만 전반적인 처리율이 좋음. 일반적인 접근법.
+  - Page pinning:
+    - 종종 페이지가 메모리에 고정되어야 하는 경우가 있음.
+    - `malloc`으로 공간 할당받고 GPU 작업을 수행하는 상황을 생각해보자.
+    - GPU가 열심히 일하고 있는데 페이징이 일어나면 문제가 생길 수 있음.
+    - 하드웨어와 일하고 있는 페이지는 victim으로 설정하지 않는게 pinning.
+  - Paging virtual memory:
+    - 앞에서 대충 얘기한 가상 주소공간 얘기를 다시 해보자.
+    - 코드 영역은 거의 write할 일이 없음. 코드 페이지는 모두 modify bit이 모두 0일 것. 쉽게 페이징할 수 있음.
+    - 스택과 힙 영역은 read/write가 빈번함. 페이징하려면 swap file에 내용을 백업해둬야 한다.
+    - 데이터 영역은 한번이라도 write이 일어나면 anonymous page가 됨. CoW 이후에는 swap file에 백업이 필요.
+
+## File Systems
+
+- 보조 기억 장치가 왜 필요한지는 잘 알거임. 큰 저장 공간과 영속성이 필요하기 때문.
+- 프로세스는 여러분이 직접 건드릴 일이 별로 없지만 파일 시스템은 수시로 건드린다.
+- 파일:
+  - 보조 기억 장치에 저장된 이름 붙여진 정보.
+  - Pseudo file: 프로세스나 swap 공간에 대한 정보도 파일 형태로 추상화됨. `/proc`이나 `/tmp` 디렉토리.
+  - 파일의 속성:
+    - 이름, ID, Type, Location, Size, Permission, Time, etc.
+    - 파일에도 타입이 있음. 파일 이름에 확장자라는 이름으로 표시하는 그것.
+      - 윈도우즈에서는 `.exe`, `.jpg`처럼 이름에 표시.
+      - UNIX는 파일의 첫 문자열에 표시. 셸 스크립트에 `#!/bin/sh`하는 것.
+  - File operations:
+    - Open:
+      - 각 프로세스는 파일 디스크립터(fd) 테이블을 갖고 있음.
+      - 테이블을 통해 프로세스가 어떤 파일을 열었는지 추적한다.
+      - Open-file table: 열려있는 파일에 대한 테이블. 파일이 열려있다는 사실을 추적.
+    - Access:
+      - 프로세스는 열린 파일 각각에 대한 파일 포인터를 갖고 있음.
+      - 파일 포인터는 마지막으로 읽거나 쓰기한 위치를 가리킴.
+  - Directory:
+    - 유저 입장에서는 파일을 모아놓은 묶음.
+    - 시스템 입장에서는 그냥 특별한 메타데이터를 가진 파일:
+      - 디렉토리는 파일 이름과 파일 속성의 집합. 디렉토리에 각 파일과 그 파일의 속성이 쓰여있다는 것.
+      - 즉, 디렉토리는 파일과 그 파일에 대한 속성을 매핑시키는 파일.
+    - 윈도우즈에서는 폴더라고 부름.
+    - Tree-structured: 디렉토리는 트리 구조:
+      ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter11/11_11_TreeStructure.jpg)
+      - path가 주어지면 트리를 순회하여 파일을 찾을 수 있음.
+      - open과 read 인터페이스가 분리되어 있는 이유. read할 때마다 open하려면 매번 트리 순회를 해야해서 느림.
+  - Link:
+    - 디렉토리 엔트리는 다른 디렉토리나 파일 데이터에 링크되어 있음.
+    - 두 디렉토리 엔트리가 같은 파일 데이터를 링크하면 하드링크
+    - 파일 아이디가 아니라 파일 경로를 기준으로 링크하면 심볼릭 링크.
+    - 파일을 지우는건 링크를 끊는 것. 그래서 시스템 콜에 `rm`이 없고 `unlink`가 있음.
+- 저장 장치:
+  - HDD: 실린더, 암, 헤드, 트랙, 섹터, 플래터, ..., Seek time, Rotational delay, Transfer time으로 측정.
+  - SSD:
+    - NAND Flash:
+      - 수많은 셀의 배열. 플래시 메모리 원리.
+      - Read: 페이지(여러 셀의 집합) 단위로 비트열을 읽음.
+      - Write(or Program): 페이지 단위로 특정 비트열을 기록. 쓰기 전에는 반드시 erase를 해야.
+      - Erase: 블록(여러 페이지의 집합) 단위로 비트열을 초기화.
+    - FTL(File Transition layer):
+      - HDD를 위한 파일시스템은 사용하기 편리했음. 그냥 섹터 단위로 생각하면 됐음.
+      - 그래서 기존 파일시스템에는 섹터 읽기와 쓰기 인터페이스만 있음.
+      - 근데 SSD에는 그지같은 특성이 있다:
+        - write과 erase를 많이 하면 oxide 레이어가 마모되면서 wear out이 일어남.
+        - 한 번 write하면 바로 overwrite이 불가능함.
+        - write하려면 erase를 해야 하는데, erase는 블록 단위로만 할 수 있음.
+      - 하드웨어 장치를 위해 파일 시스템을 완전히 뜯어고쳐야 하나?
+        - SSD 장치 내부에 FTL이라는 소프트웨어 레이어를 두자.
+        - FTL에서 전통적인 블록 장치를 에뮬레이트해서 기존 파일시스템과 인터페이스를 맞춰줌.
+      - NAND 플래시는 어차피 다 거기서 거기. 근데 FTL에 따라 SSD의 성능이 달라진다.
+- 파일 시스템의 구현:
+  - 디스크는 그냥 엄청 큰 어레이. 섹터가 512B 단위로 나뉘어 있음.
+    - 하나의 파일을 여러 데이터 블록으로 쪼개서 저장한다.
+    - 파일 이름과 파일에 대한 메타데이터도 디스크의 한 블록에 저장될 것.
+  - 파일 시스템이라는 논리적인 레이어를 물리적인 리소스 위에 잘 설계하는게 중요:
+    - 하나의 파일에 대한 블록을 여기저기 두는 것보다는 일렬로 두는게 좋음.
+    - 데이터 블록을 일렬로 모아주는게 옛날에 쓰던 조각모음.
+  - FAT:
+    - 오래전 플로피 디스크와 HDD를 위해 만들어진 간략한 파일 시스템.
+    - 구현하기 쉽고, 파일 시스템 자체를 유지하기 위한 메모리가 작음.
+    - 오래된 파일시스템이고, 요즘에는 블랙박스같은 작은 임베디드 시스템에 쓰임.
+    - 각각의 딜게토리 엔트리에 대응되는 File Allocation Table(FAT)을 관리:
+      - 처음에는 모두 1로 초기화되어 있음.
+      - 디렉토리 엔트리에 FAT의 인덱스가 적혀있음. FAT에서 해당 인덱스를 참조.
+      - 해당 FAT 엔트리가 다른 엔트리를 가리킬수도. EOF를 가리킬 때까지 탐색을 함.
+    - FAT16: 디렉토리 엔트리 하나가 16바이트. 파일 이름 12바이트, 나머지 4바이트는 FAT 인덱스.
+    - FAT의 문제는 파일의 연속된 할당에 대한 고려가 부족. 읽기 쓰기를 반복하면 여기저기에 파일이 fragment된다.
+  - EXT4:
+    - 대표적인 유닉스 표준 파일시스템.
+    - 70년대 중반 Fast File System이 유닉스에 도입. 그걸 개선해서 EXT2, EXT3가 나옴. 이제 EXT4.
+    - 연속된 파일에 대한 설계가 잘 되어 있어서 fragment가 잘 일어나지 않음.
+    - 더 궁금하면 저희 연구실 인턴을...
+  - 다른 파일 시스템들:
+    - 마소: NTFS (공식적인 구현이 알려져 있지 않음. 리버스 엔지니어링으로 파악)
+    - 애플: HFS/HFS+, APFS (플래시 메모리 성능에 집중)
+    - Android: F2FS (플래시 메모리에 최적화된 파일시스템, 메인테이너가 우리학교 졸업생이에요)
+    - Redhat: XFS (고성능 컴퓨터에 적합한 파일시스템)
+    - btrfs, LFS, RAMFS, ...
+- Virtual File System:
+  ![](https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/images/Chapter12/12_04_Virtual_FS.jpg)
+  - 많은 파일 시스템이 있지만, 대부분의 사람들은 실제 파일 시스템을 모름.
+  - 운영체제는 실제 파일 시스템에 상관없이 사용자에게 파일에 접근할 수 있는 인터페이스를 제공해야.
+  - 리눅스 VFS는 어떤 파일시스템이든 3개의 정보를 요구한다:
+    - superblock: 전체 파일 시스템
+    - dentry: 앞에서 계속 얘기한 디렉토리 엔트리.
+    - inode: 파일시스템의 오브젝트(파일과 디렉토리)에 대응.
+- Page Cache:
+  - 우리의 마지막 주제는 메모리와 파일 시스템의 조합.
+  - SSD가 아무리 빨라도 DRAM에서 읽는게 빠름.
+  - 메모리는 비싼 장치. 안 쓰면 손해다. 그럼 파일을 여유 메모리에 써두면 어떨까?
+  - 페이지 캐시는 VFS의 확장.
+  - 파일 접근이 일어나면 VFS가 파일 데이터를 비어있는 페이지 프레임에 저장해둔다.
+  - 메모리가 더 필요하면? 페이지 캐시는 쉽게 비울 수 있음. clean file-backed 페이지니까.
+  - 보통 남는 메모리 공간은 페이지 캐시로 쓰고, 1GB는 진짜 비어있는 free page로 남겨둠.
+  - 메모리 정리 프로그램같은 거 있죠? 페이지 캐시를 날려서 메모리를 확보한 것처럼 만드는 것.
