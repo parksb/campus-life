@@ -190,7 +190,7 @@
 - 특정 이미지를 인식하고 3D 개체 띄우는 걸 보여줄게:
   - 교수님이 라이브 코딩하고 시연하는데 잘 안 됨.
   - 30분간 이어지는 눈물의 디버깅쑈... 뭔가 확실히 보여주시려는 듯.
-  - 실습 수업에서 해결됨.
+  - 실습 수업에서 해결됨. Universal RP 문제였음.
 
 ## Plane Tracking and AR Raycasting
 
@@ -209,6 +209,46 @@
 - 유니티로 UI만드는 법을 알려줄거임. 이건 인터넷에 자료가 많으니 짧게 하겠음.
 - 모든 UI 요소는 Canvas 컴포넌트를 가진 게임 오브젝트의 자식이어야 한다.
 
+## Face Tracking, Light Estimation, Anchors, Occlusion
+
+- 얼굴 추적:
+  - 얼굴 추적은 AR Face Manager를 쓰면 됨.
+  - 얼굴에 가상 마스크같은 걸 씌울 수 있다.
+  - 이건 AR Foundation Remote가 안 됨. 매번 apk를 빌드해야 한다.
+  - 수정과 빌드를 반복하면서 왜 AR Foundation Remote가 좋은지 보여주고 계심.
+- Light estimation:
+  - ARCameraManager는 카메라로 캡쳐된 프레임을 분석해서 빛을 estimation한다.
+    ```cs
+    private void Awake() {
+      targetLight = GetComponent<Light>;
+    }
+
+    private void OnEnable() {
+      cameraManager.frameReceived += ProcessFrame;
+    }
+
+    private void OnDisable() {
+      cameraManager.frameReceived -= ProcessFrame;
+    }
+
+    private void ProcessFrame(ARCameraFrameEventArgs args) {
+      ARLightEstimationData data = args.lightEstimation;
+      if (data.averageBrightness.HasValue) {
+        targetLight.intensity = data.averageBrightness.Value; // 공간의 평균 조도로 설정.
+      }
+
+      // 조도 외에 averageColorTemperture, colorCorrection, mainLightColor 등 속성이 있음.
+      ...
+    }
+    ```
+- Anchors:
+  - 앵커는 공간상의 특정한 지점.
+  - `gameObject.AddComponent<ARAnchor>()`같은 식으로 오브젝트에 앵커를 추가할 수 있음.
+
+## AR Interaction with Xr Interaction Toolkit
+
+- 잠깐 졸았는데 챕터가 바뀜...
+
 ## Memo
 
 - 깜짝 퀴즈 볼거임. 지금 당장.
@@ -226,3 +266,5 @@
   - 맥이나 리눅스쓴다면 그냥 [AR Core 저장소](https://github.com/google-ar/arcore-android-sdk/tree/master/tools/arcoreimg)에서 받아도 됨.
   - `$ arcoreimg evel-img --input_image_path=<path>`하면 이미지 인식률을 체크해볼 수 있음.
   - 점수가 75점 이상 나와야 마커 이미지로 인식이 잘 된다.
+- Q: 데스크탑이랑 모바일 네트워크가 서로 달라서 AR Foundation Remote를 못 씀...
+  - A: USB 테더링으로 해보셈.

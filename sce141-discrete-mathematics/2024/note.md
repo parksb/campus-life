@@ -717,11 +717,11 @@ $$
   - 출발 도시는 정해져있으므로 7개 도시에 대한 순열을 구하면 된다.
   - 따라서 $7 \cdot 6 \cdot 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1 = 7!$.
 
-### Combinations
+#### Combinations
 
 - 순서없이 고르는 경우의 수.
 - $C(n, r) = {n! \over (n - r)!r!}$
-  - 사실 $C(n, r) = P(n, r) \over P(r, r)$.
+  - 사실 $C(n, r) = {P(n, r) \over P(r, r)}$.
   - 순서를 고려한 경우의 수를 중복되는 경우의 수로 나눠주는 것.
 - 따름정리 2: $C(n, r) = C(n, n - r)$
 
@@ -746,30 +746,133 @@ $$
   - 관계는 하나의 원소가 여러 원소에 대응될 수 있기 때문에 함수와 관계는 다름.
   - 관계가 함수를 포함하는 개념임.
   - 만약 두 집합간 관계에 함수가 있다면 $(a, f(a))$로 표현할 수 있을 것.
-- e.g., $A = \{1, 2, 3, 4\}$이고, $R = \{(a, b) | a \text{divides} b\}$:
+- e.g., $A = \{1, 2, 3, 4\}$이고, $R = \{(a, b) | a \text{ divides } b\}$:
   - $A$에서 $A$로의 관계. 자기 자신으로의 관계.
   - $A$의 원소 중 하나가 다른 하나를 나눌 수 있는지 본다.
   - $R = \{(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 4), (3, 3), (4, 4)\}$
 - e.g., 어떤 집합 $A$에 대한 관계는 총 몇 개인가?
   - 만들 수 있는 모든 순서쌍 개수는 $|A \times A|$개.
   - 관계는 전체 순서쌍의 부분집합이므로, $2^{|A \times A|}$개.
+
+#### Properties of Relations
+
+- 자기만의 방식으로 잘 익혀두셈.
 - Reflexive relations (반사적 관계):
   - 집합 $A$에 속한 모든 원소 $a$에 대해 $(a, a) \in R$라면 $R$은 반사적이다.
-  - R is reflexive if and only if $\forall a((a, a) \in R)$.
+  - $R$ is reflexive iff $\forall a((a, a) \in R)$.
   - 자기 자신으로 향하는 순서쌍을 모두 갖고 있어야 반사적.
-  - Irreflexive relations (비반사적 관계):
-    - 책에는 안 나오는데 이런 특성도 있음.
-    - 자기 자신으로 향하는 관계가 아예 없어야: $\forall((a, a) \not \in R)$.
-    - relexive와 반대는 아님. reflexive도 아니고 irreflexive할 수도 있으니까.
-    - 공집합에 대한 관계는 reflexive한 동시에, irreflexive함.
-  - 그래프로 그려보면: a에서 화살표가 나와서 자기자신 a로 들어감.
-  - 행렬로 그려보면: $\sbmatrix{1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1}$
+  - 행렬로 그려보면: $\sbmatrix{1 & & & & \\ & 1 & & & \\ & & \ddots & & \\ & & & 1 & \\ & & & & 1}$
+    - 주대각 원소가 모두 1.
+- Irreflexive relations (비반사적 관계):
+  - 자기 자신으로 향하는 관계가 아예 없으면 비반사적.
+  - $R$ is irreflexive iff $\forall((a, a) \not \in R)$.
+  - reflexive도 아니고 irreflexive도 아닐 수 있고, 둘을 동시에 만족할 수도 있음.
+  - 공집합에 대한 관계는 reflexive한 동시에, irreflexive함.
+  - 루프가 없어야.
+  - 행렬로 그려보면: $\sbmatrix{0 & & & & \\ & 0 & & & \\ & & \ddots & & \\ & & & 0 & \\ & & & & 0}$
+    - 주대각 원소가 모두 0.
 - Symmetric relations (대칭적 관계):
-  - 관계에 $(a, b)$가 있을 때, $(b, a)$가 항상 있다면 반사적.
-  - R is symmetric if and only if $\forall a \forall b ((a, b) \in R \to (b, a) \in R)$
-  - 그래프로 그려보면: a에서 b로 향하는 화살표가 있으면 b에서 a로 향하는 화살표도 있음.
-  - 행렬로 그려보면: $\sbmatrix{0 & 1 & 1 \\ 1 & 1 & 0 \\ 1 & 0 & 1}$
-- Transitive relations (전이적 관계)
+  - $(a, b)$가 있을 때, $(b, a)$가 항상 있다면 반사적.
+  - $R$ is symmetric iff $\forall a \forall b ((a, b) \in R \to (b, a) \in R)$.
+  - 행렬로 그려보면:
+    - 주대각을 기준으로 접었을 때 똑같아야: $m_{ij} = a_{ji}$
+    - 주대각 원소는 뭐가되든 상관없음.
+- Asymmetric relations (비대칭적 관계):
+  - $(a, b)$가 있을 때, $(b, a)$가 아예 없으면 비대칭적.
+  - $R$ is asymmetric iff $\forall a \forall b ((a, b) \in R \to (b, a) \not \in R)$.
+  - 서로를 향해서도 안되고, 루프가 있어서도 안 됨.
+  - 비대칭이면 비반사적이다.
+- Antisymmetric relations (반대칭적 관계):
+  - $(a, b)$가 있고 $(b, a)$가 있을 때, 항상 $a = b$이면 반대칭적.
+  - $R$ is antisymmetric iff $\forall a \forall b (((a, b) \in R \land (b, a) \in R) \to (a = b))$.
+  - asymmetric이랑 비슷해 보이는데, 자기 자신으로 향하는 루프는 허용하는 것.
+  - 대칭의 반대 의미가 아님. 모든 관계가 자기 자신으로만 향한다면 대칭이면서 반대칭이다.
+  - 반대칭이고, 비반사적이면 비대칭이다.
+  - 대칭의 반대가 아닌데 왜 반대칭인가..?
+- Transitive relations (전이적 관계):
+  - $(a, b)$가 있고, $(b, c)$가 있을 때 항상 $(a, c)$가 있으면 전이적.
+  - $R$ is transitive iff $\forall a \forall b \forall c (((a, b) \in R \land (b, c) \in R) \to (a, c) \in R)$.
+  - 전이적인지 판단할 수 없는 관계도 전이적이라고 본다. 공집합도 전이적임.
+  - e.g., transitive:
+    - $R = \{(a, b) | a \leq b\}$: $a \leq a+1$이고, $a+1 \leq a+2$일 때 $a \leq a+2$.
+    - $R = \{(a, b) | a = b\}$: 모두 자기 자신으로 향함.
+  - e.g., not transitive:
+    - $R = \{(a, b)|a = b + 1\}$
+
+#### Combining Relations
+
+- 여러 관계를 결합해서 새로운 관계를 만들 수 있음.
+- 집합 연산: $R_1 \cup R_2$, $R_1 \cap R_2$, $R_1 - R_2$, $R_2 - R_1$.
+- 관계가 순서쌍의 집합이라는걸 잊지 마세용.
+- 관계의 합성(composition):
+  - 함수 합성이랑 비슷: $f(x) = y$, $g(y) = z$일 때, $(f \circ g)(x) = g(f(x)) = g(y) = z$.
+  - $R$의 원소가 $(x, y)$이고 $S$의 원소가 $(y, z)$라면, $S \circ R$의 원소는 $(x, z)$.
+  - $R$에서 순서쌍을 먼저 보고, 그 다음에 $y$가 같은 순서쌍을 $S$에서 찾아야 한다는 점에 주의.
+- 관계의 거듭제곱(powers):
+  - 거듭제곱 연산을 재귀적으로 정의하면:
+    - Basis step: $R^1 = R$
+    - Inductive step: $R^{n + 1} = R^n \circ R$
+  - 관계를 $n$번 반복했을 때의 순서쌍 집합을 의미.
+  - $n$이 어느 이상을 넘어가면 결과가 고정됨. 나중에 closure 배울 때 이 개념을 쓸 거임.
+  - 정리: $R$ on a set $A$ is transitive iff $R^n \sube R$ for $n = 1, 2, 3, \cdots$.
+
+### Representing Relations
+
+- 관계를 행렬로 표현:
+  - 행렬을 보고 관계를 원소나열법으로 표현할 수 있음.
+  - $M_R = [m_{ij}]$일 때, $m_{ij} = \begin{cases} 1 \text{ if } (a_i , b_j) \in R \\ 0 \text{ if } (a_i, b_j) \not \in R \end{cases}$
+  - $A$에서 $B$로의 관계를 행렬로 표현하면 $|A|$개의 행과 $|B|$개의 열이 있어야.
+  - 관계가 공집합이면 행렬로 어떻게 표현하나? $M_R = []$? 행렬로 표현하지 않음.
+- 관계를 다이그래프로 표현:
+  - directed graph, digraph, 유향그래프, 방향그래프.
+  - V: vertices, nodes, 정점.
+  - E: edges, arcs, links, 간선.
+  - 간선 $(a, b)$에서 정점 $a$는 initial vertex, $b$는 terminal vertex.
+  - 간선의 개수를 세보면 관계의 카디널리티(순서쌍의 개수)를 알 수 있음. 루프도 잊지말고 세라.
+  - Reflexive: 모든 정점에 루프가 있음.
+    ```mermaid
+    graph LR
+      a((a)) --> b((b))
+      b --> c((c))
+      b --> a
+      a --> a
+      b --> b
+      c --> c
+    ```
+  - Symmetry: 모든 간선이 양방향임.
+     ```mermaid
+    graph LR
+      a((a)) --> b((b))
+      b --> a
+      b --> c((c))
+      c --> b
+      c --> d((d))
+      d --> c
+    ```
+  - Asymmetry: 모든 간선이 단방향이고, 루프도 없음.
+    ```mermaid
+    graph LR
+      a((a)) --> b((b))
+      b --> c((c))
+      c --> d((d))
+    ```
+  - Antisymmetry: 모든 간선이 단방향임. 루프는 있어도 노상관.
+    ```mermaid
+    graph LR
+      a((a)) --> b((b))
+      b --> c((c))
+      c --> d((d))
+      a --> a
+      b --> b
+      d --> d
+    ```
+  - Transitive: A에서 B, B에서 C로 향하는 간선이 있으면 A에서 C로 향하는 간선도 있음.
+    ```mermaid
+    graph LR
+      a((a)) --> b((b))
+      b --> c((c))
+      a --> c
+    ```
 
 ## Memo
 
@@ -810,7 +913,27 @@ $$
 - $C(n, r) = {n! \over (n - r)!r!}$
   - Corollary 2: $C(n, r) = C(n, n - r)$
 
+### Mathematical Induction
+
+- $(a + b)^2 = a^2 + 2ab + b^2$
+- $(a - b)^2 = a^2 - 2ab + b^2$
+- $(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3$
+- $(a - b)^3 = a^3 - 3a^2b + 3ab^2 - b^3$
+- $(a + b)(a - b) = a^2 - b^2$
+- $(x + a)(x + b) = x^2 + (a + b)x + ab$
+- $(x + a)(x + b)(x + c) = x^3 + (a + b + c)x^2 + (ab + bc + ca)x + abc$
+- $(x - a)(x - b)(x - c) = x^3 - (a + b + c)x^2 + (ab + bc + ca)x - abc$
+
 ## Examples
+
+### Divisibility and Modular Arithmetic
+
+- $a \equiv 43 (\bmod 23)$ and $-22 \leq a \leq 0$:
+  - $a \equiv 43 + 23k$, $k = -2$일 때 $a = -3$
+- $a \equiv 17 (\bmod 29)$ and $-14 \leq a \leq 14$:
+  - $a \equiv 17 + 29k$, $k = -1$일 때 $a = -12$
+- $a \equiv -11 (\bmod 21)$ and $90 \leq a \leq 110$:
+  - $a \equiv -11 + 21k$, $k = 5$일 때 $a = 94$
 
 ### Sequences and Summations
 
@@ -836,4 +959,4 @@ $$
 ## Notices
 
 - 4/11 목요일에 2차 과제 나갈거임.
-- 4/12 금요일 개교기념일이라 수업 없음.
+- 4/12 금요일 개교기념일이라 수업 없음. 나중에 보강할거임.
