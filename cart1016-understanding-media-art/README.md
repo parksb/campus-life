@@ -10,5 +10,6 @@
   - [무대장치](./stage.jpg)
 - 프로젝트:
   - [기술생성시대의 예술작품](https://github.com/parksb/the-work-of-art-in-the-age-of-mechanical-generation)
+  - [프로젝트 설명](./project-description.md)
 
 > 학기말 미디어아트 전시회를 준비하는 교양수업.
