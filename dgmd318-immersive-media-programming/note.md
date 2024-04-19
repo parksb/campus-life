@@ -244,10 +244,96 @@
 - Anchors:
   - 앵커는 공간상의 특정한 지점.
   - `gameObject.AddComponent<ARAnchor>()`같은 식으로 오브젝트에 앵커를 추가할 수 있음.
+  - 공간에 입체 그림을 그리는 예시를 시연하심. 왕신기.
 
-## AR Interaction with Xr Interaction Toolkit
+## AR Interaction with XR Interaction Toolkit
 
-- 잠깐 졸았는데 챕터가 바뀜...
+- (잠깐 졸았는데 챕터가 바뀜...)
+- XR Interaction Toolkit은 하이레벨 인터랙션 시스템.
+- 이 툴킷으로 쉽게 인터랙티브한 AR/VR 경험을 만들 수 있음.
+- AR 인터랙션
+  - AR 제스처 시스템: 손가락 제스처, 탭, 드레그, 트위스트, 핀치 등.
+  - AR 제스처 interactor and interactables
+- VR 인터랙션:
+  - 크로스플랫폼 XR 컨트롤러 입력.
+  - 기본적인 오브젝트 호버, 선택, 활성 액션.
+  - 햅틱 피드백: 컨트롤러 진동
+  - 비주얼 피드백
+  - XR 컨트롤러를 이용한 UI 인터랙션
+  - Handling stationary and room-scale VR experiences.
+- 메인 컴포넌트:
+  - Interactors: gameobjects that can hover, select or activate another gameobject.
+  - Interactables: gameobjects that the user cnat interact with by tap, drag, press, etc.
+  - Interaction managers: handle interaction between interactors and interactables.
+  - Interactor와 Interactable이 Interaction manager를 통해 상호작용한다.
+- 스크립트 작성을 안하고 오브젝트와 인터랙션할 수 있음.
+- Summary of using AR interactables:
+  ![](./images/summary-of-ar-interactables.png)
+
+## New Input System
+
+- 앞서 `Input.GetKeyDown` 같은 식으로 입력 시스템을 사용했음.
+- 그런데 새로운 입력 시스템을 추가하면 어떨까? 조이스틱을 연결하거나 AR 컨트롤러를 연결하면?
+- 기존 시스템은 A버튼을 누르면 그에 대한 함수를 실행하도록 모델링함:
+  ```
+  Jump Button --> Jump Function
+  ```
+  - `if (Keyboard.current.spaceKey.wasPressedThisFrame) OnJump()`
+  - 해당 프레임에서 스페이스 키가 눌렸다면 점프한다.
+- 새로운 시스템이 추가되면 A버튼과 B버튼에 대한 구분이 필요해짐:
+  - 두 버튼에 대한 액션과 함수를 분리해보자:
+  ```
+  Jump Button 1
+                \
+                 +--> Jump Action --> Jump Function
+                /
+  Jump Button 2
+  ```
+  - 함수는 키를 직접 바라보는게 아니라 액션을 바라보게 됨.
+    - 하나의 액션에 각종 키를 바인딩해두고, 함수에서는 액션만을 참조한다.
+    - 이렇게 하며 새로운 입력 시스템이 추가돼도 기존 코드를 변경할 필요가 없음.
+  - 액션을 따로 만드려면 Input Actions Asset을 추가:
+    - Action maps: 액션의 그룹. key-actions pair (e.g., 메뉴, 게임플레이)
+    - Actions:
+      - 플레이어에 대한 단일 액션 (e.g., 이동, 발사, 점프)
+      - 각 액션에 특정 키 바인딩을 명시할 수 있음.
+    - Action/Binding properties: 선택된 액션의 특성.
+    - Interactions: 액션을 트리거하기 위한 인터랙션 (e.g., press, hold, single tap, multi tap)
+    - Processors: 장치로부터 받은 값을 변경 (e.g., invert, clamp)
+  - 코드에서는 키를 명시하지 않는다:
+    - `actions.FindActionMap("Gameplay").FindAction("Jump").performed += OnJump`
+    - `Gameplay` 그룹의 `Jump` 액션이 일어나면 `OnJump` 함수가 실행.
+- 슬라이드에는 없는데 하나 더 보여줄게. XR Interaction Toolkit을 써보자:
+  - VR 컨트롤러에 있는 각종 입력 장치를 바인딩해놓음.
+  - 스크립트에서 바로 사용할 수 있음.
+
+## Introduction to Virtual Reality
+
+- VR: computer-generated simulation of a 3D environment, which seems real to the user.
+- VR의 목표: "generate realistic image, sounds and other sensations that simulate a user's physical presence in a virtual environment.
+- 오늘날 VR HMD(head-moounted display)는:
+  - 양쪽 눈에 같은 이미지를 보여줌으로써 stereographic 3D scene을 제공함.
+  - 사용자의 신체나 시선을 추적할 수 있고, 감정을 읽기도.
+- Why VR? 현실감을 위해. 훈련, 교육 등 실현하려면 비용이 많이 드는 일을 가상환경으로 해결 가능.
+- Stereoscopic VR:
+  - 우리가 하나의 사물을 볼 때 양쪽 눈에는 살짝 다른 상이 맺힘.
+  - 살짝 다른 이미지를 양쪽 눈에 보여주면 3D로 보임. 각각의 눈에 렌즈가 하나씩 필요.
+  - 오래된 방식.
+- Monoscopic VR:
+  - 두 눈에 하나의 거대한 이미지를 보여준다.
+  - 몰입감은 좀 떨어지지만 저렴함.
+  - 유튜브에 있는 VR 기능이 이거임. 그냥 2D 이미지가 파노라마처럼 사용자를 둘러싸는 것.
+- VR의 역사:
+  - 1956: Sensorama 발명. 3D 영상과 소리, 냄새와 촉감 제공.
+  - 1968: 첫 HMD, The Sword of Damocles.
+  - 1969: Videoplace 발명. HDM를 필요로하지 않는 첫 인터랙티브 VR 시스템.
+  - 1978: Aspen Movie Map, https://rebeccaallen.com/projects/aspen-movie-map
+  - 1979: Vital VR 헬멧. 파일럿 시선을 추적하는 군사용 장치.
+  - 1991: 첫 VR 아케이드 머신.
+  - 1995: 홈 VR 헤드셋 출시, I-Glasses, VFX1 헤드기어. 혁명적.
+  - 2010: 오큘러스 리프트의 첫 프로토타입 개발.
+  - 이후로 구글 카드보드, 삼성 기어 Vr, GloveOne, HTC Vive, Valve Index 등 출시.
+  - 작년에는 메타 퀘스트 3와 애플 비전 프로가 나왔음.
 
 ## Memo
 
@@ -264,7 +350,10 @@
   9. April fools' day.....
 - lab4 과제가 올라왔는데 arcoreimg.exe 파일이 첨부되어 있음:
   - 맥이나 리눅스쓴다면 그냥 [AR Core 저장소](https://github.com/google-ar/arcore-android-sdk/tree/master/tools/arcoreimg)에서 받아도 됨.
-  - `$ arcoreimg evel-img --input_image_path=<path>`하면 이미지 인식률을 체크해볼 수 있음.
+  - `arcoreimg evel-img --input_image_path=<path>`하면 이미지 인식률을 체크해볼 수 있음.
   - 점수가 75점 이상 나와야 마커 이미지로 인식이 잘 된다.
 - Q: 데스크탑이랑 모바일 네트워크가 서로 달라서 AR Foundation Remote를 못 씀...
   - A: USB 테더링으로 해보셈.
+- 중간고사 보고싶은 사람?
+  - 우린 중간고사 안 봅니다.
+  - 그러니까 수업 나오셈. 4/22에 나와서 팀플하세요.
