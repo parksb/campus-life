@@ -1,7 +1,0 @@
-[doc]
-name = 'neoliberalism-ideology-behind-godsaeng'
-bundle = 'https://data1.fullyjustified.net/tlextras-2022.0r0.tar'
-
-[[output]]
-name = 'neoliberalism-ideology-behind-godsaeng'
-type = 'pdf'

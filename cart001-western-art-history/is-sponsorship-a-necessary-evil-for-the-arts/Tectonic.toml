@@ -1,7 +1,0 @@
-[doc]
-name = 'is-sponsorship-a-necessary-evil-for-the-arts'
-bundle = 'https://data1.fullyjustified.net/tlextras-2022.0r0.tar'
-
-[[output]]
-name = 'is-sponsorship-a-necessary-evil-for-the-arts'
-type = 'pdf'

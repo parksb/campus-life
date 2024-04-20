@@ -1,7 +1,0 @@
-[doc]
-name = 'assignment-2'
-bundle = 'https://data1.fullyjustified.net/tlextras-2022.0r0.tar'
-
-[[output]]
-name = 'assignment-2'
-type = 'pdf'
