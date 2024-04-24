@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>데이터베이스</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css" as="style">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github.min.css">
+
+  <style>
+    body { max-width: 900px; padding: 30px; word-break: keep-all; line-height: 1.7; font-family: 'Noto Serif KR', serif; font-size: 16px; }
+    h1, h2, h3, h4, h5, h6 { font-weight: 800; }
+    h1 { font-size: 1.6em; border-bottom: 1px solid #000000; }
+    h2 { font-size: 1.4em; }
+    h3 { font-size: 1.2em; }
+    h4, h5, h6 { font-size: 1em; }
+    img { box-sizing: initial; width: auto; height: auto; max-width: 800px; max-height: 600px; display: block; margin: 0 0 1em 0; }
+    ol, ul { padding-left: 2em; }
+    ol ol, ol ul, ul ol, ul ul { margin: 0; }
+    ul > li, ol > li { line-height: 1.7; }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { outline-width: 0; text-decoration: underline; }
+    small { font-size: 85%; color: #6a737d; font-weight: normal; }
+    h1 > code, h2 > code, li > code,  p > code { margin: 0; font-size: 90%; }
+    blockquote { margin: 5px 0 0 0; padding: 0 15px; color: #6a737d; border-left: .25em solid #dfe2e5; }
+    table { border-spacing: unset; border-collapse: collapse; margin: 0 0 1em 0; }
+    th, td { padding: 5px 10px 5px 10px; border: 1px black solid; line-height: 1.3; }
+    code { font-family: 'Fira Code', monospace; }
+    .katex-display { overflow: auto; }
+    .katex-display > .katex { text-align: left; }
+    .hljs { line-height: 1.5; }
+    .footnotes > .footnotes-list { padding: 0; counter-reset: list; font-size: 14px; }
+    .footnotes > .footnotes-list > .footnote-item { list-style-position: inherit; list-style: none; }
+    .footnotes > .footnotes-list > .footnote-item:before { content: "[" counter(list) "] "; counter-increment: list; }
+    .footnotes > .footnotes-list > .footnote-item > p { display: inline; }
+  </style>
+</head>
+
+<body>
+  <h1 id="%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4" tabindex="-1">데이터베이스</h1>
+<h2 id="introduction-to-database" tabindex="-1">Introduction to Database</h2>
+<ul>
+<li>미니월드: 데이터베이스에 저장된 데이터에 관한 리얼월드의 일부분.</li>
+<li>DBMS: 데이터베이스를 관리, 생성하기 위한 소프트웨어 시스템.</li>
+<li>데이터베이스를 정의한다는 것은 데이터의 타입과 구조, 제약을 정의하는 것.</li>
+<li>메타데이터: 데이터베이스 정의 또는 descriptive information.</li>
+</ul>
+<h3 id="simplified-database-system" tabindex="-1">Simplified Database System</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229702076-9c695974-ffcc-45e4-b91f-3f86a43904fc.png" alt=""></p>
+<h3 id="characteristics-of-the-database-approach" tabindex="-1">Characteristics of the Database Approach</h3>
+<ul>
+<li>Traditional file processing vs Database approach:
+<ul>
+<li>전통적 파일 처리는 각 사용자가 특정 애플리케이션에 필요한 파일을 정의하고 구현함.</li>
+<li>데이터베이스는 하나의 저장소가 한 번 정의된 데이터를 관리하고, 다양한 유저가 데이터에 접근함.</li>
+</ul>
+</li>
+<li>Self-describing nature of a database system:
+<ul>
+<li>데이터베이스 시스템은 구조와 제약에 대한 완전한 정의를 포함하고 있다.</li>
+<li>메타데이터는 데이터베이스의 구조를 설명한다. (NOSQL의 경우 메타데이터가 불필요함.)</li>
+<li>데이터베이스 카탈로그는 DBMS나 데이터베이스 구조에 대한 정보를 필요로하는 유저가 사용한다.</li>
+</ul>
+</li>
+<li>Insulation between programs and data:
+<ul>
+<li>Program-data independence: 데이터를 바꿔도 프로그램을 다시 작성할 필요가 없다.</li>
+<li>Program-operation independence: 명령은 두 부분(인터페이스와 구현)으로 나뉜다. 인터페이스는 명령의 이름과 인자의 데이터타입을 포함한다. 구현은 인터페이스에 영향을 미치지 않고 수정될 수 있다.</li>
+</ul>
+</li>
+<li>Support of multiple views of the data:
+<ul>
+<li>뷰는 데이터베이스의 서브셋, 데이터베이스로부터 유도되지만 명시적으로 저장되지는 않는 가상 데이터를 포함.</li>
+</ul>
+</li>
+<li>Sharing of data and multiuser transaction processing:
+<ul>
+<li>여러 유저가 데이터베이스에 동시 접근할 수 있게 해준다.</li>
+<li>동시성 제어, 트랜잭션(isolation, atomic)</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-system-concepts-and-architecture" tabindex="-1">Database System concepts and Architecture</h2>
+<ul>
+<li>데이터 모델: 구조(Structures) + 명령(Operation) + 제약(Constraints)으로 이뤄진 추상 모델.
+<ul>
+<li>Conceptual(high-level, semantic): 사용자가 데이터를 인식하는 것과 같은 개념 제공.</li>
+<li>Physical(low-level, internal): 데이터를 어떻게 저장할지에 대한 디테일한 개념 제공.</li>
+<li>Implementation (representational) data models</li>
+<li>Self-describing data models: 데이터에 대한 정의와 값이 합쳐진 모델. (e.g., XML, KV Stores, NOSQL, etc.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="schemas%2C-instances-and-states" tabindex="-1">Schemas, Instances and States</h3>
+<ul>
+<li>Schema: 데이터베이스의 구조와 제약, 데이터 타입에 대한 설명.</li>
+<li>Instance: 데이터베이스의 개별 요소를 가리키는 용어. (e.g., record instance, table instance, entity instance)</li>
+<li>State: 특정 시점의 데이터베이스에 저장된 실제 데이터. 즉, 데이터베이스의 스냅샷.</li>
+<li>스키마는 거의 바뀌지 않지만, 스테이트는 수시로 변경될 수 있다.</li>
+<li>스키마는 intension, 스테이트는 extension이라고도 부른다.</li>
+</ul>
+<h3 id="three-schema-architecture" tabindex="-1">Three-schema Architecture</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229702415-e9ea7b7e-e9cc-4bd6-a771-686b3588d7f8.png" alt=""></p>
+<ul>
+<li>DBMS 스키마를 3개 계층으로 정의할 수 있음.</li>
+<li>Internal schema: 물리적 스토리지 구조와 접근 경로를 정의하는 스키마 (e.g., 인덱스)</li>
+<li>Conceptual schema: 전체 데이터베이스 구조와 제약을 정의하는 스키마.</li>
+<li>External schema: 데이터베이스의 모든 데이터를 제공할 필요가 없는 경우 일부를 뷰로 제공하는 스키마. 보통 conceptual schema와 같은 데이터 모델을 사용.</li>
+<li>다른 레벨 사이의 의존성을 분리하는 것을 data independence라고 한다:
+<ul>
+<li>Logical Data Independence: external schema를 변경하지 않고 conceptual schema를 변경할 수 있어야 한다.</li>
+<li>Physical Data Independence: conceptual shema를 변경하지 않고 internal schema를 변경할 수 있어야 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dbms-languages" tabindex="-1">DBMS Languages</h3>
+<ul>
+<li>Data Definition Language (DDL): conceptual schema를 정의하기 위해 사용하는 언어. 많은 DBMS가 internal/external schema도 정의할 수 있도록 지원.
+<ul>
+<li>어떤 DBMS는 internal schema에는 Storage Definition Language (SDL), external schema에는 View Definition Language (VDL)를 사용하도록 분리하기도.</li>
+</ul>
+</li>
+<li>Data Manipulation Language (DML): 데이터를 조회, 변경하기 위해 사용하는 언어. 범용 언어를 임베드하여 사용할 수도 있음.
+<ul>
+<li>하이레벨, 비절차적 DML로 SQL이 있음. declarative language라고도 한다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dbms-architectures" tabindex="-1">DBMS Architectures</h3>
+<h3 id="physical-centralized-architecture" tabindex="-1">Physical centralized architecture</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229706095-e026beb9-82ea-4d10-85f1-a616bc4bc425.png" alt=""></p>
+<h3 id="logical-two-tier-client%2Fserver-architecture" tabindex="-1">Logical two-tier client/server architecture</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229706162-de7f9f3e-a84f-4238-9db4-9ffd01b8335f.png" alt=""></p>
+<ul>
+<li>클라이언트에게 쿼리와 트랜잭션 서비스를 제공.</li>
+<li>클라이언트 애플리케이션은 서버 데이터베이스에 접근하기 위한 API(e.g., ODBC, JDBC)를 사용할 수 있음.</li>
+</ul>
+<h3 id="logical-three-tier-client%2Fserver-architecture" tabindex="-1">Logical three-tier client/server architecture</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229706222-22a686e7-a4ef-4407-aed3-a72454cf427e.png" alt=""></p>
+<ul>
+<li>웹 애플리케이션을 위한 일반적인 아키텍처.</li>
+<li>웹 서버를 통해서만 데이터베이스에 접근할 수 있으므로 보안을 향상시킬 수 있음.</li>
+</ul>
+<h2 id="data-modeling-using-e-r-model" tabindex="-1">Data Modeling Using E-R Model</h2>
+<ul>
+<li>아래와 같은 과정으로 모델링:
+<img src="https://user-images.githubusercontent.com/6410412/229670315-de5a73e6-3c01-44b8-ad99-68afa05eb442.png" alt="">
+<ol>
+<li>미니월드의 요구사항을 수집, 분석해 데이터 요구사항을 얻는다.</li>
+<li>요구사항을 바탕으로 개념적 설계를 해 모델을 만든다: ER Diagram</li>
+<li>개념적 모델을 기반으로 논리적 모델을 만든다: Relational Model</li>
+<li>DB를 구현해 데이터베이스를 구축한다.</li>
+</ol>
+</li>
+<li>Entity: 데이터베이스에 표현되는 미니월드의 특정 개체.</li>
+<li>Attribute: 엔티티를 묘사하는 속성.
+<ul>
+<li>Simple: 원자적 값을 가진 속성.</li>
+<li>Composite: 여러 속성들로 구성된 속성.</li>
+<li>Multi-valued: 여러 값을 가진 속성.</li>
+</ul>
+</li>
+<li>Entity type: 같은 기본 속성들로 그룹핑되거나, 하나의 엔티티 타입으로 타이핑되는 엔티티. (e.g., EMPLOYEE, PROJECT)</li>
+<li>Key attribute: 엔티티 타입의 속성은 각 엔티티에 대해 고유한 값을 가져야 한다. (e.g., SSN of EMPLOYEE)
+<ul>
+<li>복합 키를 만들 수 있음. (e.g., 차량번호는 번호와 지역으로 구성)</li>
+<li>여러 키를 가질 수 있음. (e.g., CAR는 차량등록번호와 차량번호)</li>
+</ul>
+</li>
+</ul>
+<h3 id="e-r-diagram" tabindex="-1">E-R Diagram</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229708819-c913d251-3cd5-4dae-b698-3d437a6c8aba.png" alt=""></p>
+<ul>
+<li>Employee는 EID, Department는 DID처럼 중복되는 이름을 피하면 구분이 편함.</li>
+<li>ER 다이어그램에서 여러 어트리뷰트로 묶인 키를 표현하려면 어떻게?
+<ul>
+<li>relational model에서 복합키를 PK로 쓰는건 특수한 상황. ER 모델에서 여러 어트리뷰트를 묶어서 키로 표현할 필요가 없다.</li>
+</ul>
+</li>
+<li>왜 weak entity가 필요한가? 그냥 임의의 ID를 주면 되는데?
+<ul>
+<li>실제로 대부분의 경우 그냥 ID를 줌. ID가 있는 엔티티는 중요하다는 것. 명시적으로 weak entity로 만들면 스키마만 보고도 그 엔티티 자체로는 의미가 없다는 것을 보여줄 수 있다.</li>
+</ul>
+</li>
+<li>Relational 모델에서 여러 어트리뷰트에 underline하는 건 그 어트리뷰트들의 묶음이 하나의 PK라는 의미, ER 다이어그램에서 여러 어트리뷰트에 underline하는 건 개별 어트리뷰트 하나 하나가 유니크한 key라는 의미. superkey는 relational model에만 존재하는 개념이다.</li>
+</ul>
+<h3 id="relationship" tabindex="-1">Relationship</h3>
+<ul>
+<li>2개 이상의 엔티티 사이의 관계에 구체적인 의미를 갖는 것.</li>
+<li>Relationship type:
+<ul>
+<li>관계의 이름과 참여하는 엔티티 타입.</li>
+<li>특정 관계 제약을 명시해야 한다 (e.g., 1:1, 1:N, etc.)</li>
+</ul>
+</li>
+<li>Recursive relationship type</li>
+<li>Cardinality of Relationships:
+<ul>
+<li>One-to-one (1:1): A와 B가 일대일 대응.</li>
+<li>One-to-many (1:N) or Many-to-one (N:1): A 하나에 여러 개의 B가 대응.</li>
+<li>Many-to-many (M:N): 여러 개의 A에 여러 개의 B가 대응.</li>
+</ul>
+</li>
+<li>Participation Constraints:
+<ul>
+<li>Total</li>
+<li>Partial</li>
+</ul>
+</li>
+</ul>
+<h3 id="weak-entity-types" tabindex="-1">Weak Entity Types</h3>
+<ul>
+<li>키가 없는 엔티티.</li>
+<li>반드시 indentifying relationship type에 참여해야한다.</li>
+<li>엔티티는 weak entity type의 부분키(partial key)와 identifying relationship type에 관계된 특정 엔티티의 조합으로 식별된다.</li>
+</ul>
+<h2 id="relational-data-model" tabindex="-1">Relational Data Model</h2>
+<ul>
+<li>Schema <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></eq>: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>A</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R(A_1, A_2, \cdots, A_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>
+<ul>
+<li>e.g., <code>STUDENT(Id, Name, Dept)</code></li>
+</ul>
+</li>
+<li>Tuple: 값의 순서있는 집합.
+<ul>
+<li>튜플 내의 어트리뷰트에는 순서가 있음. e.g., <code>&lt;202300001, &quot;Park&quot;, &quot;Media&quot;&gt;</code></li>
+<li>relation은 튜플의 집합이다.</li>
+<li>튜플의 모든 값은 atomic하다.</li>
+<li>null 값은 unknown, not available, inapplicable, undefined를 의미한다.</li>
+</ul>
+</li>
+<li>Key: 테이블의 로우를 유일하게 식별 가능하게 하는 값.</li>
+<li>Domain: 논리적 정의와 데이터 타입 또는 형식을 갖는다.</li>
+<li>State: 어트리뷰트의 도메인에 대한 cartesian product의 서브셋.
+<ul>
+<li>relation state <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo><mo>∈</mo><mi>d</mi><mi>o</mi><mi>m</mi><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>×</mo><mi>d</mi><mi>o</mi><mi>m</mi><mo stretchy="false">(</mo><msub><mi>A</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">r(R) \in dom(A_1) \times dom(A_2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></li>
+<li>state의 도메인은 cartesian product의 결과. 즉, 조합 가능한 모든 경우.</li>
+</ul>
+</li>
+<li>스키마의 어트리뷰트를 표현할 때는 순서가 중요.
+<ul>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>A</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R(A_1, A_2, \cdots, A_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>의 값은 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub><mo>=</mo><mo>&lt;</mo><msub><mi>v</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>v</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>v</mi><mi>n</mi></msub><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">t_i = &lt;v_1, v_2, \cdots, v_n&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7651em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span></span></span></span></eq>.</li>
+<li>이걸 신경쓰지 않아도 되는 표현은 self-describing이라고 한다. (e.g., XML, JSON)</li>
+<li>튜플 간의 순서는 중요하지 않다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="constraints" tabindex="-1">Constraints</h3>
+<ul>
+<li>constraints에는 3가지 주요 타입이 있음:
+<ul>
+<li>Inherent or Implicit Constraints:
+<ul>
+<li>데이터 모델 자체에 기반하는 제약.</li>
+<li>e.g., 관계형 모델은 리스트를 값으로 취급하지 않음.</li>
+</ul>
+</li>
+<li>Schema-based or Explicit Constraints:
+<ul>
+<li>모델로부터 제공되는 제약.</li>
+<li>e.g., ER 모델의 max cardinality ratio 제약</li>
+</ul>
+</li>
+<li>Application based or Semantic Constraints:
+<ul>
+<li>애플리케이션 프로그램으로부터 제공되는 제약.</li>
+<li>종종 SQL의 assertions로 명시되기도 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>explicit constraints에 3가지 주요 타입이 있음:
+<ul>
+<li>Key constraints:
+<ul>
+<li>PK는 중복되어서는 안 된다.</li>
+<li>Superkey: 여러 어트리뷰트의 집합으로 이뤄진 키. 각각의 어트리뷰트는 유일성을 만족하지 않을 수 있음.</li>
+<li>Key: 최소성을 만족하는 superkey. key는 superkey이지만, 그 반대는 아니다.</li>
+<li>Primary key: 여러 후보키가 있을 때, 그 중 하나를 PK로 사용.</li>
+</ul>
+</li>
+<li>Entity integrity constraints:
+<ul>
+<li>각 relation schema의 PK는 null이 될 수 없다.</li>
+<li>entity를 식별할 수 있어야 한다는 제약이기 때문에 entity constraint.</li>
+</ul>
+</li>
+<li>Referential integrity constraints:
+<ul>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>에 있는 튜플의 FK는 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">R_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>에 실제 존재하는 튜플의 PK를 참조해야 한다.</li>
+<li>Foreign key: FK는 자신이 참조하는 PK와 같은 도메인이어야 한다.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>또 다른 schema-based constraint는 Domain constraints.</li>
+</ul>
+<h3 id="update-operations" tabindex="-1">Update Operations</h3>
+<ul>
+<li>데이터 업데이트 시에 integrity constraints를 위반해서는 안 된다.</li>
+<li>CASCADE, SET NULL, SET DEFAULT와 같은 트리거를 설정할 수 있다.</li>
+<li>INSERT는 모든 제약을 위반할 가능성이 있음:
+<ul>
+<li>domain:
+<ul>
+<li>새 튜플의 값이 어트리뷰트의 도메인에 포함되지 않은 경우.</li>
+<li>애플리케이션 코드에서 확인이 필요함.</li>
+</ul>
+</li>
+<li>key: 같은 키 속성을 가진 튜플이 이미 존재하는 경우.</li>
+<li>referential: 새 튜플이 참조하는 외래키가 존재하지 않는 경우.</li>
+<li>entity: 새 튜플의 주요키가 null인 경우.</li>
+</ul>
+</li>
+<li>DELETE:
+<ul>
+<li>referential: 다른 튜플이 삭제하려는 값의 주요키를 참조하는 경우.</li>
+</ul>
+</li>
+<li>UPDATE:
+<ul>
+<li>PK를 변경하는 경우에는 모든 제약을 위반할 수 있다.</li>
+<li>FK를 변경하는 경우: referential, domain.</li>
+<li>일반적인 어트리뷰트를 변경하는 경우: domain.</li>
+</ul>
+</li>
+</ul>
+<h2 id="sql" tabindex="-1">SQL</h2>
+<ul>
+<li>관계형 모델의 관계, 튜플, 속성이 테이블, 행, 열로 대응.</li>
+<li>각 구문 마지막에는 세미콜론이 있어야 한다. (중간고사에 세미콜론 꼭 써야 함.)</li>
+<li>테이블 생성: <code>CREATE TABLE COMPANY.EMPLOYEE</code> 또는 <code>CREATE TABLE COMPANY</code></li>
+</ul>
+<h3 id="specifying-constraints" tabindex="-1">Specifying Constraints</h3>
+<ul>
+<li>Key constraints: PK 값은 중복될 수 없다.</li>
+<li>Entity integrity constraint: PK 값은 null이 될 수 없다.</li>
+<li>Referential integrity constraint: FK는 PK로 표현되는 기존 값이거나, null이어야 한다.</li>
+<li><code>CONSTRAINT</code> 구문으로 constraint에 이름을 붙일수도 있음:<pre class="hljs"><code><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> EMPLOYEE(
+  Ssn <span class="hljs-type">CHAR</span>(<span class="hljs-number">9</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,
+  ...
+  <span class="hljs-keyword">CONSTRAINT</span> EMPPK
+    <span class="hljs-keyword">PRIMARY</span> KEY (Ssn),
+  <span class="hljs-keyword">CONSTRAINT</span> EMPSUPERFK
+    <span class="hljs-keyword">FOREIGN</span> KEY (Super_ssn) <span class="hljs-keyword">REFERENCES</span> EMPLOYEE(Ssn)
+      <span class="hljs-keyword">ON</span> <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">SET</span> <span class="hljs-keyword">NULL</span>
+      <span class="hljs-keyword">ON</span> <span class="hljs-keyword">UPDATE</span> CASCADE
+);
+</code></pre>
+</li>
+<li>테이블을 생성하는 시점에 아직 없는 값을 FK로 참조하면 referential integrity constraint를 위반하는 문제가 생김. 테이블을 생성한 뒤, <code>ALTER TABLE</code>해 FK를 추가하면 된다.</li>
+</ul>
+<h3 id="basic-retrieval-queries" tabindex="-1">Basic Retrieval Queries</h3>
+<ul>
+<li>기본형은 <code>SELECT &lt;attribute list&gt; FROM &lt;table list&gt; WHERE &lt;condition&gt;;</code>.</li>
+<li>‘Research’ 부서에서 일하는 모든 직원의 이름과 주소를 찾는 경우:
+<ul>
+<li><code>FROM EMPLOYEE, DEPARTMENT</code> 쿼리는 두 테이블 사이 모든 쌍이 포함된 테이블을 만듦. 즉, <code>EMPLOYEE</code>와 <code>DEPARTMENT</code>의 cartesian product.<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> Fname, Lname, Address
+<span class="hljs-keyword">FROM</span> EMPLOYEE E, DEPARTMENT D
+<span class="hljs-keyword">WHERE</span> D.Dname<span class="hljs-operator">=</span><span class="hljs-string">&#x27;Research&#x27;</span> <span class="hljs-keyword">AND</span> D.Dnumber<span class="hljs-operator">=</span>E.Dno;
+</code></pre>
+</li>
+<li>따라서 <code>WHERE</code>절이 필수.</li>
+</ul>
+</li>
+</ul>
+<h2 id="more-sql" tabindex="-1">More SQL</h2>
+<h3 id="null" tabindex="-1">NULL</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/233791999-fb1dada0-3288-4462-a033-4c7148ee9eb9.png" alt=""></p>
+<ul>
+<li>위와 같이 three-valued logic에 logical connectives가 있다.</li>
+<li>따라서 NULL 조건을 적용할 때는 비교 연산이 아니라 <code>IS</code> 연산을 해야한다:
+<ul>
+<li>e.g., <code>SELECT * FROM EMPLOYEE WHERE Pno IS NULL;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="nested-queries" tabindex="-1">Nested Queries</h3>
+<ul>
+<li><code>WHERE</code> 절 안에 완성된 형태의 select-from-where 블록을 중첩시킬 수 있다.</li>
+<li><code>IN</code> 명령을 이용해 튜플 집합에서 대상 튜플을 비교할 수 있음.<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> Essn
+<span class="hljs-keyword">FROM</span> WORKS_ON
+<span class="hljs-keyword">WHERE</span> (Pno, Hours) <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> Pno, Hours
+                       <span class="hljs-keyword">FROM</span> WORKS_ON
+                       <span class="hljs-keyword">WHERE</span> Essn<span class="hljs-operator">=</span><span class="hljs-string">&#x27;123456789&#x27;</span>);
+</code></pre>
+<ul>
+<li><code>DISTINCT</code>를 하면 중복된 값이 제거된다.</li>
+</ul>
+</li>
+<li>집합론을 기반으로 하므로 <code>UNION</code>, <code>INTERSECT</code>도 가능.<pre class="hljs"><code>(<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> Pnumber
+ <span class="hljs-keyword">FROM</span> PROJECT, DEPARTMENT, EMPLOYEE
+ <span class="hljs-keyword">WHERE</span> Dnum <span class="hljs-operator">=</span> Dnumber <span class="hljs-keyword">AND</span> Mgr_ssn <span class="hljs-operator">=</span> Ssn <span class="hljs-keyword">AND</span> Lname <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Smith&#x27;</span>)
+ <span class="hljs-keyword">UNION</span>
+(<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> Pnumber
+ <span class="hljs-keyword">FROM</span> PROJECT, WORKS_ON, EMPLOYEE
+ <span class="hljs-keyword">WHERE</span> Pnumber <span class="hljs-operator">=</span> Pno <span class="hljs-keyword">AND</span> Essn <span class="hljs-operator">=</span> Ssn <span class="hljs-keyword">AND</span> Lname <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Smith&#x27;</span>);
+</code></pre>
+</li>
+</ul>
+<h3 id="use-of-(not)-exists" tabindex="-1">Use of (<code>NOT</code>) <code>EXISTS</code></h3>
+<ul>
+<li>5번 부서의 모든 프로젝트에 참여하는 직원의 이름을 찾는 경우:<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> Fname, Lname
+<span class="hljs-keyword">FROM</span> Employee
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> (
+  (<span class="hljs-keyword">SELECT</span> Pnumber <span class="hljs-keyword">FROM</span> PROJECT <span class="hljs-keyword">WHERE</span> Dno <span class="hljs-operator">=</span> <span class="hljs-number">5</span>)
+    <span class="hljs-keyword">EXCEPT</span> (<span class="hljs-keyword">SELECT</span> Pno <span class="hljs-keyword">FROM</span> WORKS_ON <span class="hljs-keyword">WHERE</span> Ssn <span class="hljs-operator">=</span> ESsn)
+);
+</code></pre>
+</li>
+<li>5번 부서의 모든 프로젝트에서 개별 직원이 참여하는 프로젝트 목록을 뺐을 때, 남는 프로젝트가 없다면 해당 직원은 5번 부서의 모든 프로젝트에 참여하고 있다고 할 수 있음.</li>
+</ul>
+<h3 id="sql-joins" tabindex="-1">SQL Joins</h3>
+<p><img src="https://user-images.githubusercontent.com/6410412/229053775-944ef5a5-61e3-4cda-940e-7f5a569311b8.png" alt=""></p>
+<ul>
+<li><code>INNER JOIN</code>:
+<ul>
+<li><code>SELECT * FROM EMPLOYEE E INNER JOIN DEPENDENT D ON E.Ssn = D.Essn;</code></li>
+<li>DEPENDENT가 있는 모든 EMPLOYEE를 반환.</li>
+<li>비교하는 속성 이름이 같다면 <code>NATURAL JOIN</code>을 할 수 있다.</li>
+</ul>
+</li>
+<li><code>FULL OUTER JOIN</code></li>
+<li><code>LEFT OUTER JOIN</code>:
+<ul>
+<li><code>SELECT * FROM EMPLOYEE E LEFT JOIN DEPENDENT D ON E.Ssn = D.Essn;</code></li>
+<li>DEPENDENT가 없는 직원까지 포함해 반환.</li>
+</ul>
+</li>
+<li><code>RIGHT OUTER JOIN</code></li>
+</ul>
+<h3 id="aggregate-functions" tabindex="-1">Aggregate Functions</h3>
+<ul>
+<li><code>COUNT</code>, <code>SUM</code>, <code>MAX</code>, <code>MIN</code>, <code>AVG</code> 등 함수로 여러 튜플을 하나로 요약할 수 있다.</li>
+<li><code>SELECT Dno, COUNT(*), AVG(Salary) FROM EMPLOYEE GROUP BY Dno;</code>
+<ul>
+<li>그루핑의 기준 컬럼(<code>Dno</code>)을 함께 선택해야 어떤 튜플이 어떤 조건에 속하는지 알 수 있음.</li>
+</ul>
+</li>
+<li>그루핑 조건은 <code>HAVING</code> 절에 작성한다:<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> Pnumber, Pname, <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>)
+<span class="hljs-keyword">FROM</span> PROJECT, WORKS_ON
+<span class="hljs-keyword">WHERE</span> Pnumber <span class="hljs-operator">=</span> Pno
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Pnumber, Pname
+<span class="hljs-keyword">HAVING</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-operator">&gt;</span> <span class="hljs-number">2</span>;
+</code></pre>
+<ul>
+<li>여러 개 컬럼으로 <code>GROUP BY</code>하면?</li>
+</ul>
+</li>
+<li><code>WHERE</code>는 조심해야 한다. 이미 필터링된 상태에서 그루핑을 하면 <code>HAVING</code> 조건을 만족하지 못할 수 있음:<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> Dno, <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>)
+<span class="hljs-keyword">FROM</span> EMPLOYEE
+<span class="hljs-keyword">WHERE</span> Salary <span class="hljs-operator">&gt;</span> <span class="hljs-number">40000</span> <span class="hljs-keyword">AND</span> Dno <span class="hljs-keyword">IN</span>
+  (<span class="hljs-keyword">SELECT</span> Dno <span class="hljs-keyword">FROM</span> EMPLOYEE <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Dno <span class="hljs-keyword">HAVING</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-operator">&gt;</span> <span class="hljs-number">5</span>)
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Dno;
+</code></pre>
+</li>
+<li><code>GROUP BY</code>되지 않은 컬럼은 <code>SELECT</code>할 수 없다.</li>
+</ul>
+<h3 id="alter-and-dropping" tabindex="-1">Alter and Dropping</h3>
+<ul>
+<li><code>ALTER TALBE &lt;table&gt; &lt;ADD|DROP&gt; &lt;column&gt; [type] [CASCADE|RESTRICT]</code>: 컬럼 추가/제거.
+<ul>
+<li><code>CASCADE</code>: 삭제할 컬럼에 있는 모든 제약과 뷰를 제거한다.</li>
+<li><code>RESTRICT</code>: 삭제할 컬럼이 제약을 위반하면 삭제를 막는다.</li>
+</ul>
+</li>
+<li><code>ALTER TALBE &lt;table&gt; ALTER COLUMN &lt;column&gt; &lt;SET|DROP&gt; DEFAULT [default]</code>: 디폴트 값 추가/제거.</li>
+<li><code>DROP TABLE &lt;table&gt;</code>: 테이블 삭제.</li>
+</ul>
+<h2 id="relational-algebra-and-relational-calculus" tabindex="-1">Relational Algebra and Relational Calculus</h2>
+<h3 id="relational-algebra" tabindex="-1">Relational Algebra</h3>
+<ul>
+<li>관계형 모델에 대한 기본 명령 집합.</li>
+<li>쿼리의 기본적인 구현과 최적화에 사용할 수 있음.</li>
+</ul>
+<h3 id="unary-relational-operations" tabindex="-1">Unary Relational Operations</h3>
+<ul>
+<li>SELECT (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mrow><mo>&lt;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&gt;</mo></mrow></msub><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sigma_{&lt;condition&gt;}(R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">co</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span><span class="mrel mtight">&gt;</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span></eq>):
+<ul>
+<li>SQL의 WHERE에 대응하는 명령.</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mrow><mi>D</mi><mi>n</mi><mi>o</mi><mo>=</mo><mn>4</mn></mrow></msub><mo stretchy="false">(</mo><mi>E</mi><mi>M</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>Y</mi><mi>E</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sigma_{Dno = 4}(EMPLOYEE)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">o</span><span class="mrel mtight">=</span><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">EMP</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">EE</span><span class="mclose">)</span></span></span></span></eq></li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mrow><mi>S</mi><mi>a</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>y</mi><mo>&gt;</mo><mn>30000</mn></mrow></msub><mo stretchy="false">(</mo><mi>E</mi><mi>M</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>Y</mi><mi>E</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sigma_{Salary &gt; 30000}(EMPLOYEE)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ry</span><span class="mrel mtight">&gt;</span><span class="mord mtight">30000</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">EMP</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">EE</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>교환법칙이 성립하므로 순서를 바꿔도 상관없다. 따라서 연산을 적게 하는 방향으로 명령을 구성할 수 있다.</li>
+<li>AND 조건을 걸어 중첩된 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></eq> 명령을 하나로 작성할 수 있다.</li>
+</ul>
+</li>
+<li>PROJECT (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mo>&lt;</mo><mi>a</mi><mi>t</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>b</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>s</mi><mo>&gt;</mo></mrow></msub><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\pi_{&lt;attributes&gt;}(R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">tt</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">ib</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">es</span><span class="mrel mtight">&gt;</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span></eq>):
+<ul>
+<li>SQL의 SELECT에 대응하는 명령.</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mi>L</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>F</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>S</mi><mi>a</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub><mo stretchy="false">(</mo><mi>E</mi><mi>M</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>Y</mi><mi>E</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\pi_{Lname, Fname, Salary}(EMPLOYEE)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ry</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">EMP</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">EE</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>결과에서 중복 튜플이 제거된다.</li>
+<li>교환법칙이 성립하지 않는다.</li>
+<li>아래첨자에 여러 속성을 나열하여 중첩된 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></eq> 명령을 하나로 작성할 수 있다.</li>
+</ul>
+</li>
+<li>Assignment (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>←</mo></mrow><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">←</span></span></span></span></eq>)
+<ul>
+<li>화살표를 이용해 중간 결과값을 저장할 수 있다:
+<ul>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>E</mi><mi>P</mi><mn>5</mn><mi mathvariant="normal">_</mi><mi>E</mi><mi>M</mi><mi>P</mi><mi>S</mi><mo>←</mo><msub><mi>σ</mi><mrow><mi>D</mi><mi>N</mi><mi>O</mi><mo>=</mo><mn>5</mn></mrow></msub><mo stretchy="false">(</mo><mi>E</mi><mi>M</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>Y</mi><mi>E</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">DEP5\_EMPS \leftarrow \sigma_{DNO=5}(EMPLOYEE)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9933em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">EP</span><span class="mord" style="margin-right:0.02778em;">5_</span><span class="mord mathnormal" style="margin-right:0.05764em;">EMPS</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">NO</span><span class="mrel mtight">=</span><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">EMP</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">EE</span><span class="mclose">)</span></span></span></span></eq></li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>E</mi><mi>S</mi><mi>U</mi><mi>L</mi><mi>T</mi><mo>←</mo><msub><mi>π</mi><mrow><mi>F</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>L</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>S</mi><mi>a</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub><mo stretchy="false">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mn>5</mn><mi mathvariant="normal">_</mi><mi>E</mi><mi>M</mi><mi>P</mi><mi>S</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">RESULT \leftarrow \pi_{Fname, Lname, Salary}(DEP5\_EMPS)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">RES</span><span class="mord mathnormal">UL</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ry</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">EP</span><span class="mord" style="margin-right:0.02778em;">5_</span><span class="mord mathnormal" style="margin-right:0.05764em;">EMPS</span><span class="mclose">)</span></span></span></span></eq></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>RENAME (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mrow><mi>S</mi><mo stretchy="false">(</mo><msub><mi>B</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>B</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>B</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rho_{S(B_1, B_2, \cdots, B_n)}(R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3552em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="minner mtight">⋯</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span></eq>)
+<ul>
+<li>릴레이션 이름과 어트리뷰트 이름을 변경한다.</li>
+<li>둘 중 하나만 변경할 수도 있다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>S</mi></msub><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rho_S(R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mrow><msub><mi>B</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>B</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>B</mi><mi>n</mi></msub></mrow></msub><mo stretchy="false">(</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rho_{B_1, B_2, \cdots, B_n}(R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="minner mtight">⋯</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.0502em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>보통 대입 연산과 함께 쓰인다:
+<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>E</mi><mi>S</mi><mi>U</mi><mi>L</mi><mi>T</mi><mo stretchy="false">(</mo><mi>F</mi><mo separator="true">,</mo><mi>M</mi><mo separator="true">,</mo><mi>L</mi><mo separator="true">,</mo><mi>S</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>A</mi><mo separator="true">,</mo><mi>S</mi><mi>X</mi><mo separator="true">,</mo><mi>S</mi><mi>A</mi><mi>L</mi><mo separator="true">,</mo><mi>S</mi><mi>U</mi><mo separator="true">,</mo><mi>D</mi><mi>N</mi><mi>O</mi><mo stretchy="false">)</mo><mo>←</mo><msub><mi>ρ</mi><mrow><mi>R</mi><mi>E</mi><mi>S</mi><mi>U</mi><mi>L</mi><mi>T</mi><mo stretchy="false">(</mo><mi>F</mi><mo separator="true">,</mo><mi>M</mi><mo separator="true">,</mo><mi>L</mi><mo separator="true">,</mo><mi>S</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>A</mi><mo separator="true">,</mo><mi>S</mi><mi>X</mi><mo separator="true">,</mo><mi>S</mi><mi>A</mi><mi>L</mi><mo separator="true">,</mo><mi>S</mi><mi>U</mi><mo separator="true">,</mo><mi>D</mi><mi>N</mi><mi>O</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>D</mi><mi>E</mi><mi>P</mi><mn>5</mn><mi mathvariant="normal">_</mi><mi>E</mi><mi>M</mi><mi>P</mi><mi>S</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">RESULT(F, M, L, S, B, A, SX, SAL, SU, DNO) \leftarrow \rho_{RESULT(F, M, L, S, B, A, SX, SAL, SU, DNO)}(DEP5\_EMPS)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">RES</span><span class="mord mathnormal">UL</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">SX</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">A</span><span class="mord mathnormal">L</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.02778em;">NO</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3552em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">RES</span><span class="mord mathnormal mtight">UL</span><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">L</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">A</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">SX</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">L</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">U</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">NO</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3552em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">EP</span><span class="mord" style="margin-right:0.02778em;">5_</span><span class="mord mathnormal" style="margin-right:0.05764em;">EMPS</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>이렇게 축약할 수도 있다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>E</mi><mi>S</mi><mi>U</mi><mi>L</mi><mi>T</mi><mo stretchy="false">(</mo><mi>F</mi><mi>i</mi><mi>r</mi><mi>s</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>L</mi><mi>a</mi><mi>s</mi><mi>t</mi><mi mathvariant="normal">_</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo stretchy="false">)</mo><mo>←</mo><msub><mi>π</mi><mrow><mi>F</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mo separator="true">,</mo><mi>L</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi></mrow></msub><mo stretchy="false">(</mo><mi>E</mi><mi>M</mi><mi>P</mi><mi>L</mi><mi>O</mi><mi>Y</mi><mi>E</mi><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">RESULT(First\_name, Last\_name) \leftarrow \pi_{Fname, Lname}(EMPLOYEE)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">RES</span><span class="mord mathnormal">UL</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal">i</span><span class="mord mathnormal">rs</span><span class="mord mathnormal">t</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">nam</span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">a</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">nam</span><span class="mord mathnormal">e</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight">nam</span><span class="mord mathnormal mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">EMP</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord mathnormal" style="margin-right:0.05764em;">EE</span><span class="mclose">)</span></span></span></span></eq></li>
+</ul>
+</li>
+</ul>
+<h3 id="relational-algebra-operations-from-set-theory" tabindex="-1">Relational Algebra Operations From Set Theory</h3>
+<ul>
+<li>UNION (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>∪</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R \cup S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>):
+<ul>
+<li>R, S에 존재하는 튜플을 모두 얻는다.</li>
+<li>R, S 릴레이션의 타입이 서로 다르면 안 된다(type compatible).</li>
+<li>교환법칙(commutative)과 결합법칙(associative)이 성립한다.</li>
+<li>결과에서 중복된 결과는 제거된다.</li>
+</ul>
+</li>
+<li>INTERSECTION (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>∩</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R \cap S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>):
+<ul>
+<li>R, S에 공통으로 존재하는 튜플을 얻는다.</li>
+<li>R, S의 타입이 서로 다르면 안 된다.</li>
+<li>교환법칙과 결합법칙이 성립한다.</li>
+</ul>
+</li>
+<li>SET DIFFERENCE (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>−</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R - S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>)
+<ul>
+<li>R에서 S에 존재하는 튜플을 제외하고 얻는다.</li>
+<li>R, S의 타입이 서로 다르면 안 된다.</li>
+<li>교환법칙과 결합법칙이 성립하지 않는다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="binary-relational-operations" tabindex="-1">Binary Relational Operations</h3>
+<ul>
+<li>CARTESIAN PRODUCT (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>A</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="false">)</mo><mo>×</mo><mi>S</mi><mo stretchy="false">(</mo><msub><mi>B</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>B</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><msub><mi>B</mi><mi>m</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R(A_1, A_2, \cdots, A_n) \times S(B_1, B_2, \cdots, B_m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0502em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>)
+<ul>
+<li>R, S 사이의 모든 튜플 조합을 얻는다.</li>
+<li>결과 Q에는 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>+</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">n + m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></eq>개의 어트리뷰트가 생긴다.</li>
+<li>R의 튜플 수가 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>R</mi><mi mathvariant="normal">∣</mi><mo>=</mo><msub><mi>n</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">|R| = n_R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, S의 튜플 수가 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>S</mi></msub></mrow><annotation encoding="application/x-tex">n_S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>라면, <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>×</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">R \times S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>에는 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>R</mi></msub><mo>×</mo><msub><mi>n</mi><mi>S</mi></msub></mrow><annotation encoding="application/x-tex">n_R \times n_S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>개의 튜플이 생긴다.</li>
+<li>R, S의 타입이 서로 달라도 된다.</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>×</mo></mrow><annotation encoding="application/x-tex">\times</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord">×</span></span></span></span></eq> 명령만으로는 큰 의미가 없고, 여기에 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></eq>를 걸어야 한다.</li>
+</ul>
+</li>
+<li>JOIN (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>⋈</mo><msub><mrow></mrow><mrow><mo>&lt;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&gt;</mo></mrow></msub><mi>S</mi></mrow><annotation encoding="application/x-tex">R \Join {}_{&lt;condition&gt;}S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6883em;vertical-align:-0.005em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⋈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8607em;vertical-align:-0.1774em;"></span><span class="mord"><span class="mord"></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">co</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span><span class="mrel mtight">&gt;</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>):
+<ul>
+<li>두 릴레이션을 결합해 조건을 만족하는 튜플들을 얻는다.</li>
+<li>여기서 condition을 theta라고 부른다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>⋈</mo><msub><mrow></mrow><mrow><mi>t</mi><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi></mrow></msub><mi>S</mi></mrow><annotation encoding="application/x-tex">R \Join {}_{theta}S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6883em;vertical-align:-0.005em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⋈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span></eq>.</li>
+<li>EQUI JOIN: 어트리뷰트 값이 같은 것을 기준으로 THETA JOIN하는 것.</li>
+<li>NATURAL JOIN: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>∗</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">S \ast R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span></eq>. 어트리뷰트 이름이 같은 것에 대해 EQUI JOIN 하는 것.
+<ul>
+<li>명시적으로 조건을 걸 수도 있다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>←</mo><mi>R</mi><mo stretchy="false">(</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>C</mi><mo separator="true">,</mo><mi>D</mi><mo stretchy="false">)</mo><mo>∗</mo><mi>S</mi><mo stretchy="false">(</mo><mi>C</mi><mo separator="true">,</mo><mi>D</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Q \leftarrow R(A, B, C, D) \ast S(C, D, E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span></eq>.
+<ul>
+<li>EQUI JOIN과 달리 결과에서 이름이 중복되는 컬럼을 제거한다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>R</mi><mi mathvariant="normal">.</mi><mi>C</mi><mo separator="true">,</mo><mi>S</mi><mi mathvariant="normal">.</mi><mi>C</mi><mo separator="true">,</mo><mi>R</mi><mi mathvariant="normal">.</mi><mi>D</mi><mo separator="true">,</mo><mi>S</mi><mi mathvariant="normal">.</mi><mi>D</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Q(A, B, R.C, S.C, R.D, S.D, E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Q</span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span></eq>가 아닌 <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo separator="true">,</mo><mi>C</mi><mo separator="true">,</mo><mi>D</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Q(A, B, C, D, E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">Q</span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span></eq>.</li>
+</ul>
+</li>
+<li>e.g., DEPARTMENT에도 Dnumber가 있고, DEPT_LOCATION에도 Dnumber가 있다면 다음과 같이 부서별 위치를 구할 수 있다: <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>P</mi><mi>E</mi><mi>T</mi><mi mathvariant="normal">_</mi><mi>L</mi><mi>O</mi><mi>C</mi><mi>S</mi><mo>←</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>A</mi><mi>R</mi><mi>T</mi><mi>M</mi><mi>E</mi><mi>N</mi><mi>T</mi><mo>∗</mo><mi>D</mi><mi>E</mi><mi>P</mi><mi>T</mi><mi mathvariant="normal">_</mi><mi>L</mi><mi>O</mi><mi>C</mi><mi>A</mi><mi>T</mi><mi>I</mi><mi>O</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">DPET\_LOCS \leftarrow DEPARTMENT \ast DEPT\_LOCATION</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9933em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">PET</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.05764em;">OCS</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">EP</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.13889em;">RTMENT</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9933em;vertical-align:-0.31em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">EPT</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.10903em;">ON</span></span></span></span></eq>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DIVISION (<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><mi>Z</mi><mo stretchy="false">)</mo><mo>÷</mo><mi>S</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R(Z) \div S(X)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span></eq>):
+<ul>
+<li>X가 Z의 부분집합일 때 나누기 연산을 할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="additional-relational-operations" tabindex="-1">Additional Relational Operations</h3>
+<ul>
+<li>Complete set of relational operations: SELECT, PROJECT, UION, DIFFERENCE, RENAME, CARTESIAN PRODUCT. 다른 모든 명령을 이 6개 명령으로 구성할 수 있다.
+<ul>
+<li>e.g., <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>∩</mo><mi>S</mi><mo>=</mo><mo stretchy="false">(</mo><mi>R</mi><mo>∪</mo><mi>S</mi><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mi>R</mi><mo>−</mo><mi>S</mi><mo stretchy="false">)</mo><mo>∪</mo><mo stretchy="false">(</mo><mi>S</mi><mo>−</mo><mi>R</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R \cap S = (R \cup S) - ((R - S) \cup (S - R))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">((</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">))</span></span></span></span></eq></li>
+<li>e.g., <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>⋈</mo><msub><mrow></mrow><mrow><mo>&lt;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&gt;</mo></mrow></msub><mi>S</mi><mo>=</mo><msub><mi>σ</mi><mrow><mo>&lt;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&gt;</mo></mrow></msub><mo stretchy="false">(</mo><mi>R</mi><mo>×</mo><mi>S</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R \Join {}_{&lt;condition&gt;}S = \sigma_{&lt;condition&gt;}(R \times S)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6883em;vertical-align:-0.005em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⋈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8607em;vertical-align:-0.1774em;"></span><span class="mord"><span class="mord"></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">co</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span><span class="mrel mtight">&gt;</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">co</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span><span class="mrel mtight">&gt;</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1774em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mclose">)</span></span></span></span></eq></li>
+</ul>
+</li>
+<li>LEFT/RIGHT/FULL OUTER JOIN 모두 가능:
+<ul>
+<li>OUTER JOIN은 기준 릴레이션의 모든 튜플이 포함. 매칭되지 않는 튜플의 조인된 어트리뷰트는 null로 채워짐.</li>
+</ul>
+</li>
+</ul>
+<h3 id="query-tree-notation" tabindex="-1">Query Tree Notation</h3>
+<ul>
+<li>쿼리를 표현하기 위한 internal data structure.</li>
+<li>쿼리의 동작을 트리로 표현할 수 있다.</li>
+</ul>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad:true });</script>
+</body>
+
