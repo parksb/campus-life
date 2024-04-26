@@ -7,5 +7,7 @@
 - [인간컴퓨터상호작용](human-computer-interaction-note.html)
 - [일본근현대사](japanese-modern-history-note.html)
 - [미디어아트의이해](understanding-media-art-note.html)
+- [정보디자인](information-design-note.html)
+- [운영체제](operating-systems-note.html)
 - [과학기술과법 중간](science-technology-and-law-note-midterm.html)
 - [이산수학 중간](discrete-mathematics-note-midterm.html)
