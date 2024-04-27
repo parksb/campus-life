@@ -113,3 +113,8 @@
 ### 자동화
 
 * [Ajou Hack](https://github.com/ajou-hack)
+
+## 라이선스
+
+- 이 저장소의 모든 문서와 사진은 [CC BY-NC-SA 4.0](LICENSE-CC)에 따라 이용할 수 있습니다.
+- 이 저장소의 모든 소스코드는 [The GNU General Public License v3.0](LICENSE-GPL)에 따라 이용할 수 있습니다.
