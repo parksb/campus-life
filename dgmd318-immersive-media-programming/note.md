@@ -334,6 +334,117 @@
   - 2010: 오큘러스 리프트의 첫 프로토타입 개발.
   - 이후로 구글 카드보드, 삼성 기어 Vr, GloveOne, HTC Vive, Valve Index 등 출시.
   - 작년에는 메타 퀘스트 3와 애플 비전 프로가 나왔음.
+- VR의 중요한 요소들:
+  - 3D viewing:
+    - pincushion effect
+    - 유니티의 VR 카메라는 uses barrel distortion으로 pincushion effect를 방지.
+    - Screen resolution: 해상도가 낮으면 screen-door effect가 일어난다.
+    - 낮은 해상도의 HMD를 위한 기법이 있음: foveated rendering은 시선을 추적해서 사용자가 보고 있는 곳만 고해상도로 렌더링하고, 주변부는 흐리게 함.
+  - Head, hand, and body tracking:
+    - VR HMD에는 모션 트래킹을 위한 센서가 있음.
+    - Positional tracking: 현실 세계의 헤드셋과 컨트롤러의 위치를 추적.
+    - Hand tracking: 컨트롤러나 장갑, 햅틱 피드백.
+    - Body tracking: 몸 전체를 추적. 수트같은걸 입음.
+    - Inside-out vs outside-in tracking:
+      ![](https://xinreality.com/mediawiki/images/5/5a/Inside_out_vs._outside_in_tracking.png)
+      - Inside-Out: 카메라가 사용자에게 달려있음. e.g., Oculus, Meta Quest, ...
+      - Outside-in: 환경에 고정된 카메라가 있고, 사용자를 추적. e.g., HTC Vive, Oculus Rift, ...
+    - 3DoF vs 6DoF:
+      - 3DoF:
+        ![](https://cognitive3d.com/uploads/3dof.gif)
+        - Rotational movements of the head are tracked (tilt, turn)
+        - 3개의 회전축.
+      - 6DoF:
+        ![](https://cognitive3d.com/uploads/6dof.gif)
+        - Rotational movements of the head + position tracking
+        - 3개의 회전축과 3개의 위치축.
+  - Embodiment:
+    - 사용자가 가상의 바디를 자신의 바디라고 느끼는 것.
+    - first-person VR 경험에 필수적.
+    - Increased immersion, presence, emotional responses.
+  - Interactivity:
+    - Natural: 인터랙션은 자연스러워야 한다.
+    - Multimodal: 인터랙션은 다양한 입출력을 지원해야 한다.
+  - High quality content:
+    - 높은 품질의 콘텐츠는 높은 몰입을 가능하게 만들죠.
+    - 이 수업은 3D 콘텐츠를 만드는 수업은 아니니까 어셋 스토어에서 가져다 쓰도록.
+  - Spatial sound
+
+### VR Hardware and Software
+
+- HMDs and Projcted VR:
+  - HMD는 님들이 잘 아는 VR 기기.
+  - Projected VR은 사방이 스크린인 공간에 사용자가 들어감.
+- Types of VR HMD devices:
+  - Tethered, desktop VR:
+    - 실제로는 컴퓨터에서 도는데 케이블 통해서 HMD로 전송하는 방식.
+    - e.g., 플레이스테이션 VR, Steam VR, HTC VIVE, ...
+  - Standalone, mobile VR: 오큘러스, 메타 퀘스트, ...
+- Hand input devices:
+  - 컨트롤러나 장갑같은 걸 쓸 수 있음.
+  - Meta Quest 3나 애플 비전 프로는 맨손도 감지한다.
+- Non-hand input devices: Head, Eye, Lip/face, Microphones, Full-body tracking
+
+### Types of VR Experience
+
+- Diodrama: 간단한 3D 씬, "Shoebox diodrama"
+- First-person experience: e.g., Half-Life Alyx
+- Third-person experience
+- Stationary vs room-scale VR experiences:
+  - 둘 다 방에 카메라 설치해두는 건데 뭐가 다른가?
+  - Stationary: 사용자가 한 장소에 고정. 사용자의 물리적 움직임이 영향을 미치지 않음.
+  - Room-scale: VR 기기가 사용자의 실제 움직임을 추적해서 가상세계에 반영.
+- 3D content creation experiences: VR로 3D 콘텐츠를 만든다. 마인크래프트도 어찌보면...
+- Riding/Walking experiences: 롤러코스터 VR은 아주 초기에도 시도한 것. 보통 상호작용이 제한됨.
+- 360-Degree media: 비디오인데 360도 촬영해서 몰입감을 선사. 상호작용은 없음.
+- Social VR: 아주 유명한 VRChat.
+
+### Design Considerations for VR Experiences
+
+- 몰입도 높은 VR 경험을 위한 요구사항:
+  - 낮은 레이턴시(motion-to-photon): 20ms 미만이어야.
+  - 높은 프레임 레이트: 90 FPS 이상이어야.
+  - High resolution
+  - Wide field of view(FOV): 실제 사람은 220도 정도, 오큘러스 리프트는 90도.
+  - Precise head/hand/body tracking: 6DoF가 좋겠죠.
+  - High quality audiovisual content
+  - Natural interaction
+  - Blocking of external disturbances
+- Simulator sickness:
+  - VR을 사용하고 멀미를 하는 경우도 흔합니다.
+  - simulator sickness가 일어나는 다양한 원인이 있음.
+  - 높은 레이턴시, 낮은 트래킹 정확도: 요즘엔 디바이스가 좋아서 문제가 안 됨.
+  - Fast acceleration(eye-inner ear mismatch): 등속운동하거나 천천히 움직이도록 해보세요.
+  - 빠르게 움직일 때 FoV가 너무 넓으면 안 됨.
+  - 낮은 refresh rate와 flicker, brightness, strong contrast changes.
+  - 예상치 못한 움직임: 계단을 오르는데 점프가 된다거나... 적이 사용자를 미는 경우.
+
+## VR Development Tools Setup, Inputs, and Hand Presence
+
+- Oculus/Meta Quest 2 공식문서 읽고 셋업하셈. 당신 폰과 컴에 관련 앱이 필요함.
+- 고성능 GPU가 필요함. 지원이 안 되는 GPU가 있으니 그래픽카드 사양을 잘 보셈.
+- 그리고 안타깝지만 윈도우즈 시스템에서만 할 수 있음. (oh no)
+- 내일 실습에 오기 전에 미리 설정을 해보렴. 그래야 우리가 도와줄 수 있음.
+- 유니티에서 셋업하는 방법을 알려줄게:
+  - 유니티에서 VR과 Universal 3D 프로젝트는 둘 다 URP를 사용함.
+    - 난 Universal 3D를 해보겠음.
+    - VR ㅋ프로젝트 템플릿을 쓰면 샘플 파일들이 들어있어서 좀 지저분하다.
+  - 패키지 매니저에서 OpenXR Plugin을 설치해라.
+  - 추가로 XR Device Siulator를 설치하면 기기가 없어도 시뮬레이트할 수 있음.
+  - 프로젝트 세팅 > XR Plug-in Management > OpenXR > 안드로이드 탭 들어가서 프로파일 추가해라.
+  - AR 프로젝트에서 메인 카메라 지우고 XR Origin 추가했지? VR 프로젝트도 똑같음.
+  - 근데 이제 컨트롤러가 있으니까 카메라 오프셋 아래에 있는 컨트롤러를 없앨 필요는 없음.
+  - 컨트롤러에 XR Interactor Line Visual 컴포넌트를 추가하면 컨트롤러 방향을 선으로 표시해줌.
+- 간단한 VR 씬만들고 시연하심. 재밌겠다...:star_struck:
+- What is URP?
+  - 렌더 파이프라인은 씬의 콘텐츠를 스크린에 렌더링함.
+  - Build-in RP: 모든 플랫폼에서 동작.
+  - URP: 제한된 성능의 기기에서 동작함. (e.g., 스마트폰, VR 기기)
+  - HDRP: 고성능 기기에서만 동작함. (e.g., 컴퓨터, 콘솔)
+  - 상황에 맞게 잘 선택하면 된다.
+- What is OpenXR?
+  - 크로스플랫폼 XR 개발을 위한 표준.
+  - 유니티 OpenXR 플러그인은 각종 기기에 여러 인터랙션 프로파일을 지원함.
 
 ## Memo
 
@@ -357,3 +468,9 @@
 - 중간고사 보고싶은 사람?
   - 우린 중간고사 안 봅니다.
   - 그러니까 수업 나오셈. 4/22에 나와서 팀플하세요.
+- VR 기기 빌려줄게요:
+  - 팀 1,2,3,4,9는 산621로 오셈. VR 기기랑 USB 케이블을 줄거임.
+  - 기기는 조심히 써주세요. 엄청 비싸진 않지만 저렴하지도 않음.
+  - 기기는 항상 박스에 넣어둬라. 케이블도 꼭 챙겨서 나중에 반납해야 됨.
+  - 케이블이나 충전기가 없는 경우도 있을거임. 그냥 핸드폰 충전기 써보셈.
+- 님들 컴퓨터가 안 좋으면 실습실에서 하세요. 실습실 쓸 사람들은 신청서를 제출하렴.
