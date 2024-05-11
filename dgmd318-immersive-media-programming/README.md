@@ -11,3 +11,5 @@
     - [Documentation](./projects/ar/documentation.pdf)
     - [Idea pitch and project plan](./projects/ar/idea-pitch.pdf)
     - [Final presentation](./projects/ar/final-presentation.pdf)
+  - VR:
+    - [Idea pitch and project plan](./projects/vr/idea-pitch.pdf)
