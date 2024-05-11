@@ -53,7 +53,7 @@ $$
   - 동치류는 전체 집합 $A$를 빈 공간없이 정확히 분할한다.
   - 전체 집합 $A$를 관계 $R$로 분할한다: $A / B$
   - 정리 1, 관계 $R$이 $A$에 대한 동치 관계일 때:
-    - $\relation{a}{b}$
+    - $\relation{R}{a}{b}$
     - $[a] = [b]$
     - $[a] \cap [b] \neq \varnothing$ (exactly cover)
   - 동치분할:
@@ -166,6 +166,192 @@ $$
     - 이때, $y$가 $x$를 덮는다(cover). 이때 $(x, y)$의 집합이 covering relation.
   - > $S = \{a, b, c\}$에 대한 멱집합 $P(S)$의 부분 순서 $\{(A, B) | A \sube B\}$를 하세 다이어그램으로 그려라.
     > - $P(S) = \{\varnothing, \{a\}, \{b\}, \{c\}, \{a, b\}, \{a, c\}, \{b, c\}, \{a, b, c\}\}$
+- Maximal and Minimal elements:
+  - 극대원소: 다른 어떤 원소보다도 작지 않은 원소들.
+  - 극소원소: 다른 어떤 원소보다도 크지 않은 원소들.
+  - 하세 다이어그램을 그리면 쉽게 찾을 수 있음. 무한 집합에서는 존재하지 않을 수도.
+- Greatest and Least elements:
+  - 최대원소: 다른 모든 원소보다 큰 유일한 원소.
+  - 최소원소: 다른 모든 원소보다 작은 유일한 원소.
+  - 극대원소가 여러 개면 최대원소가 존재하지 않음.
+  - 극소원소가 여러 개면 최소원소가 존재하지 않음.
+- Upper and Lower bound:
+  - 상한계: 부분집합 A의 모든 원소보다 크거나 같은 원소.
+  - 하한계: 부분집합 A의 모든 원소보다 작거나 같은 원소.
+  - 최소상한계(Least upper bound, LUB): 상한계에서 가장 작은 유일한 원소.
+  - 최대하한계(Greatest lower bound, GLB): 하한계에서 가장 작은 유일한 원소.
+  - 상한계와 하한계에 자기 자신이 포함된다는 걸 잊으면 안 됩니당.
+  - > e.g., $(\Bbb{Z}^+, |)$에 대해 lub는 최소공배수, glb는 최대공약수.
+- Lattices:
+  - poset의 모든 원소간 쌍에 lub와 glb가 존재하는 경우.
+  - 임의의 두 원소를로 만들어지는 모든 쌍에 대해 lub와 glb가 존재하는지 확인해보면 된다.
+- 위상정렬(topological sorting):
+  - 주어진 partial order로부터 total order를 구하는 것.
+  - $\relation{a}{R}{b}$일 때 $a \poleq b$이면 partial order와 total order가 양립할 수 있음.
+  - 보조정리 1: 모든 유한한 nonempty poset $(S, \poleq)$은 최소 하나의 극소원소를 갖는다.
+  - 비교가 불가능한 두 원소 중 아무거나 선택해도 되므로, 위상정렬의 결과가 유일하지 않을 수도 있음.
+
+## Graphs
+
+- 앞에서는 그래프가 관계를 표현하는 한 방법이었음.
+- 방대한 네트워크를 그래프로 모델링하고 알고리즘을 만들면 컴퓨터가 계산해준다.
+- 그래프 이론은 대학원에서 배울 수 있음. 우리는 기본적인 것들만 보자.
+- 알고리즘을 다루지는 않을거임. 자구나 알고에서 배우렴.
+
+### Graphs and Graph Models
+
+- 그래프: $G = (V, E)$
+  - 공집합이 아닌 정점 집합 $V$와 간선 집합 $E$로 구성.
+  - 각 간선은 한 두개의 정점과 연결됨. 이때 간선과 연결된 정점을 끝점(endpoint)라고 한다.
+- Infinite graph: $V$가 무한집합인 그래프. 유한집합이면 finite graph.
+- Simple graph:
+  - 간선이 두 개의 서로 다른 정점을 연결하고 (루프가 없어야)
+  - 같은 정점 쌍을 연결하는 두 개 이상의 간선이 없는 그래프 (멀티엣지가 없어야)
+- Multigraph: 멀티엣지를 가진 그래프. 멀티엣지는 허용, 루프는 없어야.
+- Pseudograph: 루프와 멀티엣지를 가진 그래프.
+- Undirected graph:
+  - 간선에 방향이 없는 그래프. 양방향 관계라고 볼 수 있음.
+  - 순서가 없으니까 간선을 $\{u, v\}$로 표현. 순서가 상관없음.
+  - 근데 보통은 다 $(u, v)$로 표현한다. 대신 방향이 없다고 말해줘야.
+- Directed graph or digraph:
+  - 간선에 방향이 있는 그래프. 방향그래프, 유향그래프 등 다양하게 부름.
+  - 간선에 방향이 있으므로 $E$를 표현할 때는 순서가 있는 순서쌍 집합으로 표현해줘야.
+  - 간선 $(u, v)$는 정점 $u$에서 $v$로 향하는 간선. 순서가 중요함.
+- Mixed graph or hybrid graph: 방향이 있는 간선과 없는 간선이 섞여있는 그래프.
+- Simple directed graph:
+  ```mermaid
+  graph LR
+  a((a)) --> b((b))
+  b --> c((c))
+  a --> c
+  c --> b
+  ```
+  - 루프와 멀티엣지가 없으니 단순그래프임.
+  - 방향이 있으니 유향그래프임.
+- Directred multigraph:
+  ```mermaid
+  graph LR
+  a((a)) --> b((b))
+  b --> c((c))
+  b --> c
+  b --> b
+  a --> c
+  a --> c
+  c --> c
+  ```
+  - 루프나 멀티엣지를 가질 수 있음.
+  - 멀티그래프에는 루프가 없어야 한다며? 유향그래프에서는 루프가 허용됨.
+- 그래프 종류 총정리:
+  | Type                  | Edges                 | Multiple Edges Allowed? | Loops Allowed? |
+  |-----------------------|-----------------------|-------------------------|----------------|
+  | Simple graph          | Undirected            | No                      | No             |
+  | Multigraph            | Undirected            | Yes                     | No             |
+  | Pseudograph           | Undirected            | Yes                     | Yes            |
+  | Simple directed graph | Directed              | No                      | No             |
+  | Directed multigraph   | Directed              | Yes                     | Yes            |
+  | Mixed graph           | Directed & undirected | Yes                     | Yes            |
+- 그래프 모델:
+  - 그래프로 모델링할 때 해볼 질문들:
+    - 방향이 있어야 하는가?
+    - 멀티엣지가 필요한가?
+    - 루프가 필요한가?
+  - 컴퓨터 네트워크 예시, 소셜 네트워크 예시.
+
+### Graph Terminology and Special Types of Graphs
+
+#### Undirected graph
+
+- undirected graph 관련 기본 용어:
+  - 인접(adjacent or neighbors):
+    - 어떤 두 정점을 직접 잇는 간선이 존재한다면 둘은 인접정점.
+    - 이때 간선 $e$는 두 정점에 부속되며(incident), 두 정점을 연결(connect)한다.
+  - Neighborhood of $v$: $N(v)$
+    - 정점 $v$와 인접한 정점의 집합.
+    - 정점집합 $V$의 어떤 부분집합 $A$에 대해 $N(A) = \bigcup_{v \in A} N(v)$
+    - 루프가 있는 경우 자기 자신도 인접정점에 포함된다.
+  - 차수(degree): $\text{deg}(v)$
+    - 어떤 점점의 차수는 그 정점과 연결된 엣지의 개수.
+    - 루프를 가진 정점의 차수는 2. 나가는 거 하나, 들어오는 거 하나.
+  - Isolated vertex: 그래프에서 어떠한 정점과도 연결되지 않은 정점.
+  - Pendant vertex: 그래프에서 단 하나의 정점과 연결된 정점.
+- 정리 1 (handshaking theorem):
+  - 어떤 undirected graph $G = (V, E)$가 $m$개의 간선을 가지고 있는경우.
+  - 모든 차수를 더하면 간선의 2배가 된다: $2m = \sum_{v \in V} \text{deg}(v)$
+  - 즉, 차수의 합이 언제나 짝수임을 보장할 수 있다.
+  - > 차수가 6인 정점이 10개 있는 그래프에서 간선의 개수는? 차수의 합이 60, 따라서 간선은 30개.
+  - > 정점이 5개 있는 그래프에서 각 정점의 차수가 3이 될 수 있나?
+    > - 차수의 합이 15면 간선의 개수 $m$은 7.5가 되어야 함.
+    > - 정수로 떨어지지 않으므로 불가능하다.
+- 정리 2: 홀수 차수를 가진 정점의 개수는 항상 짝수이다.
+- 여기서 차수에 대한 정리는 다 undirected graph 얘기임.
+
+#### Directed graph
+
+- 유향그래프는 순서쌍으로 구성된다. $(u, v)$는 $u$에서 출발해서 $v$에 도착하는 간선.
+- 시점(initial vertex): 간선이 출발하는 정점. $(u, v)$에서 $u$.
+- 종점(terminal vertex): 간선이 도착하는 정점. $(u, v)$에서 $v$.
+- 유향그래프의 차수에 대해 생각해보자:
+  - 진입차수(in-degree): 들어오는 간선 개수, $\text{deg}^-(v)$
+  - 진출차수(out-degree): 나가는 간선 개수, $\text{deg}^+(v)$
+  - isolated 정점의 진입/진출 차수는 둘 다 0.
+- 정리 3:
+  - 유향그래프 $G = (V, E)$에서 간선의 개수는 진입/진출차수의 합과 같음.
+  - $|E| = \sum_{v \in V} \text{deg}^-(v) = \sum_{v \in V} \text{deg}^+(v)$
+  - 나가는 간선이 있으면 들어가는 간선도 무조건 있으니까.
+
+#### Simple graph
+
+- 완전그래프(complete graph), $K_n$:
+  - 가능한 모든 간선을 갖는 simple graph.
+  - $n$개의 정점을 가진 완전그래프를 $K_n$이라고 한다.
+  - 여기에 k_1부터 k_6까지 그래프 사진.
+  - 완전그래프의 간선 개수: $|V| = n$일 때, $|E| = {}_nC_2 = {2(n - 1) \over 2}
+- 사이클(cycle), $C_n$:
+  ```
+  graph LR
+    a((a)) --- b((b))
+    b --- c((c))
+    c --- d((d))
+    d --- e((e))
+    e --- a
+  ```
+  - $n \geq 3$의 정점을 갖는 그래프에서 모든 정점을 한 번씩 거쳐 시점으로 돌아오는 그래프.
+  - $|V| = n, |E| = n$
+- Wheel, $W_n$:
+  - 사이클에 정점 하나를 추가한 심플 그래프.
+  - $|V| = n + 1, |E| = 2n$, 여기서 $n$은 사이클의 $n$.
+- Cube, $Q_n$:
+  - n-dimensional hypercube 또는 n-cube이라고도 함.
+  - $Q_n$의 정점 개수는 $2^n$개. 이때 $n$은 비트스트링의 길이.
+  - 각 정점이 유니크한 비트스트링을 의미한다.
+  - 자신의 비트스트링에서 딱 한 비트를 변경한 정점과 간선으로 연결된다.
+  - 가령 $000$의 인접정점은 $100, 010, 001$이 된다. $011, 111$ 같은 건 안 되겠지.
+  - $n$개 비트를 표현하려면 $2^n$개의 정점이 필요할 것임: $|V| = 2^n$
+  - 비트스트링이 어떤 집합의 원소의 유무를 표현하는 식으로 사용할 수 있음.
+- 이분그래프(bipartite graph):
+  - $V$의 두 부분집합 $V_1$과 $V_2$의 정점이 서로 연결된 심플그래프.
+  - 단, 같은 집합 내에서는 서로 연결되면 안 된다.
+  - 정점 집합을 공통부분이 없는 두 부분 집합으로 나눈다고 생각하면 됨.
+  - 사이클 $C_n$에서 $n$이 짝수일 때 이분그래프가 된다.
+- 완전 이분그래프(complete bipartite graph), $K_{m,n}$:
+  - 정점의 두 부분집합에 대해 $V = V_1 \cup V_2$이고, $V_1 \cap V_2 = \varnothing$.
+  - 이때 $V_1$의 모든 정점과 $V_2$의 모든 정점이 서로 연결된 이분그래프.
+- Topology
+  - 컴퓨터 네트워크를 생각해보자. 네트워크의 요소들을 연결하는 형태를 토폴로지라고 한다.
+  - Star topology: 모든 노드들이 중앙의 한 노드에만 연결된 형태. 완전 이분그래프.
+  - Ring topology: 한 노드가 양쪽의 두 노드에 연결된 형태. 사이클.
+  - $W_n$ based topology: star와 ring 토폴로지를 결합한 형태. wheel.
+  - Mesh topoogy: 병렬처리를 위한 모델. n-dimensional hypercube.
+
+### New graph from old
+
+- 기존 그래프를 수정해서 새로운 그래프를 만드는 방법에 대해 살펴보자.
+- 부분그래프(subgraph):
+  - 어떤 그래프 $G = (V, E)$에 대해 $W \sub V$, $F \sub E$인 그래프 $H = (W, F)$.
+  - 진부분그래프(proper subgraph):
+    - $G$와 동일한 경우는 제외한 $H$, $G \not \eq H$
+    - 이때 $W, F$도 각각 $V, E$에 대해 진부분집합임.
+  - 당연히 한 그래프에 대해 다양한 진부분그래프가 만들어질 수 있음.
 
 ## Notices
 

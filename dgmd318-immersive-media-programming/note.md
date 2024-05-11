@@ -445,6 +445,15 @@
 - What is OpenXR?
   - 크로스플랫폼 XR 개발을 위한 표준.
   - 유니티 OpenXR 플러그인은 각종 기기에 여러 인터랙션 프로파일을 지원함.
+- Hand presence:
+  - XR Origin에 컨트롤러 외에 Hand, Hand visualizer 오브젝트를 추가하면 손을 인식시킬 수 있음.
+  - XR Origin에 XR Input Modality Manager 스크립트가 있어야.
+  - 구현하는 방법은 보강 동영상으로 올려뒀으니 확인해보렴.
+
+## Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, and Tunneling Vignette
+
+- XR Simple Interactable
+- Locomotion in VR
 
 ## Memo
 
