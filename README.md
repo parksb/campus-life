@@ -116,5 +116,5 @@
 
 ## 라이선스
 
-- 이 저장소의 모든 문서와 사진은 [CC BY-NC-SA 4.0](LICENSE-CC)에 따라 이용할 수 있습니다.
+- 이 저장소의 모든 PDF 및 마크다운 문서와 사진은 [CC BY-NC 4.0](LICENSE-CC)에 따라 이용할 수 있습니다.
 - 이 저장소의 모든 소스코드는 [The GNU General Public License v3.0](LICENSE-GPL)에 따라 이용할 수 있습니다.
