@@ -438,7 +438,7 @@
 - 간단한 VR 씬만들고 시연하심. 재밌겠다...:star_struck:
 - What is URP?
   - 렌더 파이프라인은 씬의 콘텐츠를 스크린에 렌더링함.
-  - Build-in RP: 모든 플랫폼에서 동작.
+  - Built-in RP: 모든 플랫폼에서 동작.
   - URP: 제한된 성능의 기기에서 동작함. (e.g., 스마트폰, VR 기기)
   - HDRP: 고성능 기기에서만 동작함. (e.g., 컴퓨터, 콘솔)
   - 상황에 맞게 잘 선택하면 된다.
@@ -454,6 +454,18 @@
 
 - XR Simple Interactable
 - Locomotion in VR
+- Locomotion methods:
+  - Teleportation: 이동 지점을 선택하면 순간이동.
+  - Continuous movement: 이동수단 같은 걸 타고 이동.
+  - Grab move: 뭔가를 잡고 밀고 당기며 이동. (수영하듯)
+  - Snap/continuous turn
+  - Climb
+- Interfaction groups
+- teleportation, vinette, grab move 시연하시는 중.
+  - 플레이어한테는 콜라이더가 없어서 오브젝트를 통과해버림.
+  - 캐릭터 컨트롤러로 이 문제를 해결해보자.
+  - URP 설정 건드렸더니 모든 오브젝트가 마젠타가 됨... 머티리얼 RP를 싹 다 스탠다드로 바꿈.
+  - 스크립트 한줄도 안 짜고 컴포넌트만 추가하고 파라미터 설정해주면 되니까 쉽죠.
 
 ## Memo
 
