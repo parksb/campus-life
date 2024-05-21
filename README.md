@@ -110,8 +110,10 @@
 
 * [PC119센터 대여](http://pc119.ajou.ac.kr)
 
-### 자동화
+### 기타
 
+* [GitLab](https://git.ajou.ac.kr/)
+* [AjoupyterHub](https://jupyter.ajou.ac.kr/)
 * [Ajou Hack](https://github.com/ajou-hack)
 
 ## 라이선스
