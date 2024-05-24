@@ -460,12 +460,25 @@
   - Grab move: 뭔가를 잡고 밀고 당기며 이동. (수영하듯)
   - Snap/continuous turn
   - Climb
-- Interfaction groups
+- Interaction groups
 - teleportation, vinette, grab move 시연하시는 중.
   - 플레이어한테는 콜라이더가 없어서 오브젝트를 통과해버림.
   - 캐릭터 컨트롤러로 이 문제를 해결해보자.
   - URP 설정 건드렸더니 모든 오브젝트가 마젠타가 됨... 머티리얼 RP를 싹 다 스탠다드로 바꿈.
   - 스크립트 한줄도 안 짜고 컴포넌트만 추가하고 파라미터 설정해주면 되니까 쉽죠.
+
+## VR Interactions in XR Interaction Toolkit
+
+- XR Interaction Toolkit은 VR 인터랙션을 쉽게 구현할 수 있게 해줌.
+  ![](./images/interactor-interactable.png)
+- 총 잡는 예시:
+  - 권총 모델에 박스 콜라이더 설정해주고... 손으로 잡아보기.
+  - 앗! 총이 아래를 보고있다. 모델의 Attach transform 위치를 바꿔주자.
+  - 님들 과제에서 중요한 부분이니까 잘 보셈.
+- Interactor hierarchy:
+  ![](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.3/manual/images/class-hierarchy.svg)
+  - BaseInteractable을 상속해서 자신만의 인터랙터블을 만들 수 있음.
+- UI Interaction: UI를 만들어보아요.
 
 ## Memo
 
@@ -495,3 +508,6 @@
   - 기기는 항상 박스에 넣어둬라. 케이블도 꼭 챙겨서 나중에 반납해야 됨.
   - 케이블이나 충전기가 없는 경우도 있을거임. 그냥 핸드폰 충전기 써보셈.
 - 님들 컴퓨터가 안 좋으면 실습실에서 하세요. 실습실 쓸 사람들은 신청서를 제출하렴.
+- 6/17 13~15시 산422, 산420에서 기말고사볼거임. 강의실 배정은 TA가 엑셀파일로 올려줄거임.
+  - 손코딩 없을거임. 그건 실습에서 했으니까.
+  - 이론적인걸 많이 물어볼거임. 설명하면서 당신이 코드를 제시할 수는 있겠지. 그 코드가 컴파일이 잘 되는지는 노상관임.
