@@ -136,6 +136,7 @@
   - 가상 또는 현실 세계의 물체를 정확히 등록할 수 있음.
 - AR은 현실을 증강, 개선하는 것을 목표로 한다.
 - Mixed Reality(MR):
+  ![](https://schoolofdisruption.com/wp-content/uploads/2018/07/AR-VR-MR.jpg)
   - MR은 공간 인식을 통해 가상의 콘텐츠를 현실 세계에 올려놓을 수 있다는게 특징.
   - 과거에는 AR이 지금처럼 스마트하지 않았어요. AR에서는 가상 콘텐츠가 현실 위에 보일 뿐이었음.
   - 사실 지금은 AR이 MR임. 지금은 우리가 AR이라고 부르는게 다 MR이죠.
@@ -310,7 +311,7 @@
 ## Introduction to Virtual Reality
 
 - VR: computer-generated simulation of a 3D environment, which seems real to the user.
-- VR의 목표: "generate realistic image, sounds and other sensations that simulate a user's physical presence in a virtual environment.
+- VR의 목표: generate realistic image, sounds and other sensations that simulate a user's physical presence in a virtual environment.
 - 오늘날 VR HMD(head-moounted display)는:
   - 양쪽 눈에 같은 이미지를 보여줌으로써 stereographic 3D scene을 제공함.
   - 사용자의 신체나 시선을 추적할 수 있고, 감정을 읽기도.
@@ -479,6 +480,11 @@
   ![](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.3/manual/images/class-hierarchy.svg)
   - BaseInteractable을 상속해서 자신만의 인터랙터블을 만들 수 있음.
 - UI Interaction: UI를 만들어보아요.
+- XR Poke Interactor:
+  - 인터랙터블과 UI를 터치, 찌를 수 있게 해주는 인터랙터.
+  - e.g., 대왕 성냥개비로 인터랙터블과 상호작용.
+- 오늘은 문 열기 레버 내리기 같은 걸 해볼게요.
+  - 문 여는건 그냥 hinge joint 컴포넌트 추가하면 됨.
 
 ## Memo
 
@@ -511,3 +517,172 @@
 - 6/17 13~15시 산422, 산420에서 기말고사볼거임. 강의실 배정은 TA가 엑셀파일로 올려줄거임.
   - 손코딩 없을거임. 그건 실습에서 했으니까.
   - 이론적인걸 많이 물어볼거임. 설명하면서 당신이 코드를 제시할 수는 있겠지. 그 코드가 컴파일이 잘 되는지는 노상관임.
+- > ### Final exam scope
+  >
+  > The final exam scope includes the following lecture notes:
+  > - 03-Introduction to Immersive Media (slides 2-12)
+  > - 04 - Introduction to AR (slides 5-26, 29-31)
+  > - 05 - AR Foundation and AR project setup (slides 2-7, 13-15)
+  > - 06 - Trackables and Image Tracking (2-13)
+  > - 07 - Plane Tracking and AR Raycasting
+  > - 10 - AR Interaction with XR Interaction Toolkit (slides 2-7)
+  > - 12 - Introduction to VR (slides 2-5, 11-24, 26-40)
+  > - 14 - Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, Tunneling Vignette (slides 1-27)
+  > - 15 - Interactions
+  >
+  > Additionally, you should review the sample code related to these lectures. Studying labs 4-7 can also be useful.
+  >
+  > NOTE: You don't need to memorize the details of the AR and VR components in Unity Inspector.
+  >
+  > If you have any questions, please ask!
+  >
+  > ### Time and place
+  >
+  > - Date: Monday 6/17
+  > - Time: 1pm~3pm
+  > - Place: Sanhak Hall 422, 420
+  >
+  > ### Instructions
+  >
+  > Bring your student ID (or another ID with a photo) because TAs will check your identity.
+  >
+  > You can bring with you:
+  > - Pencil, pen, eraser, pencil sharpener, ruler, and other necessary accessories for writing your answers.
+  > - English dictionary book (without hand-written notes. We will check!)
+  >
+  > ### Q&A
+  >
+  > - Q: When can I leave the exam room?
+  >   - A: after 30 mins
+  > - Q: How long can I be late?
+  >   - A: At most 29 mins 59 seconds.
+  > - Q: How do I answer the questions?
+  >   - A: write your answers onto the provided answer sheet.
+  > - Q: What kind of questions will there be in the exam?
+  >   - A: I haven't prepared the exam questions yet, but I may mix different types of questions, like:
+  >       - multiple-choice questions
+  >       - short explanations (e.g. "Explain the following term and give an example.")
+  >       - longer explanations (e.g. "Describe different locomotion techniques in VR and compare them. Explain what XR Interaction Toolkit components you need for each of them. ")
+  >       - understanding code (e.g. study code snippets and answer questions about them).
+  > - Q: when I’m finished, what should I do?
+  >   - A: make sure that you answered all questions and subquestions and wrote your name on all papers, including the question paper. Then, return the answer sheets AND question paper to the TA.
+  > - Q: Can I go to restroom during the exam?
+  >   - A: No. Please go to restroom before the exam.
+
+  ## Memo
+
+  ### Introduction to Immersive Media
+
+  - Immersion is the level of user's engagement with her/his senses in a media experience.
+  - Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.
+  - Important elements for immersion:
+    - Continuity of surroundings
+    - Conformance to human vision
+    - Freedom of movement
+    - Interaction with the environment
+    - Narrative engagement
+    - 3D audio
+    - Natural social interaction
+- Presence: the strength of this feeling. (suspension of disbelief)
+- XR: eXtended Reality
+
+### Introduction to AR
+
+- AR aims to enhance real world experiences by using different types of digital congtent.
+- Weak AR: imprecise tracking, limited interactivity, ...
+- Strong AR: accurate tracking, seamless integration with real world, ...
+- MR: Mixed Reality
+  - Virtual content can be placed onto the real world through spatial awareness.
+- HUD, Headset, Handheld AR, Public space AR, Location-based AR, ...
+- Anchors:
+  - World space: the coordinate space where the camera and the virtual objects are locaated.
+  - Pose: represents an object's position and orientation in world space.
+- A good AR experience not only tracks the position of the virtual objects, but also changes their transform according to the user's position.
+
+### AR Foundation and AR Project Setup
+
+- AR Foundation: provides tools to create multi-plataform AR application in Unity.
+- XR Origin: represents the center of world space in AR, MR and Vr applications.
+- AR Session: controls the lifecycle of an AR application.
+
+### Trackables and Image Tracking
+
+- Trackable: anything in the real world that can be detected and tracked.
+- AR Tracked Image Manager: it is used for tracking 2D images.
+
+### Plane Tracking and AR Raycasting
+
+- AR Plane Manager
+- AR Raycast Manager: interacts with the detected planes.
+
+### AR Interaction with XR Interaction Toolkit
+
+- XR Interaction Toolkit: high-level interaction system for easy creation of interactive AR/VR experiences.
+- Main components:
+  - Interactors: gameobjects that can hover, select or activate another gameobject.
+  - Interactables: gameobjects that the user can interact with by tap, drag, press, etc.
+  - Interaction managers: handle interaction between interactors and interactables.
+- XR Interaction Manager: takes care of communication between interactors and interactables.
+
+### Introduction to Virtual Reality
+
+- VR: computer-generated simulation of a 3D environment, which seems real to the user.
+- Stereoscopic VR:
+  - separate views for the left and right eyes, which are slightly offset to create a 3D effect even though the images are 2D.
+  - VR head-mounted displays are based on stereoscopic images.
+- Monoscopic VR: uses the same image for both eyes.
+- Important elements of VR:
+  - 3D viewing:
+    - pincushion effect
+    - barrel distortion
+  - Screen resolution
+    - screen-door effect
+    - foveated rendering
+  - Motion tracking:
+    - positional tracking
+    - inside-out tracking
+    - outside-in tracking
+    - 3DoF: rotational movements of the head
+    - 6DoF: rotational movements of the head + position tracking
+  - Embodiment
+  - Interactivity
+    - natural
+    - multimodal
+  - High quality content
+  - Spatial sound
+- Diodrama: a simple 3D scene, which is observed from a third-person perspective.
+- First-person experience: the user takes the role of a freely moving agent in the scene.
+- Third-person experience: the user watches the scene from a third-person perspective.
+- Stationary: the user sits or stands in one place.
+- Room-scale: the Vr device translates the user's movement in the real world to the character's movement in the virtual world.
+- Requirements for a high-quality VR experience:
+  - low latency
+  - high frame rate
+  - high resolution
+  - wide field of view
+  - precise head/hand/body tracking
+  - high quality audiovisual content
+  - natural interaction
+  - blocking of external disturbances
+- Simulator sickness:
+  - if the player needs to move fast, recude the field of view: tunneling vignette
+
+### Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, and Tunneling Vignette
+
+- Locomotion: moving from one place to another in a virtual scene.
+  - Physical: motion-based(continuous), roomscale-based(continuous)
+  - Artificial: controller-based(continuous), teleportation-based(non-continuous)
+
+### VR Interactions in XR Interaction Toolkit
+
+- XR Direct Interactor: allows the user to directly interact with interactables.
+- XR Socket Interactor: enables placing interactables into a socket.
+- XR Grab Interactable: allows the user to pick up and drop a gameobject, as well as throw or it into a socket.
+- XR Simple Interactor: the simplest interactable object that doesn't really do anything. Hover, select and activate events that programmers can attach their code to.
+- You can create your own interactors by inheriting from `BaseInteractor` or `BaseControllerInteractor`.
+- You can crate your own interactables by inheriting from `BaseInteractable`.
+- Interaction Layer Mask: mechanism for filtering which interfactors and interactables can work together.
+  - Raycast Mask: specifies the physics layers that a raycast can hit.
+  - Interaction Layer Mask: specifies the interaction layers through which an interactor and interactable can interact.
+- Interaction states: Hover -> Select -> Activate
+- XR Poke Interactor: allows the user to interact with interactables and UI by poking/touching them.

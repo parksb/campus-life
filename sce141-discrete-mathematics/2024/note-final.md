@@ -595,6 +595,102 @@ $$
   - 심플 그래프 $G$의 스패닝 트리는 $G$의 모든 정점을 포함하는 부분 그래프.
   - 그래프가 트리가 되도록 일부 간선을 지워주면 된다. $|E| = |V| - 1$인지 확인해보세요.
   - 같은 그래프에 대해 다양한 스패닝 트리가 만들어질 수 있음.
+- 심플그래프이고 연결되어 있으면 스패닝 트리가 존재한다.
+- 스패닝 트리를 어떻게 찾을 수 있을까? DFS나 BFS를 활용하면 된다.
+- Depth-First Search(DFS):
+  ```python
+  def dfs(G):
+      T = [(None, root)]
+      TV = [root]
+      visit(G, root)
+      def visit(v):
+          for w in G[v]:
+              if w not in TV:
+                  T.append((v, w))
+                  TV.append(w)
+                  visit(w)
+      return T
+  ```
+  - 그래프의 노드 하나를 루트로 선택하고 스택을 사용해 방문. 방문 경로가 스패닝 트리가 됨.
+  - Tree edges: DFS로 선택된 엣지들.
+  - Back edges: 선택된 엣지는 아니지만, 트리의 조상과 자손을 연결하는 엣지.
+- Breadth-First Search(BFS):
+  ```python
+  def bfs(G):
+      Q = [root]
+      T = [(None, root)]
+      TV = [root]
+      while Q:
+          v = Q.pop(0)
+          for w in G[v]:
+              if w not in TV:
+                  Q.append(w)
+                  T.append((v, w))
+                  TV.append(w)
+      return T
+  ```
+  - 그래프의 노드 하나를 루트로 선택하고 큐를 사용해 방문. 방문 경로가 스패닝 트리가 됨.
+  - DFS보다 깊이가 얕음.
+- Backtracking applications:
+  - DFS에서 막다른 길에 도달하면 앞선 갈림길로 돌아갔음. 그게 백트래킹.
+  - Graph Colorings: 정점에 색칠하는 문제. 인접한 정점은 서로 다른 색을 가져야 함.
+  - The n-Queens Problem: n개의 퀸을 n x n 체스판에 놓는 문제. 서로 공격하지 않아야 함.
+  - Sums of Subsets: 주어진 집합에서 합이 특정 값이 되는 부분집합을 찾는 문제.
+- DFS in Directed graphs:
+  - 이제 유향그래프에서 스패닝 트리를 만들어보자. 똑같이 DFS하면 됨.
+  - 유향그래프는 연결관계에 따라 스패닝 포레스트가 나올 수도 있음.
+
+### Minimum Spanning Trees
+
+- 가중치가 있는 연결그래프에서 엣지의 가중치 합이 최소가 되는 스패닝 트리를 만들어보자.
+- Prim's algorithm:
+  ```python
+  def prim(G: list[tuple[int, int]]): # G = [(v, cost), ...]
+      T = []
+      TV = [random(N)]
+      while len(T) < N - 1:
+          min_cost = sys.maxsize
+          min edge = (u, None)
+          for u in TV:
+              for v, cost in G[u]:
+                  if v not in TV and cost < min_cost:
+                      min_cost = cost
+                      min_edge[1] = v
+          T.append(min_edge[1])
+          TV.append(min_edge)
+      return T
+  ```
+  1. 최소 스패닝 트리의 간선 집합 $T = \varnothing$와 정점 집합 $TV = \varnothing$을 초기화한다.
+  1. 임의의 시작 정점을 선택하고 $TV$에 추가한다: $TV = \{ a \}$
+  1. $TV$의 모든 정점의 인접정점에 대해, $TV$에 있지 않은 정점 중 가중치가 가장 작은 간선을 $T$에 추가한다.
+  1. $T$의 크기가 $n - 1$이 될 때까지 반복한다.
+- Kruskal's algorithm:
+  ```python
+  def kruskal(G: list[tuple[int, int, int]]): # G = [(u, v, cost), ...]
+      T = []
+      E = sorted(G, key=lambda x: x[2])
+      while len(T) < N - 1:
+          e = E.pop()
+          if not has_simple_circuit(T + [e]):
+              T.append(e)
+      return T
+  ```
+  1. 최소 스패닝 트리의 간선 집합 $T = \varnothing$와 정점 집합 $E$을 초기화한다.
+    - 여기서 $E$는 $G$의 간선을 가중치에 따라 오름차순으로 정렬한 리스트.
+  1. $E$의 간선을 순서대로 보면서 $T$에 추가해도 심플 서킷을 형성하지 않는 엣지를 $T$에 추가한다.
+  1. $T$의 크기가 $n - 1$이 될 때까지 반복한다.
+  - 심플 서킷이 있는지 어떻게 검사하나? 유니온 파인드를 사용하면 된다. 나중에 배우셈.
+- 가중치에 중복이 없으면 최소 스패닝 트리가 유일하다.
+- 모양이 달라도  결과물의 가중치 합은 동일하다.
+- 둘의 시간복잡도가 다름. 엣지가 많으면 프림이 낫고, 엣지가 적으면 크루스칼이 낫다.
+
+## Boolean Algebra
+
+- 불리언 뻥션과 그 수학적 표현을 배울거임.
+- 논리 게이트 살펴볼거고, 회로 설계도 해볼거임.
+- propagation delay를 줄이기 위한 회로 최소화도 배워봅시다.
+
+### Boolean Functions
 
 ## Memo
 
@@ -615,3 +711,4 @@ $$
 - 6/18 20시부터 22시까지 기말고사.
 - 번역서 보시는 분들 목차 마지막에 안내가 있을거임. 12, 13장 PDF로 파일받으셈.
 - 우리는 12장 boolean algebra까지만 다룰거임. 디회에서 중요함.
+- 6/7 4차 과제 나갈거임.
