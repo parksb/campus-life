@@ -10,4 +10,6 @@
 - [정보디자인](information-design-note.html)
 - [운영체제](operating-systems-note.html)
 - [과학기술과법 중간](science-technology-and-law-note-midterm.html)
+- [과학기술과법 기말](science-technology-and-law-note-final.html)
 - [이산수학 중간](discrete-mathematics-note-midterm.html)
+- [이산수학 기말](discrete-mathematics-note-final.html)
