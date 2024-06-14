@@ -485,8 +485,9 @@
   - e.g., 대왕 성냥개비로 인터랙터블과 상호작용.
 - 오늘은 문 열기 레버 내리기 같은 걸 해볼게요.
   - 문 여는건 그냥 hinge joint 컴포넌트 추가하면 됨.
+- 시선 추적도 할 수 있어용: eye gaze interactor를 추가하셈.
 
-## Memo
+## Notices
 
 - 깜짝 퀴즈 볼거임. 지금 당장.
   - 펜과 종이로 20초 안에 질문에 대답해야 함. 이메일로 당신의 정답을 내셈.
@@ -517,72 +518,76 @@
 - 6/17 13~15시 산422, 산420에서 기말고사볼거임. 강의실 배정은 TA가 엑셀파일로 올려줄거임.
   - 손코딩 없을거임. 그건 실습에서 했으니까.
   - 이론적인걸 많이 물어볼거임. 설명하면서 당신이 코드를 제시할 수는 있겠지. 그 코드가 컴파일이 잘 되는지는 노상관임.
-- > ### Final exam scope
-  >
-  > The final exam scope includes the following lecture notes:
-  > - 03-Introduction to Immersive Media (slides 2-12)
-  > - 04 - Introduction to AR (slides 5-26, 29-31)
-  > - 05 - AR Foundation and AR project setup (slides 2-7, 13-15)
-  > - 06 - Trackables and Image Tracking (2-13)
-  > - 07 - Plane Tracking and AR Raycasting
-  > - 10 - AR Interaction with XR Interaction Toolkit (slides 2-7)
-  > - 12 - Introduction to VR (slides 2-5, 11-24, 26-40)
-  > - 14 - Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, Tunneling Vignette (slides 1-27)
-  > - 15 - Interactions
-  >
-  > Additionally, you should review the sample code related to these lectures. Studying labs 4-7 can also be useful.
-  >
-  > NOTE: You don't need to memorize the details of the AR and VR components in Unity Inspector.
-  >
-  > If you have any questions, please ask!
-  >
-  > ### Time and place
-  >
-  > - Date: Monday 6/17
-  > - Time: 1pm~3pm
-  > - Place: Sanhak Hall 422, 420
-  >
-  > ### Instructions
-  >
-  > Bring your student ID (or another ID with a photo) because TAs will check your identity.
-  >
-  > You can bring with you:
-  > - Pencil, pen, eraser, pencil sharpener, ruler, and other necessary accessories for writing your answers.
-  > - English dictionary book (without hand-written notes. We will check!)
-  >
-  > ### Q&A
-  >
-  > - Q: When can I leave the exam room?
-  >   - A: after 30 mins
-  > - Q: How long can I be late?
-  >   - A: At most 29 mins 59 seconds.
-  > - Q: How do I answer the questions?
-  >   - A: write your answers onto the provided answer sheet.
-  > - Q: What kind of questions will there be in the exam?
-  >   - A: I haven't prepared the exam questions yet, but I may mix different types of questions, like:
-  >       - multiple-choice questions
-  >       - short explanations (e.g. "Explain the following term and give an example.")
-  >       - longer explanations (e.g. "Describe different locomotion techniques in VR and compare them. Explain what XR Interaction Toolkit components you need for each of them. ")
-  >       - understanding code (e.g. study code snippets and answer questions about them).
-  > - Q: when I’m finished, what should I do?
-  >   - A: make sure that you answered all questions and subquestions and wrote your name on all papers, including the question paper. Then, return the answer sheets AND question paper to the TA.
-  > - Q: Can I go to restroom during the exam?
-  >   - A: No. Please go to restroom before the exam.
+- UBILIFE LAB 오세용.
+- 6/17 월요일에 VR 기기 반납해라. 상자에 들어있던 거 잘 챙기고. 과제를 일욜까지니까 괜찮지?
+- 6/20 금요일까지 당신들 출석이랑 과제 점수 같은 거 최종 점검해라.
 
-  ## Memo
+## About final exam
 
-  ### Introduction to Immersive Media
+The final exam scope includes the following lecture notes:
+- 03 - Introduction to Immersive Media (slides 2-12)
+- 04 - Introduction to AR (slides 5-26, 29-31)
+- 05 - AR Foundation and AR project setup (slides 2-7, 13-15)
+- 06 - Trackables and Image Tracking (2-13)
+- 07 - Plane Tracking and AR Raycasting
+- 10 - AR Interaction with XR Interaction Toolkit (slides 2-7)
+- 12 - Introduction to VR (slides 2-5, 11-24, 26-40)
+- 14 - Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, Tunneling Vignette (slides 1-27)
+- 15 - Interaction
 
-  - Immersion is the level of user's engagement with her/his senses in a media experience.
-  - Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.
-  - Important elements for immersion:
-    - Continuity of surroundings
-    - Conformance to human vision
-    - Freedom of movement
-    - Interaction with the environment
-    - Narrative engagement
-    - 3D audio
-    - Natural social interaction
+Additionally, you should review the sample code related to these lectures. Studying labs 4-7 can also be useful
+
+NOTE: You don't need to memorize the details of the AR and VR components in Unity Inspector
+
+If you have any questions, please ask
+
+### Time and plac
+
+- Date: Monday 6/17
+- Time: 1pm~3pm
+- Place: Sanhak Hall 422, 42
+
+### Instruction
+
+Bring your student ID (or another ID with a photo) because TAs will check your identity
+
+You can bring with you:
+- Pencil, pen, eraser, pencil sharpener, ruler, and other necessary accessories for writing your answers.
+- English dictionary book (without hand-written notes. We will check!
+
+### Q&A
+
+- Q: When can I leave the exam room?
+  - A: after 30 mins
+- Q: How long can I be late?
+  - A: At most 29 mins 59 seconds.
+- Q: How do I answer the questions?
+  - A: write your answers onto the provided answer sheet.
+- Q: What kind of questions will there be in the exam?
+  - A: I haven't prepared the exam questions yet, but I may mix different types of questions, like:
+    - multiple-choice questions
+    - short explanations (e.g. "Explain the following term and give an example.")
+    - longer explanations (e.g. "Describe different locomotion techniques in VR and compare them. Explain what XR Interaction Toolkit components you need for each of them. ")
+    - understanding code (e.g. study code snippets and answer questions about them).
+- Q: when I’m finished, what should I do?
+  - A: make sure that you answered all questions and subquestions and wrote your name on all papers, including the question paper. Then, return the answer sheets AND question paper to the TA.
+- Q: Can I go to restroom during the exam?
+  - A: No. Please go to restroom before the exam.
+
+## Memo for final exam
+
+### Introduction to Immersive Media
+
+- Immersion is the level of user's engagement with her/his senses in a media experience.
+- Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.
+- Important elements for immersion:
+  - Continuity of surroundings
+  - Conformance to human vision
+  - Freedom of movement
+  - Interaction with the environment
+  - Narrative engagement
+  - 3D audio
+  - Natural social interaction
 - Presence: the strength of this feeling. (suspension of disbelief)
 - XR: eXtended Reality
 
