@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>몰입형미디어프로그래밍</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css" as="style">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Noto+Serif+KR&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    body { max-width: 900px; padding: 30px; word-break: keep-all; line-height: 1.7; font-family: 'Noto Serif KR', serif; font-size: 16px; }
+    h1, h2, h3, h4, h5, h6 { font-weight: 800; }
+    h1 { font-size: 1.6em; border-bottom: 1px solid #000000; }
+    h2 { font-size: 1.4em; }
+    h3 { font-size: 1.2em; }
+    h4, h5, h6 { font-size: 1em; }
+    img { box-sizing: initial; width: auto; height: auto; max-width: min(100%, 800px); max-height: 600px; display: block; margin: 0; }
+    ol, ul { padding-left: 2em; }
+    ol ol, ol ul, ul ol, ul ul { margin: 0; }
+    ul > li, ol > li { line-height: 1.7; }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { outline-width: 0; text-decoration: underline; }
+    small { font-size: 85%; color: #6a737d; font-weight: normal; }
+    h1 > code, h2 > code, li > code,  p > code { margin: 0; font-size: 90%; }
+    blockquote { margin: 5px 0 0 0; padding: 0 15px; color: #6a737d; border-left: .25em solid #dfe2e5; }
+    blockquote > p { margin: 0; }
+    table { border-spacing: unset; border-collapse: collapse; margin: 0 0 1em 0; }
+    th, td { padding: 5px 10px 5px 10px; border: 1px black solid; line-height: 1.3; }
+    code { font-family: 'Fira Code', monospace; }
+    .katex { font-size: 1em; }
+    .katex-display { overflow: visible; }
+    .katex-display > .katex { text-align: left; }
+    .hljs { line-height: 1.5; }
+    .footnotes > .footnotes-list { padding: 0; counter-reset: list; font-size: 14px; }
+    .footnotes > .footnotes-list > .footnote-item { list-style-position: inherit; list-style: none; }
+    .footnotes > .footnotes-list > .footnote-item:before { content: "[" counter(list) "] "; counter-increment: list; }
+    .footnotes > .footnotes-list > .footnote-item > p { display: inline; }
+    details > p { margin: 0; }
+    details[open=""] > p { border-left: black 1px solid; padding-left: 15px; margin-left: 3.5px; }
+    summary { cursor: pointer; width: fit-content; }
+  </style>
+</head>
+
+<body>
+  <h1 id="%EB%AA%B0%EC%9E%85%ED%98%95%EB%AF%B8%EB%94%94%EC%96%B4%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D" tabindex="-1">몰입형미디어프로그래밍</h1>
+<ul>
+<li>난 핀란드 사람인데 스웨덴에도 살고 한국에도 살았음. VR/AR에 관심있다.</li>
+<li>AR/VR 프로젝트 과제가 2개 있을거고, 유니티 쓸거임.</li>
+<li>금요일에는 랩 세션을 진행할거임. 개별 실습 과제와 팀플을 하고, 각종 질문받음.
+<ul>
+<li>지난주 주제에 대한 실습 과제가 있음. 어렵지 않아요.</li>
+<li>팀플은 3-4명, 프로젝트는 결과를 발표하고, 코드나 문서 및 시연영상을 제출.</li>
+<li>왠지 모르겠는데 다들 게임을 만들어요. 시연영상은 진짜 게임 예고편처럼 만들어봐.</li>
+</ul>
+</li>
+<li>기말고사가 있을거임.</li>
+<li>교재는 없고, 강의노트와 녹강, 유니티, C#을 쓸거임.</li>
+<li>AR은 안드로이드 디바이스가 있으면 됨. VR은 학교에 오큘러스와 메타퀘스트2가 있음.</li>
+</ul>
+<h2 id="unity-basics" tabindex="-1">Unity basics</h2>
+<ul>
+<li>유니티는 크로스 플랫폼 게임엔진.</li>
+<li>Game object: scene에 있는 모든 것.</li>
+<li>Mesh: 게임 오브젝트의 모양.</li>
+<li>Colliders: 물체의 물리적 경계. 충돌 판정에 필요.</li>
+<li>Scene: 하나의 게임 화면이며, 여러 게임 오브젝트를 배치할 수 있다.</li>
+</ul>
+<h2 id="unity-scripting" tabindex="-1">Unity scripting</h2>
+<ul>
+<li>C# 스크립트를 사용한다. prefab을 만들고, 여기에 스크립트를 추가할 수 있음.</li>
+<li>스크립트 파일에는 <code>Start</code>와 <code>Update</code> 함수가 있음:
+<ul>
+<li><code>Start</code>: 게임이 시작되기 전에 호출됨. 각종 초기화 작업.</li>
+<li><code>Update</code>: 게임 시작 후 매 프레임마다 호출됨.</li>
+</ul>
+</li>
+<li>스크립트에서 게임오브젝트를 참조할 수 있다:
+<ul>
+<li><code>GameObject</code> 타입 변수를 <code>public</code>으로 만들고 유니티에서 연결하면 됨.</li>
+<li><code>private</code>으로 만들고 스크립트에서 <code>GameObject.Find(&quot;name&quot;)</code>으로 찾을수도.</li>
+<li><code>Instantiate</code>: 새 게임오브젝트를 생성한다.</li>
+<li>언제 스크립트에서 오브젝트를 생성해야 할까?
+<ul>
+<li>레벨 시작시 prefab을 여러 다른 장소에 복제해야 할 때.</li>
+<li>무기에서 뭔가를 발상할 때, 총알이나 화살 등.</li>
+<li>게임오브젝트가 여러 조각으로 분해될 때, 폭발 등.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>유니티의 벡터:
+<ul>
+<li>유니티 좌표계는 왼손법칙을 따름.</li>
+<li><code>Vector3</code> 타입으로 오브젝트의 위치, 스칼라, 방향, 속도 등을 다룰 수 있음.</li>
+<li><code>MoveTowards</code>, <code>Lerp</code>, <code>Slerp</code> 같은 함수들을 유용하게 사용할 수 있음.</li>
+<li><code>Update</code> 함수 안에 <code>transform.Translate(transform.forward * Time.deltaTime * 0.5)</code>을 작성하면 단위 시간마다 0.5씩 앞으로 이동.</li>
+</ul>
+</li>
+<li>중요한 클래스들:
+<ul>
+<li><code>GameObject</code></li>
+<li><code>Transform</code>:
+<ul>
+<li>게임오브젝트의 위치, 회전, 크기를 표현한다.</li>
+<li>유니티는 회전을 나타내는 두 방법이 있음, Euler angles와 quaternions</li>
+</ul>
+</li>
+<li><code>MonoBehavior</code>: 스크립트의 베이스 클래스. 게임오브젝트에 대한 각종 정보가 있음.</li>
+</ul>
+</li>
+<li>이벤트 함수: 이벤트가 발생하는 특정 시점에 호출되는 함수들. <code>Update</code>도 이벤트 함수임.</li>
+<li>키 입력으로 오브젝트 움직이기:
+<ul>
+<li><code>Input.GetAxis(&quot;Horizontal&quot;)</code>, <code>Input.GetAxis(&quot;Vertical&quot;)</code></li>
+<li><code>transform.Translate(new Vector3(horizontal, 0, vertical) * (5.0f * Time.deltaTime))</code></li>
+<li>근데 이러면 대각선으로 움직일 때 속도가 빨라짐. 이걸 해결하려면 벡터를 normalize해줘야.</li>
+</ul>
+</li>
+<li>Coroutines:
+<ul>
+<li>스레드 프로그래밍 해봤죠? 유니티에는 코루틴이 있다.</li>
+<li>함수 실행을 일시정지하고, 유니티에게 제어권을 넘겨준 다음, 나중에 재개할 수 있음.</li>
+<li>가령 함수 안에서 <code>yield return WaitForSeconds(x)</code>하면 <code>x</code>초 뒤에 함수가 재개됨.</li>
+</ul>
+</li>
+<li>Rigidbody:
+<ul>
+<li>게임오브젝트가 rigidbody 컴포넌트를 갖는다면, 중력에 영향을 받는다. (비활성화하지 않는 이상)</li>
+<li>콜라이더를 쓰면 충돌에도 영향을 받음.</li>
+</ul>
+</li>
+<li>Kinematic:
+<ul>
+<li>rigidbody 게임 오브젝트가 키네마틱이라면, 물리엔진에 의해 움직이지 않음.</li>
+<li>즉, 중력이나 힘, 토크의 영향을 받지 않음.</li>
+<li>오직 스크립트나 애니메이션에 의해서만 움직이게 됨.</li>
+<li>스크립트로 임의의 force나 torque를 추가해줄 수 있음.</li>
+<li>여전히 collisions에 영향을 받기는 한다.</li>
+</ul>
+</li>
+<li>Collision detection:
+<ul>
+<li>다른 게임오브젝트와 콜라이더가 충돌했는지 판단:<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnCollisionEnter</span>(<span class="hljs-params">Collision collision</span>)</span> {
+    <span class="hljs-keyword">if</span> (collision.gameObject.CompareTage(<span class="hljs-string">&quot;Enemy&quot;</span>)) {
+        Debug.Log(<span class="hljs-string">&quot;Collided with an enemy&quot;</span>);
+    }
+}
+</code></pre>
+</li>
+<li><code>OnCollisionEnter</code>는 딱 충돌했을 때 한번만 호출됨.</li>
+<li><code>OnCollisionStay</code>를 쓰면 콜라이더가 맞닿은 내내 반복 호출된다.</li>
+</ul>
+</li>
+<li>Trigger:
+<ul>
+<li>트리거로도 충돌을 판정할 수 있음.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnTriggerEnter</span>(<span class="hljs-params">Collider other</span>)</span> {
+    <span class="hljs-keyword">if</span> (other.CompareTag(<span class="hljs-string">&quot;Food&quot;</span>)) {
+        Debug.Log(<span class="hljs-string">&quot;Yum&quot;</span>);
+    }
+}
+</code></pre>
+<ul>
+<li>트리거를 쓰면 다른 콜라이더를 통과할 수 있다.</li>
+</ul>
+</li>
+<li>Raycasting:
+<ul>
+<li>어떤 점 A부터 B로 향하는 보이지 않는 라인.</li>
+<li>레이캐스팅을 하면 ray가 어떤 콜라이더와 충돌하는지 체크할 수 있다.</li>
+<li>충돌한 오브젝트가 무엇인지, 그것과의 거리는 얼마인지, 충돌 좌표는 어디인지 알 수 있다.</li>
+<li>e.g., FPS 게임에서 총쏘면 총알이 어디 착탄했는지 알 수 있음.</li>
+<li>e.g., 플레이어가 추락하고 있다면 바닥과의 거리를 알 수 있음.</li>
+<li>e.g., 플레이어와 적 사이에 뭔가가 있는지 체크할 수 있음.</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-to-immersive-media" tabindex="-1">Introduction to Immersive Media</h2>
+<ul>
+<li>몰입도: 미디어 경험에서 사용자의 감각이 결합되는 정도.</li>
+<li>Embodiment: 몸에 각종 센서를 부착해서 몰입도를 높이는 것.</li>
+<li>Presensce:
+<ul>
+<li>좋은 미디어 경험은 사용자가 진짜 가상 세계에 있다고 느끼게 만든다.</li>
+<li>presence는 그런 느낌의 강도. 한국어로 뭐라고 하지…</li>
+<li>제고 요인: 기술적 품질, 몰입도, 현실성, embodiment, 익숙함, 심미성, 디테일 등.</li>
+<li>저하 요인: 각종 기술적 문제, 하드웨어의 불편함, 촉감의 부재, 실제 공간의 방해물,</li>
+<li>80도 이상의 와이드 뷰, 1080p 이상의 해상도, 60Hz 이상의 주사율 등이 필요함.</li>
+</ul>
+</li>
+<li>Multisensory: 몰입되는 환경을 위해서는 다양한 기술을 결합해 모든 감각을 동원해야.
+<ul>
+<li>시각: 3D 디스플레이, 돔, HMD, 홀로그램</li>
+<li>청각: 3D 오디오 효과, 서라운드 사운드</li>
+<li>촉감: 햅틱 수트, 장갑</li>
+<li>그 외 후각, 미각도 하드웨어 장비로 가능.</li>
+</ul>
+</li>
+<li>몰입형 미디어가 뭐냐?
+<ul>
+<li>물리 세계의 느낌을 주는 가상 세계를 만들기 위한 시도.</li>
+<li>몰입형 미디어의 주요 기능: 시뮬레이션, 인간 관계, 심리적 반응, 신체적 반응 등.</li>
+<li>XR(eXtended Reality):
+<ul>
+<li>AR:
+<ul>
+<li>증강 현실. 가상 콘텐츠를 현실에 놓는다. e.g., 포켓몬 고, 이케아 플레이스 등.</li>
+<li>Augmented virtuality: 증강 가상. AV는 현실의 콘텐츠를 가상으로 가져옴.</li>
+</ul>
+</li>
+<li>VR: 가상 현실. e.g., 하프라이프 Alyx</li>
+<li>MR: 혼합현실. e.g., 홀로렌즈 AR이랑 뭐가 다른거지? 뒤에 나옴.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-to-augmented-reality" tabindex="-1">Introduction to Augmented Reality</h2>
+<ul>
+<li>AR의 역사:
+<ul>
+<li>1901: 소설 &lt;The Master Key&gt;</li>
+<li>1968: Ivan Sutherland가 HMD 디바이스 개발.</li>
+<li>1990: 보잉 엔지니어 Thomas Caudell이 AR 용어를 창안.</li>
+<li>1992: Louis Rosenberg가 미 공군 연구소에서 첫 AR 시스템을 만들었음.</li>
+<li>1998: NFL 게임에서 가상의 노란 선을 보여주며 AR이라는 용어를 사용.</li>
+<li>2000: ARToolKit 릴리즈, 첫 AR 게임 &lt;ARQuake&gt; 출시.</li>
+<li>2009: ARToolKit이 브라우저를 지원.</li>
+<li>2014: 구글 글래스 출시.</li>
+<li>2015: AR 기능을 탑재한 모바일 앱이 대거 출시됨.</li>
+<li>2016: 포켓몬 고, 마이크로소프트 홀로렌즈.</li>
+<li>2017: ARKit, ARCore 발표</li>
+<li>2023: 애플 비전 프로.</li>
+</ul>
+</li>
+<li>AR의 특성:
+<ul>
+<li>실제와 가상 세계가 동시에 보여짐.</li>
+<li>실시간 인터렉션을 제공. 사용자가 가상 콘텐츠와 상호작용.</li>
+<li>가상 또는 현실 세계의 물체를 정확히 등록할 수 있음.</li>
+</ul>
+</li>
+<li>AR은 현실을 증강, 개선하는 것을 목표로 한다.</li>
+<li>Mixed Reality(MR):
+<img src="https://schoolofdisruption.com/wp-content/uploads/2018/07/AR-VR-MR.jpg" alt="">
+<ul>
+<li>MR은 공간 인식을 통해 가상의 콘텐츠를 현실 세계에 올려놓을 수 있다는게 특징.</li>
+<li>과거에는 AR이 지금처럼 스마트하지 않았어요. AR에서는 가상 콘텐츠가 현실 위에 보일 뿐이었음.</li>
+<li>사실 지금은 AR이 MR임. 지금은 우리가 AR이라고 부르는게 다 MR이죠.</li>
+</ul>
+</li>
+<li>AR 디바이스:
+<ul>
+<li>Head-up Display (HUD): 일종의 프로젝터. 시각적으로 보여주는 목적이지, 상호작용은 거의 없음.</li>
+<li>헤드셋: 두 가지 종류로 나뉨.
+<ul>
+<li>Optical see-through: 유리판 같은 광학 요소를 통해 현실을 봄. e.g., 홀로렌즈, 구글 글래스.</li>
+<li>Video see-through: 카메라를 통해 현실을 봄. e.g., 오큘러스 퀘스트, 애플 비전 프로.</li>
+</ul>
+</li>
+<li>모바일/Handheld AR: 스마트폰 같은 포터블 디바이스에서 구현된 AR.</li>
+<li>공공장소 전광판, 키오스크 등.</li>
+</ul>
+</li>
+<li>Tracking:
+<ul>
+<li>현실 세계를 추적하기. AR 시스템이 가상 객체를 현실 세계에 놓아야 하니까.</li>
+<li>Marker-based:
+<ul>
+<li>Fiducial markers: 바코드, QR 코드 기반 인식.</li>
+<li>Image targets: 굵은 윤곽선과 불규칙한 패턴, 고대비 이미지.</li>
+<li>Multi-targets: 전개도를 인식해서 3D 개체로 보여줌.</li>
+</ul>
+</li>
+<li>Markerless-based:
+<ul>
+<li>출력된 마커없이 현실 세계를 추적할 수도 있음.</li>
+<li>더욱 리얼한 AR 경험을 제공. 지원하지 않는 디바이스도 있음.</li>
+<li>Object detection: 3D 개체를 인식.</li>
+<li>SLAM: 현실 환경의 평면을 인식. 가령 테이블 위에 모델을 올리고 싶다면 필요.</li>
+<li>Face tracking: 스노우의 그것. 높은 정확도를 위해 LIDAR 사용할수도.</li>
+<li>Location tracking: GPS나 나침반 활용. AR 내비게이션.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Anchors:
+<ul>
+<li>가상 콘텐츠가 어딘가에 고정되어 있지 않다면 카메라를 계속 따라다닐거임.</li>
+<li>현실 세계의 특정 위치에 콘텐츠를 고정히키기 위해 앵커를 사용할 수 있다.</li>
+<li>두 가지 중요한 용어:
+<ul>
+<li>World space: 카메라와 가상 개체가 위치한 좌표 공간. 현실 세계에서 위치가 갱신됨.</li>
+<li>Pose: world space에서의 개체 위치와 방향을 표현.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AR 플랫폼: 애플은 ARKit, 안드로이드는 ARCore, 오픈소스 Holokit 등.</li>
+<li>좋은 AR 경험을 위한 요인:
+<ul>
+<li>가상 개체를 현실 세계의 특정 위치에 고정시켜야.</li>
+<li>사용자의 위치에 따라 가상 개체가 변형될 수 있어야. 가령 가까이 가면 커져야 한다.</li>
+<li>Occlusion: 개체가 다른 개체와 물리적으로 상호작용해야.</li>
+<li>Lighting: 조명을 잘 다루면 현실적.</li>
+</ul>
+</li>
+</ul>
+<h2 id="ar-foundation-and-ar-project-setup" tabindex="-1">AR Foundation and AR Project Setup</h2>
+<ul>
+<li>유니티로 XR 개발을 할 수 있음.</li>
+<li>AR Foundation:
+<ul>
+<li>유니티에서 멀티플랫폼 AR 애플리케이션을 만들게 해주는 툴.</li>
+<li>디바이스 추적, 평면 인식, 앵커, 얼굴 추적 등 온갖게 다 들어있음.</li>
+<li>iOS에 지원되는 기능이 더 많기는 합니다.</li>
+</ul>
+</li>
+<li>유니티에서 AR 프로젝트 만드는 법 설명…</li>
+<li>XROrigin: XR 월드 스페이스의 중심을 표현. 개체의 AR 좌표를 유니티 월드 좌표로 변환.</li>
+<li>XR Simulation: 컴퓨터에서 AR 앱을 테스트해볼 수 있음.</li>
+</ul>
+<h2 id="trackable-and-image-tracking" tabindex="-1">Trackable and Image Tracking</h2>
+<ul>
+<li>AR Foundation의 추적 시스템은 현실 세계의 Trackable을 기반으로 동작함.</li>
+<li>이미지를 인식하고 그에 따른 동작을 프로그래밍할 수 있음.</li>
+<li>특정 이미지를 인식하고 3D 개체 띄우는 걸 보여줄게:
+<ul>
+<li>교수님이 라이브 코딩하고 시연하는데 잘 안 됨.</li>
+<li>30분간 이어지는 눈물의 디버깅쑈… 뭔가 확실히 보여주시려는 듯.</li>
+<li>실습 수업에서 해결됨. Universal RP 문제였음.</li>
+</ul>
+</li>
+</ul>
+<h2 id="plane-tracking-and-ar-raycasting" tabindex="-1">Plane Tracking and AR Raycasting</h2>
+<ul>
+<li>AR Plane Manager로 plane을 인식할 수 있음.</li>
+<li>일단 기본적은 AR scene을 설정하고, XR Session Origin &gt; Add Component &gt; AR Plane Manager 선택.</li>
+<li>hierarchy에 기본 palne을 추가하셈(XR &gt; AR Default Plane)</li>
+<li>이렇게 하면 인식된 planes를 시각화해서 볼 수 있음.</li>
+<li>터치했을 때 plane 위에 오브젝트 생성하기:
+<ul>
+<li>레이를 쏴서 plane 위에 오브젝트를 올릴 수 있다.</li>
+<li>강의노트 7-8 페이지에 코드가 있음.</li>
+<li>오늘도 라이브 코딩 하시는 중.</li>
+</ul>
+</li>
+<li>plane 대신 placement indicator를 쓸 수도 있다.</li>
+</ul>
+<h2 id="building-ui-with-unity-ui-(ugui)" tabindex="-1">Building UI with Unity UI (uGUI)</h2>
+<ul>
+<li>유니티로 UI만드는 법을 알려줄거임. 이건 인터넷에 자료가 많으니 짧게 하겠음.</li>
+<li>모든 UI 요소는 Canvas 컴포넌트를 가진 게임 오브젝트의 자식이어야 한다.</li>
+</ul>
+<h2 id="face-tracking%2C-light-estimation%2C-anchors%2C-occlusion" tabindex="-1">Face Tracking, Light Estimation, Anchors, Occlusion</h2>
+<ul>
+<li>얼굴 추적:
+<ul>
+<li>얼굴 추적은 AR Face Manager를 쓰면 됨.</li>
+<li>얼굴에 가상 마스크같은 걸 씌울 수 있다.</li>
+<li>이건 AR Foundation Remote가 안 됨. 매번 apk를 빌드해야 한다.</li>
+<li>수정과 빌드를 반복하면서 왜 AR Foundation Remote가 좋은지 보여주고 계심.</li>
+</ul>
+</li>
+<li>Light estimation:
+<ul>
+<li>ARCameraManager는 카메라로 캡쳐된 프레임을 분석해서 빛을 estimation한다.<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>()</span> {
+  targetLight = GetComponent&lt;Light&gt;;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnEnable</span>()</span> {
+  cameraManager.frameReceived += ProcessFrame;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnDisable</span>()</span> {
+  cameraManager.frameReceived -= ProcessFrame;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ProcessFrame</span>(<span class="hljs-params">ARCameraFrameEventArgs args</span>)</span> {
+  ARLightEstimationData data = args.lightEstimation;
+  <span class="hljs-keyword">if</span> (data.averageBrightness.HasValue) {
+    targetLight.intensity = data.averageBrightness.Value; <span class="hljs-comment">// 공간의 평균 조도로 설정.</span>
+  }
+
+  <span class="hljs-comment">// 조도 외에 averageColorTemperture, colorCorrection, mainLightColor 등 속성이 있음.</span>
+  ...
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Anchors:
+<ul>
+<li>앵커는 공간상의 특정한 지점.</li>
+<li><code>gameObject.AddComponent&lt;ARAnchor&gt;()</code>같은 식으로 오브젝트에 앵커를 추가할 수 있음.</li>
+<li>공간에 입체 그림을 그리는 예시를 시연하심. 왕신기.</li>
+</ul>
+</li>
+</ul>
+<h2 id="ar-interaction-with-xr-interaction-toolkit" tabindex="-1">AR Interaction with XR Interaction Toolkit</h2>
+<ul>
+<li>(잠깐 졸았는데 챕터가 바뀜…)</li>
+<li>XR Interaction Toolkit은 하이레벨 인터랙션 시스템.</li>
+<li>이 툴킷으로 쉽게 인터랙티브한 AR/VR 경험을 만들 수 있음.</li>
+<li>AR 인터랙션
+<ul>
+<li>AR 제스처 시스템: 손가락 제스처, 탭, 드레그, 트위스트, 핀치 등.</li>
+<li>AR 제스처 interactor and interactables</li>
+</ul>
+</li>
+<li>VR 인터랙션:
+<ul>
+<li>크로스플랫폼 XR 컨트롤러 입력.</li>
+<li>기본적인 오브젝트 호버, 선택, 활성 액션.</li>
+<li>햅틱 피드백: 컨트롤러 진동</li>
+<li>비주얼 피드백</li>
+<li>XR 컨트롤러를 이용한 UI 인터랙션</li>
+<li>Handling stationary and room-scale VR experiences.</li>
+</ul>
+</li>
+<li>메인 컴포넌트:
+<ul>
+<li>Interactors: gameobjects that can hover, select or activate another gameobject.</li>
+<li>Interactables: gameobjects that the user cnat interact with by tap, drag, press, etc.</li>
+<li>Interaction managers: handle interaction between interactors and interactables.</li>
+<li>Interactor와 Interactable이 Interaction manager를 통해 상호작용한다.</li>
+</ul>
+</li>
+<li>스크립트 작성을 안하고 오브젝트와 인터랙션할 수 있음.</li>
+<li>Summary of using AR interactables:
+<img src="./images/summary-of-ar-interactables.png" alt=""></li>
+</ul>
+<h2 id="new-input-system" tabindex="-1">New Input System</h2>
+<ul>
+<li>앞서 <code>Input.GetKeyDown</code> 같은 식으로 입력 시스템을 사용했음.</li>
+<li>그런데 새로운 입력 시스템을 추가하면 어떨까? 조이스틱을 연결하거나 AR 컨트롤러를 연결하면?</li>
+<li>기존 시스템은 A버튼을 누르면 그에 대한 함수를 실행하도록 모델링함:<pre class="hljs"><code>Jump Button --&gt; Jump Function
+</code></pre>
+<ul>
+<li><code>if (Keyboard.current.spaceKey.wasPressedThisFrame) OnJump()</code></li>
+<li>해당 프레임에서 스페이스 키가 눌렸다면 점프한다.</li>
+</ul>
+</li>
+<li>새로운 시스템이 추가되면 A버튼과 B버튼에 대한 구분이 필요해짐:
+<ul>
+<li>두 버튼에 대한 액션과 함수를 분리해보자:</li>
+</ul>
+<pre class="hljs"><code>Jump Button 1
+              \
+               +--&gt; Jump Action --&gt; Jump Function
+              /
+Jump Button 2
+</code></pre>
+<ul>
+<li>함수는 키를 직접 바라보는게 아니라 액션을 바라보게 됨.
+<ul>
+<li>하나의 액션에 각종 키를 바인딩해두고, 함수에서는 액션만을 참조한다.</li>
+<li>이렇게 하며 새로운 입력 시스템이 추가돼도 기존 코드를 변경할 필요가 없음.</li>
+</ul>
+</li>
+<li>액션을 따로 만드려면 Input Actions Asset을 추가:
+<ul>
+<li>Action maps: 액션의 그룹. key-actions pair (e.g., 메뉴, 게임플레이)</li>
+<li>Actions:
+<ul>
+<li>플레이어에 대한 단일 액션 (e.g., 이동, 발사, 점프)</li>
+<li>각 액션에 특정 키 바인딩을 명시할 수 있음.</li>
+</ul>
+</li>
+<li>Action/Binding properties: 선택된 액션의 특성.</li>
+<li>Interactions: 액션을 트리거하기 위한 인터랙션 (e.g., press, hold, single tap, multi tap)</li>
+<li>Processors: 장치로부터 받은 값을 변경 (e.g., invert, clamp)</li>
+</ul>
+</li>
+<li>코드에서는 키를 명시하지 않는다:
+<ul>
+<li><code>actions.FindActionMap(&quot;Gameplay&quot;).FindAction(&quot;Jump&quot;).performed += OnJump</code></li>
+<li><code>Gameplay</code> 그룹의 <code>Jump</code> 액션이 일어나면 <code>OnJump</code> 함수가 실행.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>슬라이드에는 없는데 하나 더 보여줄게. XR Interaction Toolkit을 써보자:
+<ul>
+<li>VR 컨트롤러에 있는 각종 입력 장치를 바인딩해놓음.</li>
+<li>스크립트에서 바로 사용할 수 있음.</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-to-virtual-reality" tabindex="-1">Introduction to Virtual Reality</h2>
+<ul>
+<li>VR: computer-generated simulation of a 3D environment, which seems real to the user.</li>
+<li>VR의 목표: generate realistic image, sounds and other sensations that simulate a user’s physical presence in a virtual environment.</li>
+<li>오늘날 VR HMD(head-moounted display)는:
+<ul>
+<li>양쪽 눈에 같은 이미지를 보여줌으로써 stereographic 3D scene을 제공함.</li>
+<li>사용자의 신체나 시선을 추적할 수 있고, 감정을 읽기도.</li>
+</ul>
+</li>
+<li>Why VR? 현실감을 위해. 훈련, 교육 등 실현하려면 비용이 많이 드는 일을 가상환경으로 해결 가능.</li>
+<li>Stereoscopic VR:
+<ul>
+<li>우리가 하나의 사물을 볼 때 양쪽 눈에는 살짝 다른 상이 맺힘.</li>
+<li>살짝 다른 이미지를 양쪽 눈에 보여주면 3D로 보임. 각각의 눈에 렌즈가 하나씩 필요.</li>
+<li>오래된 방식.</li>
+</ul>
+</li>
+<li>Monoscopic VR:
+<ul>
+<li>두 눈에 하나의 거대한 이미지를 보여준다.</li>
+<li>몰입감은 좀 떨어지지만 저렴함.</li>
+<li>유튜브에 있는 VR 기능이 이거임. 그냥 2D 이미지가 파노라마처럼 사용자를 둘러싸는 것.</li>
+</ul>
+</li>
+<li>VR의 역사:
+<ul>
+<li>1956: Sensorama 발명. 3D 영상과 소리, 냄새와 촉감 제공.</li>
+<li>1968: 첫 HMD, The Sword of Damocles.</li>
+<li>1969: Videoplace 발명. HDM를 필요로하지 않는 첫 인터랙티브 VR 시스템.</li>
+<li>1978: Aspen Movie Map, <a href="https://rebeccaallen.com/projects/aspen-movie-map">https://rebeccaallen.com/projects/aspen-movie-map</a></li>
+<li>1979: Vital VR 헬멧. 파일럿 시선을 추적하는 군사용 장치.</li>
+<li>1991: 첫 VR 아케이드 머신.</li>
+<li>1995: 홈 VR 헤드셋 출시, I-Glasses, VFX1 헤드기어. 혁명적.</li>
+<li>2010: 오큘러스 리프트의 첫 프로토타입 개발.</li>
+<li>이후로 구글 카드보드, 삼성 기어 Vr, GloveOne, HTC Vive, Valve Index 등 출시.</li>
+<li>작년에는 메타 퀘스트 3와 애플 비전 프로가 나왔음.</li>
+</ul>
+</li>
+<li>VR의 중요한 요소들:
+<ul>
+<li>3D viewing:
+<ul>
+<li>pincushion effect</li>
+<li>유니티의 VR 카메라는 uses barrel distortion으로 pincushion effect를 방지.</li>
+<li>Screen resolution: 해상도가 낮으면 screen-door effect가 일어난다.</li>
+<li>낮은 해상도의 HMD를 위한 기법이 있음: foveated rendering은 시선을 추적해서 사용자가 보고 있는 곳만 고해상도로 렌더링하고, 주변부는 흐리게 함.</li>
+</ul>
+</li>
+<li>Head, hand, and body tracking:
+<ul>
+<li>VR HMD에는 모션 트래킹을 위한 센서가 있음.</li>
+<li>Positional tracking: 현실 세계의 헤드셋과 컨트롤러의 위치를 추적.</li>
+<li>Hand tracking: 컨트롤러나 장갑, 햅틱 피드백.</li>
+<li>Body tracking: 몸 전체를 추적. 수트같은걸 입음.</li>
+<li>Inside-out vs outside-in tracking:
+<img src="https://xinreality.com/mediawiki/images/5/5a/Inside_out_vs._outside_in_tracking.png" alt="">
+<ul>
+<li>Inside-Out: 카메라가 사용자에게 달려있음. e.g., Oculus, Meta Quest, …</li>
+<li>Outside-in: 환경에 고정된 카메라가 있고, 사용자를 추적. e.g., HTC Vive, Oculus Rift, …</li>
+</ul>
+</li>
+<li>3DoF vs 6DoF:
+<ul>
+<li>3DoF:
+<img src="https://cognitive3d.com/uploads/3dof.gif" alt="">
+<ul>
+<li>Rotational movements of the head are tracked (tilt, turn)</li>
+<li>3개의 회전축.</li>
+</ul>
+</li>
+<li>6DoF:
+<img src="https://cognitive3d.com/uploads/6dof.gif" alt="">
+<ul>
+<li>Rotational movements of the head + position tracking</li>
+<li>3개의 회전축과 3개의 위치축.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Embodiment:
+<ul>
+<li>사용자가 가상의 바디를 자신의 바디라고 느끼는 것.</li>
+<li>first-person VR 경험에 필수적.</li>
+<li>Increased immersion, presence, emotional responses.</li>
+</ul>
+</li>
+<li>Interactivity:
+<ul>
+<li>Natural: 인터랙션은 자연스러워야 한다.</li>
+<li>Multimodal: 인터랙션은 다양한 입출력을 지원해야 한다.</li>
+</ul>
+</li>
+<li>High quality content:
+<ul>
+<li>높은 품질의 콘텐츠는 높은 몰입을 가능하게 만들죠.</li>
+<li>이 수업은 3D 콘텐츠를 만드는 수업은 아니니까 어셋 스토어에서 가져다 쓰도록.</li>
+</ul>
+</li>
+<li>Spatial sound</li>
+</ul>
+</li>
+</ul>
+<h3 id="vr-hardware-and-software" tabindex="-1">VR Hardware and Software</h3>
+<ul>
+<li>HMDs and Projcted VR:
+<ul>
+<li>HMD는 님들이 잘 아는 VR 기기.</li>
+<li>Projected VR은 사방이 스크린인 공간에 사용자가 들어감.</li>
+</ul>
+</li>
+<li>Types of VR HMD devices:
+<ul>
+<li>Tethered, desktop VR:
+<ul>
+<li>실제로는 컴퓨터에서 도는데 케이블 통해서 HMD로 전송하는 방식.</li>
+<li>e.g., 플레이스테이션 VR, Steam VR, HTC VIVE, …</li>
+</ul>
+</li>
+<li>Standalone, mobile VR: 오큘러스, 메타 퀘스트, …</li>
+</ul>
+</li>
+<li>Hand input devices:
+<ul>
+<li>컨트롤러나 장갑같은 걸 쓸 수 있음.</li>
+<li>Meta Quest 3나 애플 비전 프로는 맨손도 감지한다.</li>
+</ul>
+</li>
+<li>Non-hand input devices: Head, Eye, Lip/face, Microphones, Full-body tracking</li>
+</ul>
+<h3 id="types-of-vr-experience" tabindex="-1">Types of VR Experience</h3>
+<ul>
+<li>Diodrama: 간단한 3D 씬, “Shoebox diodrama”</li>
+<li>First-person experience: e.g., Half-Life Alyx</li>
+<li>Third-person experience</li>
+<li>Stationary vs room-scale VR experiences:
+<ul>
+<li>둘 다 방에 카메라 설치해두는 건데 뭐가 다른가?</li>
+<li>Stationary: 사용자가 한 장소에 고정. 사용자의 물리적 움직임이 영향을 미치지 않음.</li>
+<li>Room-scale: VR 기기가 사용자의 실제 움직임을 추적해서 가상세계에 반영.</li>
+</ul>
+</li>
+<li>3D content creation experiences: VR로 3D 콘텐츠를 만든다. 마인크래프트도 어찌보면…</li>
+<li>Riding/Walking experiences: 롤러코스터 VR은 아주 초기에도 시도한 것. 보통 상호작용이 제한됨.</li>
+<li>360-Degree media: 비디오인데 360도 촬영해서 몰입감을 선사. 상호작용은 없음.</li>
+<li>Social VR: 아주 유명한 VRChat.</li>
+</ul>
+<h3 id="design-considerations-for-vr-experiences" tabindex="-1">Design Considerations for VR Experiences</h3>
+<ul>
+<li>몰입도 높은 VR 경험을 위한 요구사항:
+<ul>
+<li>낮은 레이턴시(motion-to-photon): 20ms 미만이어야.</li>
+<li>높은 프레임 레이트: 90 FPS 이상이어야.</li>
+<li>High resolution</li>
+<li>Wide field of view(FOV): 실제 사람은 220도 정도, 오큘러스 리프트는 90도.</li>
+<li>Precise head/hand/body tracking: 6DoF가 좋겠죠.</li>
+<li>High quality audiovisual content</li>
+<li>Natural interaction</li>
+<li>Blocking of external disturbances</li>
+</ul>
+</li>
+<li>Simulator sickness:
+<ul>
+<li>VR을 사용하고 멀미를 하는 경우도 흔합니다.</li>
+<li>simulator sickness가 일어나는 다양한 원인이 있음.</li>
+<li>높은 레이턴시, 낮은 트래킹 정확도: 요즘엔 디바이스가 좋아서 문제가 안 됨.</li>
+<li>Fast acceleration(eye-inner ear mismatch): 등속운동하거나 천천히 움직이도록 해보세요.</li>
+<li>빠르게 움직일 때 FoV가 너무 넓으면 안 됨.</li>
+<li>낮은 refresh rate와 flicker, brightness, strong contrast changes.</li>
+<li>예상치 못한 움직임: 계단을 오르는데 점프가 된다거나… 적이 사용자를 미는 경우.</li>
+</ul>
+</li>
+</ul>
+<h2 id="vr-development-tools-setup%2C-inputs%2C-and-hand-presence" tabindex="-1">VR Development Tools Setup, Inputs, and Hand Presence</h2>
+<ul>
+<li>Oculus/Meta Quest 2 공식문서 읽고 셋업하셈. 당신 폰과 컴에 관련 앱이 필요함.</li>
+<li>고성능 GPU가 필요함. 지원이 안 되는 GPU가 있으니 그래픽카드 사양을 잘 보셈.</li>
+<li>그리고 안타깝지만 윈도우즈 시스템에서만 할 수 있음. (oh no)</li>
+<li>내일 실습에 오기 전에 미리 설정을 해보렴. 그래야 우리가 도와줄 수 있음.</li>
+<li>유니티에서 셋업하는 방법을 알려줄게:
+<ul>
+<li>유니티에서 VR과 Universal 3D 프로젝트는 둘 다 URP를 사용함.
+<ul>
+<li>난 Universal 3D를 해보겠음.</li>
+<li>VR ㅋ프로젝트 템플릿을 쓰면 샘플 파일들이 들어있어서 좀 지저분하다.</li>
+</ul>
+</li>
+<li>패키지 매니저에서 OpenXR Plugin을 설치해라.</li>
+<li>추가로 XR Device Siulator를 설치하면 기기가 없어도 시뮬레이트할 수 있음.</li>
+<li>프로젝트 세팅 &gt; XR Plug-in Management &gt; OpenXR &gt; 안드로이드 탭 들어가서 프로파일 추가해라.</li>
+<li>AR 프로젝트에서 메인 카메라 지우고 XR Origin 추가했지? VR 프로젝트도 똑같음.</li>
+<li>근데 이제 컨트롤러가 있으니까 카메라 오프셋 아래에 있는 컨트롤러를 없앨 필요는 없음.</li>
+<li>컨트롤러에 XR Interactor Line Visual 컴포넌트를 추가하면 컨트롤러 방향을 선으로 표시해줌.</li>
+</ul>
+</li>
+<li>간단한 VR 씬만들고 시연하심. 재밌겠다…🤩</li>
+<li>What is URP?
+<ul>
+<li>렌더 파이프라인은 씬의 콘텐츠를 스크린에 렌더링함.</li>
+<li>Built-in RP: 모든 플랫폼에서 동작.</li>
+<li>URP: 제한된 성능의 기기에서 동작함. (e.g., 스마트폰, VR 기기)</li>
+<li>HDRP: 고성능 기기에서만 동작함. (e.g., 컴퓨터, 콘솔)</li>
+<li>상황에 맞게 잘 선택하면 된다.</li>
+</ul>
+</li>
+<li>What is OpenXR?
+<ul>
+<li>크로스플랫폼 XR 개발을 위한 표준.</li>
+<li>유니티 OpenXR 플러그인은 각종 기기에 여러 인터랙션 프로파일을 지원함.</li>
+</ul>
+</li>
+<li>Hand presence:
+<ul>
+<li>XR Origin에 컨트롤러 외에 Hand, Hand visualizer 오브젝트를 추가하면 손을 인식시킬 수 있음.</li>
+<li>XR Origin에 XR Input Modality Manager 스크립트가 있어야.</li>
+<li>구현하는 방법은 보강 동영상으로 올려뒀으니 확인해보렴.</li>
+</ul>
+</li>
+</ul>
+<h2 id="simple-interactable%2C-locomotion%2C-ray-interactor%2C-interaction-groups%2C-and-tunneling-vignette" tabindex="-1">Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, and Tunneling Vignette</h2>
+<ul>
+<li>XR Simple Interactable</li>
+<li>Locomotion in VR</li>
+<li>Locomotion methods:
+<ul>
+<li>Teleportation: 이동 지점을 선택하면 순간이동.</li>
+<li>Continuous movement: 이동수단 같은 걸 타고 이동.</li>
+<li>Grab move: 뭔가를 잡고 밀고 당기며 이동. (수영하듯)</li>
+<li>Snap/continuous turn</li>
+<li>Climb</li>
+</ul>
+</li>
+<li>Interaction groups</li>
+<li>teleportation, vinette, grab move 시연하시는 중.
+<ul>
+<li>플레이어한테는 콜라이더가 없어서 오브젝트를 통과해버림.</li>
+<li>캐릭터 컨트롤러로 이 문제를 해결해보자.</li>
+<li>URP 설정 건드렸더니 모든 오브젝트가 마젠타가 됨… 머티리얼 RP를 싹 다 스탠다드로 바꿈.</li>
+<li>스크립트 한줄도 안 짜고 컴포넌트만 추가하고 파라미터 설정해주면 되니까 쉽죠.</li>
+</ul>
+</li>
+</ul>
+<h2 id="vr-interactions-in-xr-interaction-toolkit" tabindex="-1">VR Interactions in XR Interaction Toolkit</h2>
+<ul>
+<li>XR Interaction Toolkit은 VR 인터랙션을 쉽게 구현할 수 있게 해줌.
+<img src="./images/interactor-interactable.png" alt=""></li>
+<li>총 잡는 예시:
+<ul>
+<li>권총 모델에 박스 콜라이더 설정해주고… 손으로 잡아보기.</li>
+<li>앗! 총이 아래를 보고있다. 모델의 Attach transform 위치를 바꿔주자.</li>
+<li>님들 과제에서 중요한 부분이니까 잘 보셈.</li>
+</ul>
+</li>
+<li>Interactor hierarchy:
+<img src="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.3/manual/images/class-hierarchy.svg" alt="">
+<ul>
+<li>BaseInteractable을 상속해서 자신만의 인터랙터블을 만들 수 있음.</li>
+</ul>
+</li>
+<li>UI Interaction: UI를 만들어보아요.</li>
+<li>XR Poke Interactor:
+<ul>
+<li>인터랙터블과 UI를 터치, 찌를 수 있게 해주는 인터랙터.</li>
+<li>e.g., 대왕 성냥개비로 인터랙터블과 상호작용.</li>
+</ul>
+</li>
+<li>오늘은 문 열기 레버 내리기 같은 걸 해볼게요.
+<ul>
+<li>문 여는건 그냥 hinge joint 컴포넌트 추가하면 됨.</li>
+</ul>
+</li>
+<li>시선 추적도 할 수 있어용: eye gaze interactor를 추가하셈.</li>
+</ul>
+<h2 id="notices" tabindex="-1">Notices</h2>
+<ul>
+<li>깜짝 퀴즈 볼거임. 지금 당장.
+<ul>
+<li>펜과 종이로 20초 안에 질문에 대답해야 함. 이메일로 당신의 정답을 내셈.</li>
+</ul>
+<ol>
+<li>b) FixedUpdate</li>
+<li>d) Layer mask</li>
+<li>(0, 4, 0)</li>
+<li>A frist AR game</li>
+<li>c) Richie’s (?)</li>
+<li>b) Leo (??)</li>
+<li>a) ShanDong (???)</li>
+<li>She’s scream was louder than gunshot. (???)</li>
+<li>April fools’ day…</li>
+</ol>
+</li>
+<li>lab4 과제가 올라왔는데 arcoreimg.exe 파일이 첨부되어 있음:
+<ul>
+<li>맥이나 리눅스쓴다면 그냥 <a href="https://github.com/google-ar/arcore-android-sdk/tree/master/tools/arcoreimg">AR Core 저장소</a>에서 받아도 됨.</li>
+<li><code>arcoreimg evel-img --input_image_path=&lt;path&gt;</code>하면 이미지 인식률을 체크해볼 수 있음.</li>
+<li>점수가 75점 이상 나와야 마커 이미지로 인식이 잘 된다.</li>
+</ul>
+</li>
+<li>Q: 데스크탑이랑 모바일 네트워크가 서로 달라서 AR Foundation Remote를 못 씀…
+<ul>
+<li>A: USB 테더링으로 해보셈.</li>
+</ul>
+</li>
+<li>중간고사 보고싶은 사람?
+<ul>
+<li>우린 중간고사 안 봅니다.</li>
+<li>그러니까 수업 나오셈. 4/22에 나와서 팀플하세요.</li>
+</ul>
+</li>
+<li>VR 기기 빌려줄게요:
+<ul>
+<li>팀 1,2,3,4,9는 산621로 오셈. VR 기기랑 USB 케이블을 줄거임.</li>
+<li>기기는 조심히 써주세요. 엄청 비싸진 않지만 저렴하지도 않음.</li>
+<li>기기는 항상 박스에 넣어둬라. 케이블도 꼭 챙겨서 나중에 반납해야 됨.</li>
+<li>케이블이나 충전기가 없는 경우도 있을거임. 그냥 핸드폰 충전기 써보셈.</li>
+</ul>
+</li>
+<li>님들 컴퓨터가 안 좋으면 실습실에서 하세요. 실습실 쓸 사람들은 신청서를 제출하렴.</li>
+<li>6/17 13~15시 산422, 산420에서 기말고사볼거임. 강의실 배정은 TA가 엑셀파일로 올려줄거임.
+<ul>
+<li>손코딩 없을거임. 그건 실습에서 했으니까.</li>
+<li>이론적인걸 많이 물어볼거임. 설명하면서 당신이 코드를 제시할 수는 있겠지. 그 코드가 컴파일이 잘 되는지는 노상관임.</li>
+</ul>
+</li>
+<li>UBILIFE LAB 오세용.</li>
+<li>6/17 월요일에 VR 기기 반납해라. 상자에 들어있던 거 잘 챙기고. 과제를 일욜까지니까 괜찮지?</li>
+<li>6/20 금요일까지 당신들 출석이랑 과제 점수 같은 거 최종 점검해라.</li>
+</ul>
+<h2 id="about-final-exam" tabindex="-1">About final exam</h2>
+<p>The final exam scope includes the following lecture notes:</p>
+<ul>
+<li>03 - Introduction to Immersive Media (slides 2-12)</li>
+<li>04 - Introduction to AR (slides 5-26, 29-31)</li>
+<li>05 - AR Foundation and AR project setup (slides 2-7, 13-15)</li>
+<li>06 - Trackables and Image Tracking (2-13)</li>
+<li>07 - Plane Tracking and AR Raycasting</li>
+<li>10 - AR Interaction with XR Interaction Toolkit (slides 2-7)</li>
+<li>12 - Introduction to VR (slides 2-5, 11-24, 26-40)</li>
+<li>14 - Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, Tunneling Vignette (slides 1-27)</li>
+<li>15 - Interaction</li>
+</ul>
+<p>Additionally, you should review the sample code related to these lectures. Studying labs 4-7 can also be useful</p>
+<p>NOTE: You don’t need to memorize the details of the AR and VR components in Unity Inspector</p>
+<p>If you have any questions, please ask</p>
+<h3 id="time-and-plac" tabindex="-1">Time and plac</h3>
+<ul>
+<li>Date: Monday 6/17</li>
+<li>Time: 1pm~3pm</li>
+<li>Place: Sanhak Hall 422, 42</li>
+</ul>
+<h3 id="instruction" tabindex="-1">Instruction</h3>
+<p>Bring your student ID (or another ID with a photo) because TAs will check your identity</p>
+<p>You can bring with you:</p>
+<ul>
+<li>Pencil, pen, eraser, pencil sharpener, ruler, and other necessary accessories for writing your answers.</li>
+<li>English dictionary book (without hand-written notes. We will check!</li>
+</ul>
+<h3 id="q%26a" tabindex="-1">Q&amp;A</h3>
+<ul>
+<li>Q: When can I leave the exam room?
+<ul>
+<li>A: after 30 mins</li>
+</ul>
+</li>
+<li>Q: How long can I be late?
+<ul>
+<li>A: At most 29 mins 59 seconds.</li>
+</ul>
+</li>
+<li>Q: How do I answer the questions?
+<ul>
+<li>A: write your answers onto the provided answer sheet.</li>
+</ul>
+</li>
+<li>Q: What kind of questions will there be in the exam?
+<ul>
+<li>A: I haven’t prepared the exam questions yet, but I may mix different types of questions, like:
+<ul>
+<li>multiple-choice questions</li>
+<li>short explanations (e.g. “Explain the following term and give an example.”)</li>
+<li>longer explanations (e.g. &quot;Describe different locomotion techniques in VR and compare them. Explain what XR Interaction Toolkit components you need for each of them. &quot;)</li>
+<li>understanding code (e.g. study code snippets and answer questions about them).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Q: when I’m finished, what should I do?
+<ul>
+<li>A: make sure that you answered all questions and subquestions and wrote your name on all papers, including the question paper. Then, return the answer sheets AND question paper to the TA.</li>
+</ul>
+</li>
+<li>Q: Can I go to restroom during the exam?
+<ul>
+<li>A: No. Please go to restroom before the exam.</li>
+</ul>
+</li>
+</ul>
+<h2 id="memo-for-final-exam" tabindex="-1">Memo for final exam</h2>
+<h3 id="introduction-to-immersive-media-1" tabindex="-1">Introduction to Immersive Media</h3>
+<ul>
+<li>Immersion is the level of user’s engagement with her/his senses in a media experience.</li>
+<li>Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.</li>
+<li>Important elements for immersion:
+<ul>
+<li>Continuity of surroundings</li>
+<li>Conformance to human vision</li>
+<li>Freedom of movement</li>
+<li>Interaction with the environment</li>
+<li>Narrative engagement</li>
+<li>3D audio</li>
+<li>Natural social interaction</li>
+</ul>
+</li>
+<li>Presence: the strength of this feeling. (suspension of disbelief)</li>
+<li>XR: eXtended Reality</li>
+</ul>
+<h3 id="introduction-to-ar" tabindex="-1">Introduction to AR</h3>
+<ul>
+<li>AR aims to enhance real world experiences by using different types of digital congtent.</li>
+<li>Weak AR: imprecise tracking, limited interactivity, …</li>
+<li>Strong AR: accurate tracking, seamless integration with real world, …</li>
+<li>MR: Mixed Reality
+<ul>
+<li>Virtual content can be placed onto the real world through spatial awareness.</li>
+</ul>
+</li>
+<li>HUD, Headset, Handheld AR, Public space AR, Location-based AR, …</li>
+<li>Anchors:
+<ul>
+<li>World space: the coordinate space where the camera and the virtual objects are locaated.</li>
+<li>Pose: represents an object’s position and orientation in world space.</li>
+</ul>
+</li>
+<li>A good AR experience not only tracks the position of the virtual objects, but also changes their transform according to the user’s position.</li>
+</ul>
+<h3 id="ar-foundation-and-ar-project-setup-1" tabindex="-1">AR Foundation and AR Project Setup</h3>
+<ul>
+<li>AR Foundation: provides tools to create multi-plataform AR application in Unity.</li>
+<li>XR Origin: represents the center of world space in AR, MR and Vr applications.</li>
+<li>AR Session: controls the lifecycle of an AR application.</li>
+</ul>
+<h3 id="trackables-and-image-tracking" tabindex="-1">Trackables and Image Tracking</h3>
+<ul>
+<li>Trackable: anything in the real world that can be detected and tracked.</li>
+<li>AR Tracked Image Manager: it is used for tracking 2D images.</li>
+</ul>
+<h3 id="plane-tracking-and-ar-raycasting-1" tabindex="-1">Plane Tracking and AR Raycasting</h3>
+<ul>
+<li>AR Plane Manager</li>
+<li>AR Raycast Manager: interacts with the detected planes.</li>
+</ul>
+<h3 id="ar-interaction-with-xr-interaction-toolkit-1" tabindex="-1">AR Interaction with XR Interaction Toolkit</h3>
+<ul>
+<li>XR Interaction Toolkit: high-level interaction system for easy creation of interactive AR/VR experiences.</li>
+<li>Main components:
+<ul>
+<li>Interactors: gameobjects that can hover, select or activate another gameobject.</li>
+<li>Interactables: gameobjects that the user can interact with by tap, drag, press, etc.</li>
+<li>Interaction managers: handle interaction between interactors and interactables.</li>
+</ul>
+</li>
+<li>XR Interaction Manager: takes care of communication between interactors and interactables.</li>
+</ul>
+<h3 id="introduction-to-virtual-reality-1" tabindex="-1">Introduction to Virtual Reality</h3>
+<ul>
+<li>VR: computer-generated simulation of a 3D environment, which seems real to the user.</li>
+<li>Stereoscopic VR:
+<ul>
+<li>separate views for the left and right eyes, which are slightly offset to create a 3D effect even though the images are 2D.</li>
+<li>VR head-mounted displays are based on stereoscopic images.</li>
+</ul>
+</li>
+<li>Monoscopic VR: uses the same image for both eyes.</li>
+<li>Important elements of VR:
+<ul>
+<li>3D viewing:
+<ul>
+<li>pincushion effect</li>
+<li>barrel distortion</li>
+</ul>
+</li>
+<li>Screen resolution
+<ul>
+<li>screen-door effect</li>
+<li>foveated rendering</li>
+</ul>
+</li>
+<li>Motion tracking:
+<ul>
+<li>positional tracking</li>
+<li>inside-out tracking</li>
+<li>outside-in tracking</li>
+<li>3DoF: rotational movements of the head</li>
+<li>6DoF: rotational movements of the head + position tracking</li>
+</ul>
+</li>
+<li>Embodiment</li>
+<li>Interactivity
+<ul>
+<li>natural</li>
+<li>multimodal</li>
+</ul>
+</li>
+<li>High quality content</li>
+<li>Spatial sound</li>
+</ul>
+</li>
+<li>Diodrama: a simple 3D scene, which is observed from a third-person perspective.</li>
+<li>First-person experience: the user takes the role of a freely moving agent in the scene.</li>
+<li>Third-person experience: the user watches the scene from a third-person perspective.</li>
+<li>Stationary: the user sits or stands in one place.</li>
+<li>Room-scale: the Vr device translates the user’s movement in the real world to the character’s movement in the virtual world.</li>
+<li>Requirements for a high-quality VR experience:
+<ul>
+<li>low latency</li>
+<li>high frame rate</li>
+<li>high resolution</li>
+<li>wide field of view</li>
+<li>precise head/hand/body tracking</li>
+<li>high quality audiovisual content</li>
+<li>natural interaction</li>
+<li>blocking of external disturbances</li>
+</ul>
+</li>
+<li>Simulator sickness:
+<ul>
+<li>if the player needs to move fast, recude the field of view: tunneling vignette</li>
+</ul>
+</li>
+</ul>
+<h3 id="simple-interactable%2C-locomotion%2C-ray-interactor%2C-interaction-groups%2C-and-tunneling-vignette-1" tabindex="-1">Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, and Tunneling Vignette</h3>
+<ul>
+<li>Locomotion: moving from one place to another in a virtual scene.
+<ul>
+<li>Physical: motion-based(continuous), roomscale-based(continuous)</li>
+<li>Artificial: controller-based(continuous), teleportation-based(non-continuous)</li>
+</ul>
+</li>
+</ul>
+<h3 id="vr-interactions-in-xr-interaction-toolkit-1" tabindex="-1">VR Interactions in XR Interaction Toolkit</h3>
+<ul>
+<li>XR Direct Interactor: allows the user to directly interact with interactables.</li>
+<li>XR Socket Interactor: enables placing interactables into a socket.</li>
+<li>XR Grab Interactable: allows the user to pick up and drop a gameobject, as well as throw or it into a socket.</li>
+<li>XR Simple Interactor: the simplest interactable object that doesn’t really do anything. Hover, select and activate events that programmers can attach their code to.</li>
+<li>You can create your own interactors by inheriting from <code>BaseInteractor</code> or <code>BaseControllerInteractor</code>.</li>
+<li>You can crate your own interactables by inheriting from <code>BaseInteractable</code>.</li>
+<li>Interaction Layer Mask: mechanism for filtering which interfactors and interactables can work together.
+<ul>
+<li>Raycast Mask: specifies the physics layers that a raycast can hit.</li>
+<li>Interaction Layer Mask: specifies the interaction layers through which an interactor and interactable can interact.</li>
+</ul>
+</li>
+<li>Interaction states: Hover -&gt; Select -&gt; Activate</li>
+<li>XR Poke Interactor: allows the user to interact with interactables and UI by poking/touching them.</li>
+</ul>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</body>
+

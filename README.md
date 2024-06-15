@@ -13,3 +13,4 @@
 - [과학기술과법 기말](science-technology-and-law-note-final.html)
 - [이산수학 중간](discrete-mathematics-note-midterm.html)
 - [이산수학 기말](discrete-mathematics-note-final.html)
+- [몰입형미디어프로그래밍](immersive-media-programming-note.html
