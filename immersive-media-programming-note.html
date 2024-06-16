@@ -904,7 +904,7 @@ Jump Button 2
 <h2 id="memo-for-final-exam" tabindex="-1">Memo for final exam</h2>
 <h3 id="introduction-to-immersive-media-1" tabindex="-1">Introduction to Immersive Media</h3>
 <ul>
-<li>Immersion is the level of user’s engagement with her/his senses in a media experience.</li>
+<li><strong>Immersion is the level of user’s engagement</strong> with her/his senses in a media experience.</li>
 <li>Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.</li>
 <li>Important elements for immersion:
 <ul>
@@ -917,7 +917,14 @@ Jump Button 2
 <li>Natural social interaction</li>
 </ul>
 </li>
-<li>Presence: the strength of this feeling. (suspension of disbelief)</li>
+<li>Presence means the strength of this feeling:
+<ul>
+<li>Forgetting about the real world</li>
+<li>Losing track of Time</li>
+<li>Reacting to virtual stimuli as if they are real</li>
+<li>Related term: <strong>suspension of disbelief</strong></li>
+</ul>
+</li>
 <li>XR: eXtended Reality</li>
 </ul>
 <h3 id="introduction-to-ar" tabindex="-1">Introduction to AR</h3>
@@ -927,23 +934,27 @@ Jump Button 2
 <li>Strong AR: accurate tracking, seamless integration with real world, …</li>
 <li>MR: Mixed Reality
 <ul>
-<li>Virtual content can be placed onto the real world through spatial awareness.</li>
+<li>Virtual content can be placed onto the real world through <strong>spatial awareness</strong>.</li>
 </ul>
 </li>
 <li>HUD, Headset, Handheld AR, Public space AR, Location-based AR, …</li>
+<li><strong>SLAM(Simultaneous Localization and Mapping) technology analyzes the sensor input of a mobile device and creates points and planes that represent the real world environment.</strong></li>
 <li>Anchors:
 <ul>
-<li>World space: the coordinate space where the camera and the virtual objects are locaated.</li>
-<li>Pose: represents an object’s position and orientation in world space.</li>
+<li><strong>World space: the coordinate space where the camera and the virtual objects are locaated.</strong></li>
+<li><strong>Pose: represents an object’s position and orientation in world space.</strong></li>
 </ul>
 </li>
 <li>A good AR experience not only tracks the position of the virtual objects, but also changes their transform according to the user’s position.</li>
+<li>Immersive experiences depdend on realistic occlusion and lighting.</li>
 </ul>
 <h3 id="ar-foundation-and-ar-project-setup-1" tabindex="-1">AR Foundation and AR Project Setup</h3>
 <ul>
+<li>Unity has a plug-in framework called XR SDK that allows XR device manufacturers to integrate their XR libraries into Unity.</li>
 <li>AR Foundation: provides tools to create multi-plataform AR application in Unity.</li>
-<li>XR Origin: represents the center of world space in AR, MR and Vr applications.</li>
-<li>AR Session: controls the lifecycle of an AR application.</li>
+<li><strong>XR Origin: represents the center of world space in AR, MR and VR applications.</strong></li>
+<li><strong>AR Session: controls the lifecycle of an AR application.</strong></li>
+<li>Tracked Pose Driver, AR Camera Manager, AR Camera Background</li>
 </ul>
 <h3 id="trackables-and-image-tracking" tabindex="-1">Trackables and Image Tracking</h3>
 <ul>
@@ -952,8 +963,9 @@ Jump Button 2
 </ul>
 <h3 id="plane-tracking-and-ar-raycasting-1" tabindex="-1">Plane Tracking and AR Raycasting</h3>
 <ul>
-<li>AR Plane Manager</li>
+<li>AR Plane Manager creates GameObjects for each detected plane.</li>
 <li>AR Raycast Manager: interacts with the detected planes.</li>
+<li>If you want to raycast against gameobjects that have colliders, use <code>Physics,raycast()</code> instead.</li>
 </ul>
 <h3 id="ar-interaction-with-xr-interaction-toolkit-1" tabindex="-1">AR Interaction with XR Interaction Toolkit</h3>
 <ul>
@@ -966,6 +978,8 @@ Jump Button 2
 </ul>
 </li>
 <li>XR Interaction Manager: takes care of communication between interactors and interactables.</li>
+<li>Each interactables has three possible states: Hover, Select, Activate.</li>
+<li>There are multiple types of interactors for different types of interactions: Gesture(AR), Ray(VR), Direct(VR), Socket(VR)</li>
 </ul>
 <h3 id="introduction-to-virtual-reality-1" tabindex="-1">Introduction to Virtual Reality</h3>
 <ul>
@@ -982,29 +996,33 @@ Jump Button 2
 <li>3D viewing:
 <ul>
 <li>pincushion effect</li>
-<li>barrel distortion</li>
+<li>barrel distortion (ocular distortion correction)</li>
 </ul>
 </li>
-<li>Screen resolution
+<li>Screen resolution:
 <ul>
-<li>screen-door effect</li>
-<li>foveated rendering</li>
+<li>screen-door effect: fine lines separating the pixels become visible in the displayed image.</li>
+<li>foveated rendering: showing higher-resolution details where the eye is looking at, lower resolution image in the peripheral vision.</li>
 </ul>
 </li>
 <li>Motion tracking:
 <ul>
-<li>positional tracking</li>
-<li>inside-out tracking</li>
-<li>outside-in tracking</li>
+<li>motion tracking: measuring acceleration and rotation on three axes.</li>
+<li>positional tracking: detecting the headset’s and controllers’ positions in the real world.
+<ul>
+<li>inside-out tracking: HMD device has built-in sensors and cameras for tacking the user’s position.</li>
+<li>outside-in tracking: uses external sensors that are set up around the room to track the users.</li>
+</ul>
+</li>
 <li>3DoF: rotational movements of the head</li>
 <li>6DoF: rotational movements of the head + position tracking</li>
 </ul>
 </li>
 <li>Embodiment</li>
-<li>Interactivity
+<li>Interactivity:
 <ul>
-<li>natural</li>
-<li>multimodal</li>
+<li>should be natural, so that the interaction can feel more real.</li>
+<li>should be multimodal: so that different input and output modalities can be supported.</li>
 </ul>
 </li>
 <li>High quality content</li>
@@ -1015,7 +1033,7 @@ Jump Button 2
 <li>First-person experience: the user takes the role of a freely moving agent in the scene.</li>
 <li>Third-person experience: the user watches the scene from a third-person perspective.</li>
 <li>Stationary: the user sits or stands in one place.</li>
-<li>Room-scale: the Vr device translates the user’s movement in the real world to the character’s movement in the virtual world.</li>
+<li>Room-scale: the VR device translates the user’s movement in the real world to the character’s movement in the virtual world.</li>
 <li>Requirements for a high-quality VR experience:
 <ul>
 <li>low latency</li>
@@ -1030,7 +1048,9 @@ Jump Button 2
 </li>
 <li>Simulator sickness:
 <ul>
-<li>if the player needs to move fast, recude the field of view: tunneling vignette</li>
+<li>A condition where a person exhibits symptoms similar to motion sickness caused by playing first-person Vr experiences.</li>
+<li>It caused by a mismatch between what eyes and inner ear sense.</li>
+<li>If the player needs to move fast, reduce the field of view: tunneling vignette</li>
 </ul>
 </li>
 </ul>
@@ -1042,6 +1062,10 @@ Jump Button 2
 <li>Artificial: controller-based(continuous), teleportation-based(non-continuous)</li>
 </ul>
 </li>
+<li>Teleportation, Continuous movement, Snap/Continuous turn, Grab move, Climb</li>
+<li><strong>XR Origin(VR): represents the player in VR.</strong></li>
+<li>Interaction Group can attached to the parent gameobject. It makes sure that only one interactor in the group can interact at a time.</li>
+<li>To prevent walking through objects, add Character Controller to XR Origin.</li>
 </ul>
 <h3 id="vr-interactions-in-xr-interaction-toolkit-1" tabindex="-1">VR Interactions in XR Interaction Toolkit</h3>
 <ul>
