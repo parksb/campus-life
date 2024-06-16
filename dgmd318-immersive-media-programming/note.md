@@ -578,7 +578,7 @@ You can bring with you:
 
 ### Introduction to Immersive Media
 
-- Immersion is the level of user's engagement with her/his senses in a media experience.
+- **Immersion is the level of user's engagement** with her/his senses in a media experience.
 - Embodiment: ensemble of sensations that arise in conjuction with being inside, having, and controlling a body.
 - Important elements for immersion:
   - Continuity of surroundings
@@ -588,7 +588,11 @@ You can bring with you:
   - Narrative engagement
   - 3D audio
   - Natural social interaction
-- Presence: the strength of this feeling. (suspension of disbelief)
+- Presence means the strength of this feeling:
+  - Forgetting about the real world
+  - Losing track of Time
+  - Reacting to virtual stimuli as if they are real
+  - Related term: **suspension of disbelief**
 - XR: eXtended Reality
 
 ### Introduction to AR
@@ -597,18 +601,22 @@ You can bring with you:
 - Weak AR: imprecise tracking, limited interactivity, ...
 - Strong AR: accurate tracking, seamless integration with real world, ...
 - MR: Mixed Reality
-  - Virtual content can be placed onto the real world through spatial awareness.
+  - Virtual content can be placed onto the real world through **spatial awareness**.
 - HUD, Headset, Handheld AR, Public space AR, Location-based AR, ...
+- **SLAM(Simultaneous Localization and Mapping) technology analyzes the sensor input of a mobile device and creates points and planes that represent the real world environment.**
 - Anchors:
-  - World space: the coordinate space where the camera and the virtual objects are locaated.
-  - Pose: represents an object's position and orientation in world space.
+  - **World space: the coordinate space where the camera and the virtual objects are locaated.**
+  - **Pose: represents an object's position and orientation in world space.**
 - A good AR experience not only tracks the position of the virtual objects, but also changes their transform according to the user's position.
+- Immersive experiences depdend on realistic occlusion and lighting.
 
 ### AR Foundation and AR Project Setup
 
+- Unity has a plug-in framework called XR SDK that allows XR device manufacturers to integrate their XR libraries into Unity.
 - AR Foundation: provides tools to create multi-plataform AR application in Unity.
-- XR Origin: represents the center of world space in AR, MR and Vr applications.
-- AR Session: controls the lifecycle of an AR application.
+- **XR Origin: represents the center of world space in AR, MR and VR applications.**
+- **AR Session: controls the lifecycle of an AR application.**
+- Tracked Pose Driver, AR Camera Manager, AR Camera Background
 
 ### Trackables and Image Tracking
 
@@ -617,8 +625,9 @@ You can bring with you:
 
 ### Plane Tracking and AR Raycasting
 
-- AR Plane Manager
+- AR Plane Manager creates GameObjects for each detected plane.
 - AR Raycast Manager: interacts with the detected planes.
+- If you want to raycast against gameobjects that have colliders, use `Physics,raycast()` instead.
 
 ### AR Interaction with XR Interaction Toolkit
 
@@ -628,6 +637,8 @@ You can bring with you:
   - Interactables: gameobjects that the user can interact with by tap, drag, press, etc.
   - Interaction managers: handle interaction between interactors and interactables.
 - XR Interaction Manager: takes care of communication between interactors and interactables.
+- Each interactables has three possible states: Hover, Select, Activate.
+- There are multiple types of interactors for different types of interactions: Gesture(AR), Ray(VR), Direct(VR), Socket(VR)
 
 ### Introduction to Virtual Reality
 
@@ -639,27 +650,28 @@ You can bring with you:
 - Important elements of VR:
   - 3D viewing:
     - pincushion effect
-    - barrel distortion
-  - Screen resolution
-    - screen-door effect
-    - foveated rendering
+    - barrel distortion (ocular distortion correction)
+  - Screen resolution:
+    - screen-door effect: fine lines separating the pixels become visible in the displayed image.
+    - foveated rendering: showing higher-resolution details where the eye is looking at, lower resolution image in the peripheral vision.
   - Motion tracking:
-    - positional tracking
-    - inside-out tracking
-    - outside-in tracking
+    - motion tracking: measuring acceleration and rotation on three axes.
+    - positional tracking: detecting the headset's and controllers' positions in the real world.
+      - inside-out tracking: HMD device has built-in sensors and cameras for tacking the user's position.
+      - outside-in tracking: uses external sensors that are set up around the room to track the users.
     - 3DoF: rotational movements of the head
     - 6DoF: rotational movements of the head + position tracking
   - Embodiment
-  - Interactivity
-    - natural
-    - multimodal
+  - Interactivity:
+    - should be natural, so that the interaction can feel more real.
+    - should be multimodal: so that different input and output modalities can be supported.
   - High quality content
   - Spatial sound
 - Diodrama: a simple 3D scene, which is observed from a third-person perspective.
 - First-person experience: the user takes the role of a freely moving agent in the scene.
 - Third-person experience: the user watches the scene from a third-person perspective.
 - Stationary: the user sits or stands in one place.
-- Room-scale: the Vr device translates the user's movement in the real world to the character's movement in the virtual world.
+- Room-scale: the VR device translates the user's movement in the real world to the character's movement in the virtual world.
 - Requirements for a high-quality VR experience:
   - low latency
   - high frame rate
@@ -670,13 +682,19 @@ You can bring with you:
   - natural interaction
   - blocking of external disturbances
 - Simulator sickness:
-  - if the player needs to move fast, recude the field of view: tunneling vignette
+  - A condition where a person exhibits symptoms similar to motion sickness caused by playing first-person Vr experiences.
+  - It caused by a mismatch between what eyes and inner ear sense.
+  - If the player needs to move fast, reduce the field of view: tunneling vignette
 
 ### Simple Interactable, Locomotion, Ray Interactor, Interaction Groups, and Tunneling Vignette
 
 - Locomotion: moving from one place to another in a virtual scene.
   - Physical: motion-based(continuous), roomscale-based(continuous)
   - Artificial: controller-based(continuous), teleportation-based(non-continuous)
+- Teleportation, Continuous movement, Snap/Continuous turn, Grab move, Climb
+- **XR Origin(VR): represents the player in VR.**
+- Interaction Group can attached to the parent gameobject. It makes sure that only one interactor in the group can interact at a time.
+- To prevent walking through objects, add Character Controller to XR Origin.
 
 ### VR Interactions in XR Interaction Toolkit
 
