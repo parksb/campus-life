@@ -8,8 +8,8 @@
 - 프로젝트:
   - AR:
     - [ARchiviewer](https://github.com/imp-team-9/archiviewer)
-    - [Documentation](./projects/ar/documentation.pdf)
     - [Idea pitch and project plan](./projects/ar/idea-pitch.pdf)
+    - [Documentation](./projects/ar/documentation.pdf)
     - [Final presentation](./projects/ar/final-presentation.pdf)
   - VR:
     - [The Desert](https://github.com/imp-team-9/the-desert)
